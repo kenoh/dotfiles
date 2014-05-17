@@ -1,0 +1,1 @@
+hardstatus alwayslastline "%{gk}[%{G}%H%{g}][%=%{wk}%?%-Lw%?%{R}[%{W}%n*%t%?(%u)%?%{R}]%{w}%?%+Lw%?%?%=%{g}][%{B}%d.%m %{G}%c%{g}]"
