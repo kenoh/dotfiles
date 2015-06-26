@@ -1,1 +1,1 @@
-my (Debian) configuration dotfiles :)
+my configuration dotfiles :)
