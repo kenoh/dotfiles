@@ -33,6 +33,8 @@
       scroll-margin 7
       scroll-conservatively 9999)
 
+(setq indent-tabs-mode t
+      tab-width 4)
 
 ;; align-regexp - use spaces instead of tabs
 (defadvice align-regexp (around align-regexp-with-spaces activate)
@@ -63,6 +65,11 @@
 (add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode)
 
 (semantic-mode 1)
+
+
+;; C
+(setq c-default-style "k&r"
+      c-basic-offset 4)
 
 
 ;; my quick access
