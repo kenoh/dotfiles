@@ -165,5 +165,9 @@
 	    (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)))
 
 
+(use-package "cider"
+  :ensure t)
+
+
 ;; load private settings
 (load "~/.emacs.d/private.el")
