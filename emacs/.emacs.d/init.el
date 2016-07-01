@@ -106,6 +106,7 @@
 
 (use-package undo-tree
   :ensure t
+  :diminish undo-tree-mode
   :init (progn
 	  (global-undo-tree-mode)
 	  (setq undo-tree-visualizer-timestamps t)
@@ -114,11 +115,14 @@
 
 (use-package "which-key"
   :ensure t
+  :diminish which-key-mode
   :config (which-key-mode))
 
 
 (use-package "projectile"
-  :ensure t)
+  :ensure t
+  :diminish projectile-mode
+  :config (projectile-global-mode))
 
 
 (use-package "org"
@@ -132,12 +136,14 @@
 
 (use-package "magit"
   :ensure t
+  :diminish magit-mode
   :config (progn
 	    (add-hook 'prog-mode 'magit-mode)))
 
 
 (use-package "git-gutter-fringe"
   :ensure t
+  :diminish git-gutter-mode
   :config (global-git-gutter-mode t))
 
 
@@ -152,6 +158,7 @@
 (use-package "company"
   :ensure t
   :commands global-company-mode
+  :diminish company-mode
   :init (global-company-mode)
   :config (progn
 	    (setq company-tooltip-limit 20
