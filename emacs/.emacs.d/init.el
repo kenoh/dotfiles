@@ -174,14 +174,31 @@
 
 (use-package "paredit"
   :ensure t
-  :config (progn
-	    (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-	    (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)))
+  :diminish paredit-mode
+  :config (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
+
+(use-package "eldoc"
+  :diminish eldoc-mode
+  :config (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
 
 
 (use-package "cider"
   :ensure t)
 
+
+(use-package "f"
+  :ensure t)
+
+(use-package "highlight-parentheses"
+  :ensure t
+  :diminish highlight-parentheses-mode
+  :config (global-highlight-parentheses-mode))
+
+(use-package "highlight-blocks"
+  :ensure t
+  :diminish highlight-blocks-mode
+  :config (progn
+	    (add-hook 'emacs-lisp-mode-hook 'highlight-blocks-mode)))
 
 ;; load private settings
 (load "~/.emacs.d/private.el")
