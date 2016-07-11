@@ -184,22 +184,12 @@ bindsym $mod+Print workspace 10
 bindsym $mod+grave scratchpad show
 bindsym $mod+Shift+grave move scratchpad
 
-# synaptics
-#exec synclient TapButton1=1 TapButton2=3 TapButton3=2
-
 # pulse audio volume control
 bindsym XF86AudioLowerVolume exec /usr/bin/pactl set-sink-volume 1 '-5%' && killall -SIGUSR1 py3status
 bindsym XF86AudioRaiseVolume exec /usr/bin/pactl set-sink-volume 1 '+5%' && killall -SIGUSR1 py3status
 bindsym XF86AudioMute exec /usr/bin/pactl set-sink-mute 1 toggle && killall -SIGUSR1 py3status
 bindsym XF86MonBrightnessUp exec /usr/bin/xbacklight -inc 5
 bindsym XF86MonBrightnessDown exec /usr/bin/xbacklight -dec 5
-
-### window-specific settings
-for_window [class="Google-chrome"] move container to workspace 10
-for_window [class="Hexchat"] move container to workspace 1
-# thunderbird
-for_window [class="Mail"] move container to workspace 1
-
 
 ### my menu
 set $MENU "Change-layout 1-display 2-diplays 3-displays Setup-environment"
