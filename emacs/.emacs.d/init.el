@@ -14,11 +14,16 @@
 (set-face-inverse-video 'region t)
 (global-hl-line-mode 1)
 (menu-bar-mode -1)
+(if (fboundp 'tool-bar-mode)
+    (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode)
+    (scroll-bar-mode -1))
+(use-package "suscolors-theme"
+  :ensure t
+  :config (load-theme 'suscolors))
 (if (display-graphic-p)
     (progn
-      (scroll-bar-mode -1)
-      (tool-bar-mode -1)
-      (set-face-attribute 'default nil :height 130 :family "Hack")
+      (set-face-attribute 'default nil :height 110 :family "terminus")
       (require 'server)
       (unless (server-running-p)
 	(server-mode)
