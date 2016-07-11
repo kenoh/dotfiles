@@ -40,6 +40,12 @@
 (setq indent-tabs-mode t
       tab-width 4)
 
+
+;; whitespace
+(require 'whitespace)
+(setq whitespace-style '(face empty tabs lines-tail trailing))
+
+
 ;; align-regexp - use spaces instead of tabs
 (defadvice align-regexp (around align-regexp-with-spaces activate)
   (let ((indent-tabs-mode nil))
