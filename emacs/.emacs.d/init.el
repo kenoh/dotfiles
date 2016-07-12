@@ -32,9 +32,9 @@
       (set-face-attribute 'default nil :height 110 :family "terminus")
       (require 'server)
       (unless (server-running-p)
-	(server-mode)
-	(desktop-save-mode 1)
-	(setq confirm-kill-emacs 'y-or-n-p))))
+        (server-mode)
+        (desktop-save-mode 1)
+        (setq confirm-kill-emacs 'y-or-n-p))))
 
 (setq backup-by-copying t  ; don't clobber symlinks
       backup-directory-alist
@@ -70,9 +70,9 @@
 
 (defun k/sm-greek-lambda ()
   (font-lock-add-keywords nil `(("\\<lambda\\>"
-				 (0 (progn (compose-region (match-beginning 0) (match-end 0)
-							   ,(make-char 'greek-iso8859-7 107))
-					   nil))))))
+                                 (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                                           ,(make-char 'greek-iso8859-7 107))
+                                           nil))))))
 (add-hook 'emacs-lisp-mode-hook 'k/sm-greek-lambda)
 
 
@@ -107,28 +107,28 @@
 (use-package "helm"
   :ensure t
   :bind (("M-x"     . helm-M-x)
-	 ("C-x C-f" . helm-find-files)
-	 ("C-x C-b" . helm-buffers-list)
-	 ("C-x b"   . helm-buffers-list)
-	 ("M-y"     . helm-show-kill-ring))
+         ("C-x C-f" . helm-find-files)
+         ("C-x C-b" . helm-buffers-list)
+         ("C-x b"   . helm-buffers-list)
+         ("M-y"     . helm-show-kill-ring))
   :init (progn
-	  (use-package helm-projectile)
-	  (use-package helm-mode)
-	  (use-package helm-buffers)
-	  (use-package helm-files)
-	  (use-package helm-locate)
-	  (use-package helm-misc)
-	  (use-package helm-match-plugin)
-	  (use-package helm-ring)))
+          (use-package helm-projectile)
+          (use-package helm-mode)
+          (use-package helm-buffers)
+          (use-package helm-files)
+          (use-package helm-locate)
+          (use-package helm-misc)
+          (use-package helm-match-plugin)
+          (use-package helm-ring)))
 
 
 (use-package undo-tree
   :ensure t
   :diminish undo-tree-mode
   :init (progn
-	  (global-undo-tree-mode)
-	  (setq undo-tree-visualizer-timestamps t)
-	  (setq undo-tree-visualizer-diff t)))
+          (global-undo-tree-mode)
+          (setq undo-tree-visualizer-timestamps t)
+          (setq undo-tree-visualizer-diff t)))
 
 
 (use-package "which-key"
@@ -146,17 +146,17 @@
 (use-package "org"
   :ensure t
   :config (progn
-	    (add-to-list 'org-structure-template-alist
-			 '("s" "#+NAME: ?\n#+BEGIN_SRC \n\n#+END_SRC"))
-	    (add-to-list 'org-structure-template-alist
-			 '("se" "#+NAME: ?\n#+BEGIN_SRC emacs-lisp\n\n#+END_SRC"))))
+            (add-to-list 'org-structure-template-alist
+                         '("s" "#+NAME: ?\n#+BEGIN_SRC \n\n#+END_SRC"))
+            (add-to-list 'org-structure-template-alist
+                         '("se" "#+NAME: ?\n#+BEGIN_SRC emacs-lisp\n\n#+END_SRC"))))
 
 
 (use-package "magit"
   :ensure t
   :diminish magit-mode
   :config (progn
-	    (add-hook 'prog-mode 'magit-mode)))
+            (add-hook 'prog-mode 'magit-mode)))
 
 
 (use-package "git-gutter-fringe"
@@ -168,9 +168,9 @@
 (use-package "rpm-spec-mode"
   :ensure t
   :config (progn
-	    (autoload 'rpm-spec-mode "rpm-spec-mode.el" "RPM spec mode." t)
-	    (setq auto-mode-alist (append '(("\\.spec" . rpm-spec-mode))
-					  auto-mode-alist))))
+            (autoload 'rpm-spec-mode "rpm-spec-mode.el" "RPM spec mode." t)
+            (setq auto-mode-alist (append '(("\\.spec" . rpm-spec-mode))
+                                          auto-mode-alist))))
 
 
 (use-package "company"
@@ -179,10 +179,10 @@
   :diminish company-mode
   :init (global-company-mode)
   :config (progn
-	    (setq company-tooltip-limit 20
-		  company-idle-delay .3
-		  company-echo-delay 0
-		  company-begin-commands '(self-insert-command))))
+            (setq company-tooltip-limit 20
+                  company-idle-delay .3
+                  company-echo-delay 0
+                  company-begin-commands '(self-insert-command))))
 
 
 (use-package "outshine"
@@ -216,7 +216,7 @@
   :ensure t
   :diminish highlight-blocks-mode
   :config (progn
-	    (add-hook 'emacs-lisp-mode-hook 'highlight-blocks-mode)))
+            (add-hook 'emacs-lisp-mode-hook 'highlight-blocks-mode)))
 
 
 (use-package "gnuplot"
