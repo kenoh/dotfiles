@@ -8,6 +8,12 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+;; general use packages
+(use-package "dash"
+  :ensure t)
+(use-package "s"
+  :ensure t)
+
 ;;; setup basic
 (setf inhibit-startup-screen t)
 (setf show-trailing-whitespace t)
