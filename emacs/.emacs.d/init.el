@@ -50,6 +50,7 @@
 
 (setq indent-tabs-mode t
       tab-width 4)
+(add-hook 'lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
 
 
 ;; whitespace
