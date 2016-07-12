@@ -217,5 +217,11 @@
   :config (progn
 	    (add-hook 'emacs-lisp-mode-hook 'highlight-blocks-mode)))
 
+
+(use-package "gnuplot"
+  :ensure t
+  :config (require 'ob-gnuplot))
+
+
 ;; load private settings
 (load "~/.emacs.d/private.el")
