@@ -23,7 +23,7 @@
   :config (load-theme 'suscolors))
 (if (display-graphic-p)
     (progn
-      (set-face-attribute 'default nil :height 110 :family "terminus")
+      (set-face-attribute 'default nil :height 130 :family "terminal")
       (require 'server)
       (unless (server-running-p)
 	(server-mode)
