@@ -175,7 +175,8 @@
 	    (setq company-tooltip-limit 20
 		  company-idle-delay .3
 		  company-echo-delay 0
-		  company-begin-commands '(self-insert-command))))
+		  company-begin-commands '(self-insert-command))
+	    (delete 'company-capf company-backends)))
 
 
 (use-package "outshine"
