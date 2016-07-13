@@ -193,6 +193,7 @@ bindsym XF86MonBrightnessDown exec /usr/bin/xbacklight -dec 5
 ### my menu
 set $MENU "Change-layout 1-display 2-diplays 3-displays Setup-environment"
 bindsym Menu mode $MENU
+bindsym $mod+F12 mode $MENU
 mode $MENU {
      bindsym c exec '', mode "default"
      bindsym 1 exec ~/.screenlayout/default.sh, mode "default"
