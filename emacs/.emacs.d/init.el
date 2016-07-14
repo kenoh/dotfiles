@@ -179,11 +179,10 @@
   :diminish company-mode
   :init (global-company-mode)
   :config (progn
-	    (setq company-tooltip-limit 20
-		  company-idle-delay .3
-		  company-echo-delay 0
-		  company-begin-commands '(self-insert-command))
-	    (delete 'company-capf company-backends)))
+            (setq company-tooltip-limit 20
+                  company-idle-delay .3
+                  company-echo-delay 0
+                  company-begin-commands '(self-insert-command))))
 
 
 (use-package "outshine"
