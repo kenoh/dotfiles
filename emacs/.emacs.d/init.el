@@ -224,5 +224,10 @@
   :config (require 'ob-gnuplot))
 
 
+(use-package "icicles"
+  :ensure t
+  :config (icy-mode 1))
+
+
 ;; load private settings
 (load "~/.emacs.d/private.el")
