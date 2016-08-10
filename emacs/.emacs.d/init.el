@@ -24,9 +24,9 @@
     (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode)
     (scroll-bar-mode -1))
-(use-package "suscolors-theme"
+(use-package "solarized-theme"
   :ensure t
-  :config (load-theme 'suscolors))
+  :config (load-theme 'solarized-light t))
 (if (display-graphic-p)
     (progn
       (set-face-attribute 'default nil :height 130 :family "terminal")
