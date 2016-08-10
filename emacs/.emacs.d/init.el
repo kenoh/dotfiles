@@ -140,10 +140,20 @@
 (use-package "org"
   :ensure t
   :config (progn
+			;; custom <-ish templates (use like `<s' and TAB, or `<se' and TAB)
             (add-to-list 'org-structure-template-alist
                          '("s" "#+NAME: ?\n#+BEGIN_SRC \n\n#+END_SRC"))
             (add-to-list 'org-structure-template-alist
-                         '("se" "#+NAME: ?\n#+BEGIN_SRC emacs-lisp\n\n#+END_SRC"))))
+                         '("se" "#+NAME: ?\n#+BEGIN_SRC emacs-lisp\n\n#+END_SRC"))
+			;; active Babel languages
+			(require 'ob-sh)
+			(require 'ob-python)
+			(org-babel-do-load-languages
+			 'org-babel-load-languages
+			 '((sh . t)
+			   (emacs-lisp . t)
+			   (python . t)
+			   (gnuplot . t)))))
 
 
 (use-package "magit"
