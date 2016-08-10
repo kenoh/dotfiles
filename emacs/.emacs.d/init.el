@@ -207,6 +207,13 @@
 (use-package "f"
   :ensure t)
 
+
+(use-package "highlight-thing"
+  :ensure t
+  :diminish highlight-thing-mode
+  :config (highlight-thing-mode))
+
+
 (use-package "highlight-parentheses"
   :ensure t
   :diminish highlight-parentheses-mode
