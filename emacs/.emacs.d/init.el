@@ -104,22 +104,16 @@
 
 
 ;;; packages
-(use-package "helm"
+(use-package ido
   :ensure t
-  :bind (("M-x"     . helm-M-x)
-         ("C-x C-f" . helm-find-files)
-         ("C-x C-b" . helm-buffers-list)
-         ("C-x b"   . helm-buffers-list)
-         ("M-y"     . helm-show-kill-ring))
-  :init (progn
-          (use-package helm-projectile)
-          (use-package helm-mode)
-          (use-package helm-buffers)
-          (use-package helm-files)
-          (use-package helm-locate)
-          (use-package helm-misc)
-          (use-package helm-match-plugin)
-          (use-package helm-ring)))
+  :diminish ido-mode
+  :config (progn
+			(global-set-key "\M-x"
+							(lambda () (interactive)
+							  (call-interactively
+							   (intern
+								(ido-completing-read "M-x "
+													 (all-completions "" obarray 'commandp))))))))
 
 
 (use-package undo-tree
