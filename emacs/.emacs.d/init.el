@@ -213,21 +213,10 @@
   :diminish highlight-parentheses-mode
   :config (global-highlight-parentheses-mode))
 
-(use-package "highlight-blocks"
-  :ensure t
-  :diminish highlight-blocks-mode
-  :config (progn
-            (add-hook 'emacs-lisp-mode-hook 'highlight-blocks-mode)))
-
 
 (use-package "gnuplot"
   :ensure t
   :config (require 'ob-gnuplot))
-
-
-(use-package "icicles"
-  :ensure t
-  :config (icy-mode 1))
 
 
 ;; load private settings
