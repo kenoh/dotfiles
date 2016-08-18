@@ -120,12 +120,22 @@
   :ensure t
   :diminish ido-mode
   :config (progn
-			(global-set-key "\M-x"
-							(lambda () (interactive)
-							  (call-interactively
-							   (intern
-								(ido-completing-read "M-x "
-													 (all-completions "" obarray 'commandp))))))))
+	    (ido-mode 1)
+	    (ido-everywhere 1)
+	    (global-set-key "\M-x"
+			    (lambda () (interactive)
+			      (call-interactively
+			       (intern
+				(ido-completing-read "M-x "
+						     (all-completions "" obarray 'commandp))))))))
+
+
+(use-package flx-ido
+  :ensure t
+  :diminish flx-ido-mode
+  :config (progn
+	    (setq ido-enable-flex-matching t)
+	    (setq ido-use-faces nil)))
 
 
 (use-package undo-tree
