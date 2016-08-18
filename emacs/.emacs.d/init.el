@@ -240,6 +240,10 @@
   :config (highlight-thing-mode))
 
 
+(use-package "highlight-symbol"
+  :ensure t)
+
+
 (use-package "highlight-parentheses"
   :ensure t
   :diminish highlight-parentheses-mode
@@ -249,6 +253,9 @@
 (use-package "gnuplot"
   :ensure t
   :config (require 'ob-gnuplot))
+
+
+(use-package vdiff :ensure t)
 
 
 ;; load private settings
