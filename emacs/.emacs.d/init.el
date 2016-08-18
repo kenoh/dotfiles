@@ -56,6 +56,14 @@
       tab-width 4)
 (add-hook 'lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
 
+(setq print-level 15
+	  print-length 100
+	  print-quoted t)
+
+(defun previous-window ()
+  (interactive)
+  (call-interactively 'other-window))
+(global-set-key (kbd "<f1>") 'previous-window)
 
 ;; whitespace
 (require 'whitespace)
