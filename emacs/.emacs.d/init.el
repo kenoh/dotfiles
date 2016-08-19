@@ -21,8 +21,6 @@
 ;;; setup basic
 (setf inhibit-startup-screen t)
 (setf show-trailing-whitespace t)
-(set-face-inverse-video 'region t)
-(global-hl-line-mode 1)
 (menu-bar-mode -1)
 (if (fboundp 'tool-bar-mode)
     (tool-bar-mode -1))
