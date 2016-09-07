@@ -245,4 +245,4 @@
 
 
 ;; load private settings
-(load "~/.emacs.d/private.el")
+(load "~/.emacs.d/private.el" t)
