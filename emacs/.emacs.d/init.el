@@ -63,10 +63,10 @@
 	  print-length 100
 	  print-quoted t)
 
-(defun previous-window ()
+(defun k/previous-window ()
   (interactive)
   (call-interactively 'other-window))
-(global-set-key (kbd "<f1>") 'previous-window)
+(global-set-key (kbd "<f1>") 'k/previous-window)
 
 ;; whitespace
 (require 'whitespace)
