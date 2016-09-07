@@ -211,11 +211,11 @@ mode $MENU {
 }
 
 ### startup apps
-exec dunst
-exec xscreensaver
-exec redshift-gtk
-exec nm-applet
+exec --no-startup-id dunst
+exec --no-startup-id xscreensaver
+exec --no-startup-id redshift-gtk
+exec --no-startup-id nm-applet
 exec hexchat
-exec setxkbmap us,sk ,qwerty grp:alts_toggle,ctrl:nocaps,compose:prsc
-exec xmodmap -e "keycode 37="
-exec synclient TapButton1=1 TapButton2=3 TapButton3=2
+exec --no-startup-id setxkbmap us,sk ,qwerty grp:alts_toggle,ctrl:nocaps,compose:prsc
+exec --no-startup-id xmodmap -e "keycode 37="
+exec --no-startup-id synclient TapButton1=1 TapButton2=3 TapButton3=2
