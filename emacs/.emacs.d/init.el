@@ -108,27 +108,44 @@
 (require 'dash)
 (bind-keys
  ("C-x <f7>" . (lambda () (interactive) (find-file "~/notes.org" t)))
- ("C-x <f8>" . (lambda () (interactive) (find-file "~/todo.org" t))))
-
-
+ ("C-x <f8>" . (lambda () (interactive) (find-file "~/todo.org" t)))
+ ("C-x <f6>" . (lambda () (interactive) (notmuch))))
 
 
 ;;; packages
-(use-package ido :ensure t :diminish ido-mode :config
+(use-package helm :ensure t :diminish helm-mode :config
   (progn
-    (ido-mode 1)
-    (ido-everywhere 1)
-    (global-set-key "\M-x"
-		    (lambda () (interactive)
-		      (call-interactively
-		       (intern
-			(ido-completing-read "M-x "
-					     (all-completions "" obarray 'commandp))))))))
+	(require 'helm-config)
 
-(use-package flx-ido :ensure t :diminish flx-ido-mode :config
-  (progn
-    (setq ido-enable-flex-matching t)
-    (setq ido-use-faces nil)))
+	(use-package helm-ls-git :ensure t :config (require 'helm-ls-git))
+	(use-package helm-ls-hg :ensure t :config (require 'helm-ls-hg))
+
+	(use-package helm-ag :ensure t :config (require 'helm-ag))
+
+    (setq helm-split-window-in-side-p t
+	  helm-move-to-line-cycle-in-source t
+	  helm-ff-search-library-in-sexp t
+	  helm-scroll-amount 8
+	  helm-ff-file-name-history-use-recentf t
+	  helm-M-x-fuzzy-match t)
+
+	(global-set-key (kbd "C-c h") 'helm-command-prefix)
+	(global-unset-key (kbd "C-x c"))
+
+	(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+	(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
+	(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+	(global-set-key (kbd "C-c h o") 'helm-occur)
+	(global-set-key (kbd "C-c h g") 'helm-google-suggest)
+
+    (global-set-key (kbd "M-x") 'helm-M-x)
+    (global-set-key (kbd "C-x C-f") 'helm-find-files)
+	(global-set-key (kbd "C-x b") 'helm-mini)
+	(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+
+    (helm-mode 1)))
+
 
 (use-package undo-tree :ensure t :diminish undo-tree-mode :init
   (progn
@@ -140,7 +157,11 @@
   (which-key-mode))
 
 (use-package projectile :ensure t :diminish projectile-mode :config
-  (projectile-global-mode))
+  (progn
+	(use-package helm-projectile :ensure t :config (require 'helm-projectile))
+	(projectile-global-mode)
+	(setq projectile-completion-system 'helm)
+	(helm-projectile-on)))
 
 (use-package org :ensure t :config
   (progn
