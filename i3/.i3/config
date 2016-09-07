@@ -174,6 +174,12 @@ bar {
 workspace_layout tabbed
 hide_edge_borders both
 
+for_window [class=".*"] title_format "%class <b>%title</b>"
+for_window [class="Emacs"] title_format "<b><span foreground='#9999ff'>%title</span></b>"
+for_window [class="Firefox"] title_format "<b><span foreground='#ffcc99'>%title</span></b>"
+for_window [class="Terminator"] title_format "<b><span foreground='#ff9999'>%title</span></b>"
+
+
 # exec bindings
 bindsym $mod+Escape exec xscreensaver-command -lock
 
