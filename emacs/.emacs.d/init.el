@@ -241,6 +241,8 @@
 
 (use-package vdiff :ensure t)
 
+(use-package visual-regexp :ensure t)
+
 
 ;; load private settings
 (load "~/.emacs.d/private.el")
