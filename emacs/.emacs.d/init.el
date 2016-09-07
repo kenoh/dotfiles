@@ -28,10 +28,15 @@
     (scroll-bar-mode -1))
 (use-package "solarized-theme"
   :ensure t
-  :config (load-theme 'solarized-light t))
+  :config (progn
+	    (setq solarized-scale-org-headlines nil
+		  solarized-high-contrast-mode-line t
+		  solarized-use-variable-pitch nil
+		  solarized-distinct-fringe-background t)
+	    (load-theme 'solarized-light t)))
 (if (display-graphic-p)
     (progn
-      (set-face-attribute 'default nil :height 130 :family "terminal")
+      (set-face-attribute 'default nil :height 110 :family "Inconsolata")
       (require 'server)
       (unless (server-running-p)
         (server-mode)
