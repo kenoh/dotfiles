@@ -16,7 +16,7 @@ set $mod Mod4
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 #font pango:DejaVu Sans Mono 10
-font pango: DejaVu Sans 8
+font pango: Inconsolata 10
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # The font above is very space-efficient, that is, it looks good, sharp and
@@ -26,10 +26,10 @@ font pango: DejaVu Sans 8
 
 # colors
 # colorclass 		border 	bg 	text 	indicator
-client.focused 		#dddd00 #dddd00 #000000 #ff0000
-client.unfocused	#000000 #000000 #bbbbbb #ff0000
-client.focused_inactive #999900 #999900 #000000 #ff0000
-client.urgent           #ffffff #ff0000 #ffffff #ff0000
+client.focused 		#ffffff #ffffff #000000 #ff0000
+client.unfocused	#000000 #000000 #ffffff #ff0000
+client.focused_inactive #cccccc #cccccc #000000 #ff0000
+client.urgent           #ff0000 #ff0000 #ffffff #ff0000
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -175,9 +175,9 @@ workspace_layout tabbed
 hide_edge_borders both
 
 for_window [class=".*"] title_format "%class <b>%title</b>"
-for_window [class="Emacs"] title_format "<b><span foreground='#9999ff'>%title</span></b>"
-for_window [class="Firefox"] title_format "<b><span foreground='#ffcc99'>%title</span></b>"
-for_window [class="Terminator"] title_format "<b><span foreground='#ff9999'>%title</span></b>"
+for_window [class="Emacs"] title_format "<span foreground='#9999ff'>%class</span> <b>%title</b>"
+for_window [class="Firefox"] title_format "<span foreground='#ffcc99'>%class</span> <b>%title</b>"
+for_window [class="Terminator"] title_format "<span foreground='#ff9999'>%class</span> <b>%title</b>"
 
 
 # exec bindings
