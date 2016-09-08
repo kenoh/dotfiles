@@ -196,20 +196,6 @@ bindsym XF86AudioMute exec /usr/bin/pactl set-sink-mute 1 toggle && killall -SIG
 bindsym XF86MonBrightnessUp exec /usr/bin/xbacklight -inc 5
 bindsym XF86MonBrightnessDown exec /usr/bin/xbacklight -dec 5
 
-### my menu
-set $MENU "Change-layout 1-display 2-diplays 3-displays Setup-environment"
-bindsym Menu mode $MENU
-bindsym $mod+F12 mode $MENU
-mode $MENU {
-     bindsym c exec '', mode "default"
-     bindsym 1 exec ~/.screenlayout/default.sh, mode "default"
-     bindsym 2 exec ~/.screenlayout/right-left.sh, mode "default"
-     bindsym 3 exec ~/.screenlayout/s-ml.sh, mode "default"
-     bindsym s exec ~/bin/xinit.sh, mode "default"
-     bindsym Return mode "default"
-     bindsym Escape mode "default"
-}
-
 ### startup apps
 exec --no-startup-id dunst
 exec --no-startup-id xscreensaver
