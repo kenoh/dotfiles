@@ -54,10 +54,6 @@
       scroll-margin 7
       scroll-conservatively 9999)
 
-(setq indent-tabs-mode t
-      tab-width 4)
-(add-hook 'lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
-
 (setq print-level 15
       print-length 100
       print-quoted t)
