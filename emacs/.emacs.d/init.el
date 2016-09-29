@@ -101,7 +101,6 @@
 (add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode)
 (add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode)
 
-(semantic-mode 1)
 
 
 ;; C
@@ -205,9 +204,7 @@
     (setq auto-mode-alist (append '(("\\.spec" . rpm-spec-mode))
 				  auto-mode-alist))))
 
-(use-package company :ensure t :diminish company-mode
-  :commands global-company-mode 
-  :init (global-company-mode)
+(use-package company :ensure t
   :config
   (progn
     (setq company-tooltip-limit 20
