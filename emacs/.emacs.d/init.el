@@ -234,7 +234,10 @@
 (use-package highlight-symbol :ensure t)
 
 (use-package highlight-parentheses :ensure t :diminish highlight-parentheses-mode :config
-  (global-highlight-parentheses-mode))
+  (progn
+    (global-highlight-parentheses-mode)
+    (setq hl-paren-background-colors '("red" "green" "blue" "magenta" "cyan")
+          hl-paren-colors nil)))
 
 (use-package "gnuplot" :ensure t :config
   (require 'ob-gnuplot))
