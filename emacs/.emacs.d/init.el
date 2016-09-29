@@ -2,10 +2,9 @@
 (require 'package)
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/")
-	("marmalade" . "http://marmalade-repo.org/packages/")
-	("melpa-stable" . "https://stable.melpa.org/packages/")
-	("melpa" . "https://melpa.org/packages/")
-	))
+        ("marmalade" . "http://marmalade-repo.org/packages/")
+        ("melpa-stable" . "https://stable.melpa.org/packages/")
+        ("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
 ;;; init use-package
 (unless (package-installed-p 'use-package)
@@ -29,11 +28,11 @@
 (use-package "solarized-theme"
   :ensure t
   :config (progn
-	    (setq solarized-scale-org-headlines nil
-		  solarized-high-contrast-mode-line t
-		  solarized-use-variable-pitch nil
-		  solarized-distinct-fringe-background t)
-	    (load-theme 'solarized-light t)))
+            (setq solarized-scale-org-headlines nil
+                  solarized-high-contrast-mode-line t
+                  solarized-use-variable-pitch nil
+                  solarized-distinct-fringe-background t)
+            (load-theme 'solarized-light t)))
 (if (display-graphic-p)
     (progn
       (set-face-attribute 'default nil :height 110 :family "Inconsolata")
@@ -60,8 +59,8 @@
 (add-hook 'lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
 
 (setq print-level 15
-	  print-length 100
-	  print-quoted t)
+      print-length 100
+      print-quoted t)
 
 (defun k/previous-window ()
   (interactive)
@@ -123,34 +122,34 @@
 ;;; packages
 (use-package helm :ensure t :diminish helm-mode :config
   (progn
-	(require 'helm-config)
+    (require 'helm-config)
 
-	(use-package helm-ls-git :ensure t :config (require 'helm-ls-git))
-	(use-package helm-ls-hg :ensure t :config (require 'helm-ls-hg))
+    (use-package helm-ls-git :ensure t :config (require 'helm-ls-git))
+    (use-package helm-ls-hg :ensure t :config (require 'helm-ls-hg))
 
-	(use-package helm-ag :ensure t :config (require 'helm-ag))
+    (use-package helm-ag :ensure t :config (require 'helm-ag))
 
     (setq helm-split-window-in-side-p t
-	  helm-move-to-line-cycle-in-source t
-	  helm-ff-search-library-in-sexp t
-	  helm-scroll-amount 8
-	  helm-ff-file-name-history-use-recentf t
-	  helm-M-x-fuzzy-match t)
+          helm-move-to-line-cycle-in-source t
+          helm-ff-search-library-in-sexp t
+          helm-scroll-amount 8
+          helm-ff-file-name-history-use-recentf t
+          helm-M-x-fuzzy-match t)
 
-	(global-set-key (kbd "C-c h") 'helm-command-prefix)
-	(global-unset-key (kbd "C-x c"))
+    (global-set-key (kbd "C-c h") 'helm-command-prefix)
+    (global-unset-key (kbd "C-x c"))
 
-	(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-	(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
-	(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+    (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
+    (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
 
-	(global-set-key (kbd "C-c h o") 'helm-occur)
-	(global-set-key (kbd "C-c h g") 'helm-google-suggest)
+    (global-set-key (kbd "C-c h o") 'helm-occur)
+    (global-set-key (kbd "C-c h g") 'helm-google-suggest)
 
     (global-set-key (kbd "M-x") 'helm-M-x)
     (global-set-key (kbd "C-x C-f") 'helm-find-files)
-	(global-set-key (kbd "C-x b") 'helm-mini)
-	(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+    (global-set-key (kbd "C-x b") 'helm-mini)
+    (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
     (helm-mode 1)))
 
@@ -166,18 +165,20 @@
 
 (use-package projectile :ensure t :diminish projectile-mode :config
   (progn
-	(use-package helm-projectile :ensure t :config (require 'helm-projectile))
-	(projectile-global-mode)
-	(setq projectile-completion-system 'helm)
-	(helm-projectile-on)))
+    (use-package helm-projectile :ensure t :config (require 'helm-projectile))
+    (projectile-global-mode)
+    (setq projectile-completion-system 'helm)
+    (helm-projectile-on)))
 
 (use-package org :ensure t :config
   (progn
+    (use-package kanban :ensure t)
+
     ;; custom <-ish templates (use like `<s' and TAB, or `<se' and TAB)
     (add-to-list 'org-structure-template-alist
-		 '("s" "#+NAME: ?\n#+BEGIN_SRC \n\n#+END_SRC"))
+                 '("s" "#+NAME: ?\n#+BEGIN_SRC \n\n#+END_SRC"))
     (add-to-list 'org-structure-template-alist
-		 '("se" "#+NAME: ?\n#+BEGIN_SRC emacs-lisp\n\n#+END_SRC"))
+                 '("se" "#+NAME: ?\n#+BEGIN_SRC emacs-lisp\n\n#+END_SRC"))
     ;; active Babel languages
     (require 'ob-sh)
     (require 'ob-python)
@@ -205,15 +206,15 @@
   (progn
     (autoload 'rpm-spec-mode "rpm-spec-mode.el" "RPM spec mode." t)
     (setq auto-mode-alist (append '(("\\.spec" . rpm-spec-mode))
-				  auto-mode-alist))))
+                                  auto-mode-alist))))
 
 (use-package company :ensure t
   :config
   (progn
     (setq company-tooltip-limit 20
-	  company-idle-delay .3
-	  company-echo-delay 0
-	  company-begin-commands '(self-insert-command))))
+          company-idle-delay .3
+          company-echo-delay 0
+          company-begin-commands '(self-insert-command))))
 
 (use-package outshine :ensure t :config
   (add-hook 'outline-minor-mode-hook 'outshine-hook-function))
