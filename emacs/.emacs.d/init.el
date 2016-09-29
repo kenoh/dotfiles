@@ -91,6 +91,10 @@
 (add-hook 'emacs-lisp-mode-hook 'k/sm-greek-lambda)
 
 
+;; modeline
+(size-indication-mode t)  ; show size of buffer in modeline
+
+
 ;; semantic
 (require 'semantic)  ; semantic itself
 (require 'semantic/ia)  ; adds more completion options
