@@ -191,8 +191,7 @@
     (defun k/org-confirm-babel-evaluate (lang body)
       (not (string= lang "emacs-lisp")))
     (setq org-confirm-babel-evaluate 'k/org-confirm-babel-evaluate)
-
-	(org-indent-mode)))
+    (add-hook 'org-mode-hook 'org-indent-mode)))
 
 
 (use-package magit  :ensure t :diminish magit-mode :config
