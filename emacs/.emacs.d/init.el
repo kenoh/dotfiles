@@ -1,4 +1,3 @@
-;;; install
 (require 'package)
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/")
@@ -6,6 +5,13 @@
         ("melpa-stable" . "https://stable.melpa.org/packages/")
         ("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
+
+;;; init req-package
+(unless (package-installed-p 'req-package)
+  (package-refresh-contents)
+  (package-install 'req-package))
+(require 'req-package)
+
 ;;; init use-package
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -17,30 +23,49 @@
 (use-package "s"
   :ensure t)
 
-;;; setup basic
-(setf inhibit-startup-screen t)
-(setf show-trailing-whitespace t)
-(menu-bar-mode -1)
-(if (fboundp 'tool-bar-mode)
-    (tool-bar-mode -1))
-(if (fboundp 'scroll-bar-mode)
-    (scroll-bar-mode -1))
+(if (display-graphic-p)
+    (progn      
+      (require 'server)
+      (unless (server-running-p)
+        (server-mode)
+        ;(desktop-save-mode 1)
+        (setq confirm-kill-emacs 'y-or-n-p))))
+
 (use-package "solarized-theme"
   :ensure t
   :config (progn
             (setq solarized-scale-org-headlines nil
                   solarized-high-contrast-mode-line t
                   solarized-use-variable-pitch nil
-                  solarized-distinct-fringe-background t)
+                  solarized-distinct-fringe-background t
+		  solarized-distinct-doc-face t
+		  solarized-emphasize-indicators t)
             (load-theme 'solarized-light t)))
-(if (display-graphic-p)
-    (progn
-      (set-face-attribute 'default nil :height 110 :family "Inconsolata")
-      (require 'server)
-      (unless (server-running-p)
-        (server-mode)
-        (desktop-save-mode 1)
-        (setq confirm-kill-emacs 'y-or-n-p))))
+
+(setq ff-mono "Liberation Mono"
+      ff-sans "Liberation Sans")
+
+(ignore-errors
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (setq cursor-type '(hbar . 3)
+	use-dialog-box nil)
+  (set-face-attribute 'default nil :height 100 :family ff-mono :foreground "#000000")
+  (set-face-attribute 'mode-line nil :height 0.8 :family ff-sans)
+  (set-face-attribute 'mode-line-inactive nil :inherit 'mode-line)
+  (set-face-attribute 'speedbar-button-face nil :height 0.8 :family ff-sans)
+  (set-face-attribute 'speedbar-file-face nil :height 0.8 :family ff-sans)
+  (set-face-attribute 'speedbar-directory-face nil :height 0.8 :family ff-sans)
+  (set-face-attribute 'speedbar-highlight-face nil :height 0.8 :family ff-sans)
+  (set-face-attribute 'speedbar-selected-face nil :height 0.8 :family ff-sans)
+  (set-face-attribute 'speedbar-separator-face nil :height 0.8 :family ff-sans)
+  (set-face-attribute 'speedbar-tag-face nil :height 0.8 :family ff-sans))
+
+;;; setup basic
+(setf inhibit-startup-screen t)
+(setf show-trailing-whitespace t)
+(setq confirm-kill-emacs 'y-or-n-p)
 
 (setq backup-by-copying t  ; don't clobber symlinks
       backup-directory-alist
@@ -55,13 +80,28 @@
       scroll-conservatively 9999)
 
 (setq print-level 15
-      print-length 100
+      print-length 4096
       print-quoted t)
 
-(defun k/previous-window ()
-  (interactive)
-  (call-interactively 'other-window))
-(global-set-key (kbd "<f1>") 'k/previous-window)
+(global-set-key (kbd "<f1>") 'other-window)
+(global-set-key (kbd "<f2>") 'mode-line-other-buffer)
+(global-set-key (kbd "C-<mouse-4>") 'text-scale-increase)
+(global-set-key (kbd "C-<mouse-5>") 'text-scale-decrease)
+(global-set-key (kbd "C-M-+") 'text-scale-increase)
+(global-set-key (kbd "C-M-_") 'text-scale-decrease)
+
+(add-hook 'dired-mode-hook 'hl-line-mode)
+
+(global-set-key [next] (lambda () (interactive)
+			 (setq this-command 'next-line)
+			 (next-line
+			  (- (window-text-height)
+			     next-screen-context-lines))))
+(global-set-key [prior] (lambda () (interactive)
+			  (setq this-command 'previous-line)
+			  (previous-line
+			   (- (window-text-height)
+			      next-screen-context-lines))))
 
 ;; whitespace
 (require 'whitespace)
@@ -90,7 +130,9 @@
 (size-indication-mode t)  ; show size of buffer in modeline
 
 
+
 ;; semantic
+(require 'cedet)
 (require 'semantic)  ; semantic itself
 (require 'semantic/ia)  ; adds more completion options
 (require 'semantic/bovine/gcc)  ; use gcc for from system headers completion
@@ -99,6 +141,7 @@
 (add-to-list 'semantic-default-submodes 'global-semantic-idle-local-symbol-highlight-mode)
 (add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode)
 (add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode)
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-breadcrumbs-mode)
 
 
 
@@ -107,15 +150,16 @@
       c-basic-offset 4)
 
 
-;; my quick access
-(require 'dash)
-(bind-keys
- ("C-x <f7>" . (lambda () (interactive) (find-file "~/notes.org" t)))
- ("C-x <f8>" . (lambda () (interactive) (find-file "~/todo.org" t)))
- ("C-x <f6>" . (lambda () (interactive) (notmuch))))
+(req-package el-get ;; prepare el-get (optional)
+  :force t ;; load package immediately, no dependency resolution
+  :config (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get/el-get/recipes")
+  (el-get 'sync))
 
 
-;;; packages
+(use-package smart-tabs-mode :ensure t :config
+  (progn
+    (smart-tabs-insinuate 'c 'javascript 'python)))
+
 (use-package helm :ensure t :diminish helm-mode :config
   (progn
     (require 'helm-config)
@@ -130,6 +174,7 @@
           helm-ff-search-library-in-sexp t
           helm-scroll-amount 8
           helm-ff-file-name-history-use-recentf t
+	  recentf-max-saved-items 100
           helm-M-x-fuzzy-match t)
 
     (global-set-key (kbd "C-c h") 'helm-command-prefix)
@@ -147,8 +192,20 @@
     (global-set-key (kbd "C-x b") 'helm-mini)
     (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
+    (use-package helm-projectile :ensure t :config (helm-projectile-on))
+    (use-package helm-swoop :ensure t :config
+      (progn
+	(global-set-key (kbd "M-i") 'helm-swoop)
+	(setq helm-swoop-split-with-multiple-windows t
+	      helm-swoop-split-direction 'split-window-vertically
+	      helm-swoop-use-line-number-face t)))
+
     (helm-mode 1)))
 
+(use-package which-key :ensure t :diminish which-key-mode :config (which-key-mode))
+
+
+(use-package auto-complete :ensure t :config (ac-config-default))
 
 (use-package undo-tree :ensure t :diminish undo-tree-mode :init
   (progn
@@ -156,47 +213,122 @@
     (setq undo-tree-visualizer-timestamps t)
     (setq undo-tree-visualizer-diff t)))
 
-(use-package which-key :ensure t :diminish which-key-mode :config
-  (which-key-mode))
-
-(use-package projectile :ensure t :diminish projectile-mode :config
+(use-package highlight-thing :ensure t :diminish hi-lock-mode :config
   (progn
-    (use-package helm-projectile :ensure t :config (require 'helm-projectile))
-    (projectile-global-mode)
-    (setq projectile-completion-system 'helm)
-    (helm-projectile-on)))
+    (add-hook 'prog-mode-hook 'highlight-thing-mode)
+    (add-hook 'text-mode-hook 'highlight-thing-mode)))
 
-(use-package org :ensure t :config
+(use-package highlight-symbol :ensure t)
+
+(use-package rainbow-delimiters :ensure t :config
   (progn
-    (use-package kanban :ensure t)
+    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)))
 
-    ;; custom <-ish templates (use like `<s' and TAB, or `<se' and TAB)
-    (add-to-list 'org-structure-template-alist
-                 '("s" "#+NAME: ?\n#+BEGIN_SRC \n\n#+END_SRC"))
-    (add-to-list 'org-structure-template-alist
-                 '("se" "#+NAME: ?\n#+BEGIN_SRC emacs-lisp\n\n#+END_SRC"))
+(use-package rainbow-identifiers :ensure t)
+
+;; (use-package highlight-parentheses :ensure t :config
+;;   (progn
+;;     (add-hook 'prog-mode-hook 'highlight-parentheses-mode)
+;;     (add-hook 'text-mode-hook 'highlight-parentheses-mode)))
+
+(use-package visual-regexp :ensure t)
+
+(use-package diff-hl :ensure t :config (add-hook 'dired-mode-hook 'diff-hl-dired-mode))
+
+(use-package ediff :ensure t :config
+  (setq ediff-split-window-function 'split-window-horizontally
+	ediff-window-setup-function 'ediff-setup-windows-plain))
+
+(use-package projectile :ensure t :config
+  (progn
+    (add-to-list 'projectile-project-root-files "Vagrantfile" t)
+    (setq projectile-switch-project-action 'projectile-dired
+          projectile-use-git-grep t
+	  projectile-project-name-function (lambda (project-root)
+					     (->> project-root
+						  (replace-regexp-in-string (concat "^" (getenv "HOME") "/?") "~/")
+						  (replace-regexp-in-string "/*$" "")))
+	  projectile-mode-line '(:propertize
+				 (:eval (if (file-remote-p default-directory)
+					    " Pr"
+					  (format " %s (%s)"
+						  (projectile-project-name)
+						  (let ((fn tags-file-name))
+						    (if (stringp fn)
+							(file-relative-name fn)
+						      "?")))))
+				 face modeline-buffer-id))
+    (use-package ibuffer-projectile :ensure t)
+    ;; (use-package projectile-speedbar :ensure t :config
+    ;;   (progn
+    ;;     (global-set-key (kbd "M-<f2>") 'projectile-speedbar-toggle)
+    ;;     (setq projectile-speedbar-projectile-speedbar-enable nil)))
+    (projectile-cleanup-known-projects)
+    (projectile-global-mode)))
+
+(use-package magit :ensure t :diminish magit-mode :config
+  (progn
+    (global-set-key (kbd "C-c g") 'magit-status)))
+
+(use-package ggtags :ensure t :config
+  (progn
+    (add-hook 'c-mode-common-hook
+	      (lambda () (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+		      (ggtags-mode 1))))))
+
+(use-package git-gutter-fringe :ensure t :diminish git-gutter-mode :config (global-git-gutter-mode t))
+
+(use-package paredit :ensure t :diminish paredit-mode :config (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
+
+(use-package eldoc :diminish eldoc-mode :config (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
+
+(use-package macrostep :ensure t)
+
+(use-package nameless :ensure t :config
+  (progn
+    (setq nameless-global-aliases '(("πσ" . "parsec")))
+    (add-hook 'emacs-lisp-mode-hook 'nameless-mode)))
+
+(use-package clojure-mode :ensure t :config
+  (progn
+    (add-to-list 'exec-path (concat (getenv "HOME") "/bin"))
+    (add-hook 'clojure-mode-hook 'paredit-mode)
+    (use-package clojure-mode-extra-font-locking :ensure t)
+    (use-package cider :ensure t)))
+
+(use-package org :ensure t :defer t :config 
+  (progn
+    (add-hook 'org-mode-hook 'org-indent-mode)
     ;; active Babel languages
-    (require 'ob-sh)
+    (require 'ob-shell)
     (require 'ob-python)
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((sh . t)
-       (emacs-lisp . t)
-       (python . t)
-       (gnuplot . t)))
-    ;; do not ask for evaluation
-    (defun k/org-confirm-babel-evaluate (lang body)
-      (not (string= lang "emacs-lisp")))
-    (setq org-confirm-babel-evaluate 'k/org-confirm-babel-evaluate)
-    (add-hook 'org-mode-hook 'org-indent-mode)))
+    (require 'ob-clojure)
+    (require 'cider)
+    (setq org-babel-clojure-backend 'cider)
+    (org-babel-do-load-languages 'org-babel-load-languages
+				 '((sh . t)
+				   (emacs-lisp . t)
+				   (python . t)
+				   (gnuplot . t)
+				   (clojure . t)))
+    ;; do not bother when C-c C-c
+    (defun kenoh/org-confirm-babel-evaluate (lang body)
+      (not (member lang (list "emacs-lisp" "clojure"))))
+    (setq org-confirm-babel-evaluate 'kenoh/org-confirm-babel-evaluate)))
 
-
-(use-package magit  :ensure t :diminish magit-mode :config
+(use-package yaml-mode :ensure t :config
   (progn
-    (add-hook 'prog-mode 'magit-mode)))
+    (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+    (use-package ansible :ensure t :config
+      (progn
+	(add-hook 'yaml-mode-hook 'ansible)
+	(use-package company-ansible :ensure t :config
+	  (add-hook 'ansible-hook 'company-mode))
+	(use-package ansible-doc :ensure t :config
+	  (add-hook 'ansible-hook 'ansible-doc-mode))))))
 
-(use-package git-gutter-fringe :ensure t :diminish git-gutter-mode :config
-  (global-git-gutter-mode t))
+(el-get-bundle zweifisch/ob-ansible
+  (require 'ob-ansible))
 
 (use-package rpm-spec-mode :ensure t :config
   (progn
@@ -204,45 +336,24 @@
     (setq auto-mode-alist (append '(("\\.spec" . rpm-spec-mode))
                                   auto-mode-alist))))
 
-(use-package company :ensure t
-  :config
+(use-package lua-mode :ensure t)
+
+(use-package slime :ensure t :config
   (progn
-    (setq company-tooltip-limit 20
-          company-idle-delay .3
-          company-echo-delay 0
-          company-begin-commands '(self-insert-command))))
+    (setq inferior-lisp-program "sbcl"
+	  slime-contribs '(slime-fancy))))
 
-(use-package outshine :ensure t :config
-  (add-hook 'outline-minor-mode-hook 'outshine-hook-function))
+(use-package docker :ensure t)
+(use-package dockerfile-mode :ensure t)
 
-(use-package paredit :ensure t :diminish paredit-mode :config
-  (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
-
-(use-package eldoc :diminish eldoc-mode :config
-  (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
-
-(use-package cider :ensure t)
-
-(use-package f :ensure t)
-
-(use-package highlight-thing :ensure t :diminish highlight-thing-mode :config
-  (highlight-thing-mode))
-
-(use-package highlight-symbol :ensure t)
-
-(use-package highlight-parentheses :ensure t :diminish highlight-parentheses-mode :config
-  (progn
-    (global-highlight-parentheses-mode)
-    (setq hl-paren-background-colors '("red" "green" "blue" "magenta" "cyan")
-          hl-paren-colors nil)))
-
-(use-package "gnuplot" :ensure t :config
-  (require 'ob-gnuplot))
-
-(use-package vdiff :ensure t)
-
-(use-package visual-regexp :ensure t)
-
+(use-package graphviz-dot-mode :ensure t)
 
 ;; load private settings
 (load "~/.emacs.d/private.el" t)
+
+;; ditch the customize feature
+(setq custom-file "~/.emacs.d/custom.el")
+;(load custom-file 'noerror)
+
+(require 'ob-ansible)
+(req-package-finish)
