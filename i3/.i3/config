@@ -11,12 +11,31 @@
 
 set $mod Mod4
 
+# color defs
+set $black    #002B36
+set $white    #839496
+set $gray     #CCCCCC
+set $darkgray #666666
+set $green    #799F26
+set $blue     #4D73AA
+set $purple   #8473A7
+set $red      #f55900
+set $orange   #E59847
+set $cyan     #2AA198
+set $dark     #00252E
+set $light    #bbaaaa
+
 # look&feel
 font pango: Liberation Sans 10
-client.focused          #002b36 #889ea5 #fdf6e3 #268bd2
-client.focused_inactive #002b36 #073642 #b3c4c6 #073642
-client.unfocused        #002b36 #073642 #b3c4c6 #073642
-client.urgent           #002b36 #dc322f #fdf6e3 #002b36
+#                       border  bg      text    indicator child_border
+client.focused          $white  $white  $dark   $dark
+client.unfocused        $dark   $dark   $white  $white
+client.focused_inactive $dark   $dark   $white  $dark
+client.urgent           $orange $orange $dark   $white
+client.background       $black
+
+new_window none
+new_float normal
 
 # general
 floating_modifier $mod
@@ -26,21 +45,9 @@ hide_edge_borders smart
 # ... in effect won't wrap between screens :)
 force_focus_wrapping yes
 
-
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
-
-# launchers
-bindsym $mod+d exec rofi -show run || dmenu_run -i -l 10
-bindsym $mod+Shift+d exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -i -l 10'
-bindsym $mod+Return exec gnome-terminal || xfce4-terminal || xterm || urxvt
-bindsym $mod+Escape exec xscreensaver-command -lock
-bindsym XF86AudioLowerVolume exec amixer -q -D pulse sset Master 5%- && killall -SIGUSR1 py3status
-bindsym XF86AudioRaiseVolume exec amixer -q -D pulse sset Master 5%+ && killall -SIGUSR1 py3status
-bindsym XF86AudioMute exec amixer -q -D pulse sset Master toggle && killall -SIGUSR1 py3status
-bindsym XF86MonBrightnessUp exec xbacklight -inc 5
-bindsym XF86MonBrightnessDown exec xbacklight -dec 5
 
 # containers
 bindsym $mod+Shift+q kill
@@ -49,9 +56,6 @@ bindsym $mod+j focus left
 bindsym $mod+k focus down
 bindsym $mod+l focus up
 bindsym $mod+semicolon focus right
-
-#bindsym F11 focus left
-bindsym F12 focus right
 
 bindsym $mod+q focus parent
 bindsym $mod+a focus child
@@ -77,32 +81,29 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+grave scratchpad show
 bindsym $mod+Shift+grave move scratchpad
 
-# workspaces
-#bindsym F11 workspace next
-
-bindsym $mod+1 workspace 1
-bindsym $mod+2 workspace 2
-bindsym $mod+3 workspace 3
-bindsym $mod+4 workspace 4
-bindsym $mod+5 workspace 5
-bindsym $mod+6 workspace 6
-bindsym $mod+7 workspace 7
-bindsym $mod+8 workspace 8
-bindsym $mod+9 workspace 9
-bindsym $mod+0 workspace 10
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+bindsym $mod+0 workspace number 10
 
 bindsym $mod+z workspace back_and_forth
 
-bindsym $mod+Shift+1 move container to workspace 1
-bindsym $mod+Shift+2 move container to workspace 2
-bindsym $mod+Shift+3 move container to workspace 3
-bindsym $mod+Shift+4 move container to workspace 4
-bindsym $mod+Shift+5 move container to workspace 5
-bindsym $mod+Shift+6 move container to workspace 6
-bindsym $mod+Shift+7 move container to workspace 7
-bindsym $mod+Shift+8 move container to workspace 8
-bindsym $mod+Shift+9 move container to workspace 9
-bindsym $mod+Shift+0 move container to workspace 10
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+bindsym $mod+Shift+0 move container to workspace number 10
 
 # screens
 bindsym $mod+Shift+Control+j move workspace to output left
@@ -136,33 +137,70 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-}
-
 bar {
 	status_command i3blocks
-	position top
+	position bottom
+	separator_symbol " · "
+	font pango: Liberation Sans 10
+	tray_output primary
 	colors {
-		background #002b36
-		statusline #839496
-		separator  #586e75
-		focused_workspace  #b58900 #b58900 #002b36
-		active_workspace   #586e75 #586e75 #002b36
-		inactive_workspace #073642 #002b36 #c3d4d6
-		urgent_workspace   #dc322f #dc322f #fdf6e3
+		statusline $white
+		background $black
+		#border             border  bg      text
+		focused_workspace   $white  $white  $black
+		active_workspace    $white  $black  $white
+		inactive_workspace  $black  $black  $white
+		urgent_workspace    $red    $red    $black
+		binding_mode        $black  $red    $black
 	}
 }
 
-#other
-for_window [class=".*"] title_format "%class <b>%title</b>"
-for_window [class="Emacs"] title_format "<span foreground='#00ff00'>%class <b>%title</b></span>"
-for_window [class="Firefox"] title_format "<span foreground='#ffcc00'>%class <b>%title</b></span>"
-for_window [class="(Terminator|Xfce4-terminal|Gnome-terminal)"] title_format "<span foreground='#ff0000'>%class <b>%title</b></span>"
+# title rewrite
+for_window [class=".*"] \
+	title_format "%class <b>%title</b>"
+for_window [class="Emacs"] \
+	title_format "<span foreground='#00ff00'>E</span> <b>%title</b>"
+for_window [class="(Firefox|Chromium-browser)"] \
+	title_format "<span foreground='#ffcc00'>F</span> <b>%title</b>"
+for_window [class="(Tilix|Terminator|Xfce4-terminal|Gnome-terminal)"] \
+	title_format "<span foreground='#ff8888'>T</span> <b>%title</b>"
+for_window [class="(Google-chrome)"] \
+	title_format "<span foreground='#cc0099'>G</span> <b>%title</b>"
+
+set $mymenu <span font_style='normal'>MyMenu ::: <b>d</b>isplay, <b>e</b>macsclient, <b>x</b>init.sh</span>
+mode --pango_markup "$mymenu" {
+	bindsym d exec dir -1 ~/.screenlayout | dmenu | xargs sh && xrandr-hooks.sh ; mode "default"
+	bindsym e exec --no-startup-id emacsclient --no-wait -c || notify-send 'emacsclient' 'problem running it' ; mode "default"
+	bindsym x exec --no-startup-id xinit.sh ; mode "default"
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+bindsym $mod+x mode "$mymenu"
+
+# launchers
+bindsym $mod+d exec dmenu_run
+bindsym $mod+Shift+d exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -i -l 10'
+bindsym $mod+Return exec tilix --action=app-new-window
+bindsym $mod+Shift+Return exec xterm
+bindsym $mod+Escape exec xscreensaver-command -lock
+bindsym XF86AudioLowerVolume exec amixer -q -D pulse sset Master 5%- && killall -SIGUSR1 py3status
+bindsym XF86AudioRaiseVolume exec amixer -q -D pulse sset Master 5%+ && killall -SIGUSR1 py3status
+bindsym XF86AudioMute exec amixer -q -D pulse sset Master toggle && killall -SIGUSR1 py3status
+bindsym XF86MonBrightnessUp exec xbacklight -inc 5
+bindsym XF86MonBrightnessDown exec xbacklight -dec 5
+#bindsym XF86AudioPlay exec ~/bin/playerctl.bin -p spotify play-pause
+#bindsym XF86AudioPrev exec ~/bin/playerctl.bin -p spotify previous
+#bindsym XF86AudioNext exec ~/bin/playerctl.bin -p spotify next
+
+bindsym F12 focus right
+bindsym $mod+F11 focus output left
+bindsym $mod+F12 focus output right
+
+bindsym Print exec "test \\"$(i3-msg -t get_workspaces | jq '.[] | select(.focused) | .num')\\" = 1 && i3-msg 'workspace number 2' || i3-msg 'workspace number 1'"
 
 # startup
 exec --no-startup-id dunst
-exec --no-startup-id xscreensaver
 exec --no-startup-id redshift-gtk
 exec --no-startup-id nm-applet
 exec --no-startup-id ~/bin/xinit.sh
-exec --no-startup-id hexchat
-exec --no-startup-id compton --inactive-dim 0.2 --focus-exclude 'WM_CLASS@:s = "i3-frame"'
+exec --no-startup-id ~/bin/startup.sh || notify-send '~/bin/startup.sh not found during i3 startup.'
