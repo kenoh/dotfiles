@@ -171,7 +171,7 @@ set $mymenu <span font_style='normal'>MyMenu ::: <b>d</b>isplay, <b>e</b>macscli
 mode --pango_markup "$mymenu" {
 	bindsym d exec dir -1 ~/.screenlayout | dmenu | xargs sh && xrandr-hooks.sh ; mode "default"
 	bindsym e exec --no-startup-id emacsclient --no-wait -c || notify-send 'emacsclient' 'problem running it' ; mode "default"
-	bindsym x exec --no-startup-id xinit.sh ; mode "default"
+	bindsym x exec --no-startup-id ~/bin/xinit.sh ; mode "default"
 	bindsym Return mode "default"
 	bindsym Escape mode "default"
 }
@@ -188,6 +188,8 @@ bindsym XF86AudioRaiseVolume exec amixer -q -D pulse sset Master 5%+ && killall 
 bindsym XF86AudioMute exec amixer -q -D pulse sset Master toggle && killall -SIGUSR1 py3status
 bindsym XF86MonBrightnessUp exec xbacklight -inc 5
 bindsym XF86MonBrightnessDown exec xbacklight -dec 5
+bindsym $mod+Prior exec xbacklight -inc 5
+bindsym $mod+Next exec xbacklight -dec 5
 #bindsym XF86AudioPlay exec ~/bin/playerctl.bin -p spotify play-pause
 #bindsym XF86AudioPrev exec ~/bin/playerctl.bin -p spotify previous
 #bindsym XF86AudioNext exec ~/bin/playerctl.bin -p spotify next
