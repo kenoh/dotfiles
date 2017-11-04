@@ -201,8 +201,6 @@ bindsym $mod+F12 focus output right
 bindsym Print exec "test \\"$(i3-msg -t get_workspaces | jq '.[] | select(.focused) | .num')\\" = 1 && i3-msg 'workspace number 2' || i3-msg 'workspace number 1'"
 
 # startup
-exec --no-startup-id dunst
-exec --no-startup-id redshift-gtk
 exec --no-startup-id nm-applet
 exec --no-startup-id ~/bin/xinit.sh
 exec --no-startup-id ~/bin/startup.sh || notify-send '~/bin/startup.sh not found during i3 startup.'
