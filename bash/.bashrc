@@ -38,15 +38,20 @@ alias l='ls'
 alias ll='ls -l'
 alias la='ls -la'
 alias lt='ll -latr'
+alias c='pushd'
+alias b='popd'
 alias cd..="cd .."
 alias cd...="cd ../.."
 alias cd....="cd ../../.."
+alias cdg='cd $(git rev-parse --show-toplevel)'
 alias tree="tree -C"
 
 alias tmux='TERM=xterm-256color tmux'
 
 alias e='emacsclient --no-wait -e "(select-frame-set-input-focus (selected-frame))" && emacsclient --no-wait'
 alias et='emacsclient --tty'
+
+which ssh-ident && alias ssh="$(which ssh-ident)"
 
 alias ga='git add'
 alias gc='git commit'
