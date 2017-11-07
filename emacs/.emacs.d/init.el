@@ -89,7 +89,7 @@
       version-control t)  ; use versioned backups
 
 (setq scroll-step 1
-      scroll-margin 7
+      scroll-margin 0
       scroll-conservatively 9999)
 
 (setq print-level 15
