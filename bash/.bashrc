@@ -51,7 +51,7 @@ alias tmux='TERM=xterm-256color tmux'
 alias e='emacsclient --no-wait -e "(select-frame-set-input-focus (selected-frame))" && emacsclient --no-wait'
 alias et='emacsclient --tty'
 
-which ssh-ident && alias ssh="$(which ssh-ident)"
+which ssh-ident &>/dev/null && alias ssh="$(which ssh-ident)"
 
 alias ga='git add'
 alias gc='git commit'
@@ -60,6 +60,7 @@ alias gco='git checkout'
 alias gd='git diff'
 alias gdc='git diff --cached'
 alias gl='git log'
+alias gls='git log --graph --all --simplify-by-decoration'
 alias gP='git push'
 alias gf='git pull'
 alias gs='git status'
@@ -68,6 +69,7 @@ alias tiga='tig --all'
 alias d='colordiff -u'
 alias dr='d -r'
 
+alias openssl-cert-print-ascii='openssl x509 -text -noout -in'
 PATH="$HOME/.local/bin:$HOME/.local/usr/bin:$HOME/bin${PATH:+:${PATH}}"
 
 #PATH="$HOME/perl5/bin${PATH:+:${PATH}}"; export PATH;
