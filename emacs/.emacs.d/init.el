@@ -3,7 +3,8 @@
       '(("gnu" . "http://elpa.gnu.org/packages/")
         ("marmalade" . "http://marmalade-repo.org/packages/")
         ("melpa-stable" . "https://stable.melpa.org/packages/")
-        ("melpa" . "https://melpa.org/packages/")))
+        ("melpa" . "https://melpa.org/packages/")
+	("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -402,6 +403,9 @@
 	    `(("k" "Knowledge" entry (file ,(expand-file-name "~/kb.org"))
 	       "* %?%^g\n#+DATE: %t\n%i")))
       (define-key global-map "\C-cc" 'org-capture))))
+
+(use-package org-plus-contrib :ensure t :config
+  (require 'org-notmuch))
 
 (use-package yaml-mode :ensure t :config
   (progn
