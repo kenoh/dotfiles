@@ -1,0 +1,4 @@
+set colored-completion-prefix On
+set colored-stats On
+set bell-style visible
+set blink-matching-paren On
