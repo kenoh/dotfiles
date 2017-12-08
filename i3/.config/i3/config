@@ -138,7 +138,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 bar {
-	status_command i3blocks
+	status_command py3status
 	position bottom
 	separator_symbol " · "
 	font pango: Liberation Sans 10

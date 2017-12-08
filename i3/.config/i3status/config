@@ -1,0 +1,93 @@
+# i3status configuration file.
+# see "man i3status" for documentation.
+
+# It is important that this file is edited as UTF-8.
+# The following line should contain a sharp s:
+# ß
+# If the above line is not correctly displayed, fix your editor first!
+
+general {
+	colors = true
+	color = "#aaaaaa"
+	interval = 5
+	markup = "pango"
+}
+
+order += "external_script systemd"
+order += "external_script notmuch"
+order += "selinux"
+order += "spotify"
+order += "load"
+order += "disk /"
+order += "disk /home"
+order += "backlight"
+order += "battery_level"
+order += "volume_status"
+order += "tztime date"
+order += "tztime time"
+
+external_script systemd {
+	format = "{output}"
+	color = "#ffff00"
+	script_path = "\"{ systemctl --user -q is-failed '*' && systemctl --user --state=failed --no-pager --no-legend || echo ''; } | cut -d ' ' -f 1 | head -n 1\""
+}
+
+backlight {
+	format = "☼ {level}"
+}
+
+battery_level {
+	format = "{icon} {percent}% {time_remaining}"
+	hide_seconds = True
+	threshold_full = 95
+	threshold_degraded = 70
+	threshold_bad = 30
+	color_good = ""
+}
+
+tztime date {
+	format = "%Y-%m-%d"
+}
+
+tztime time {
+	format = "<span color='#ffffff'><b>%time</b></span>"
+	format_time = "%H:%M"
+}
+
+load {
+	format = "%1min"
+}
+
+disk "/home" {
+	low_threshold = "9"
+	threshold_type = gbytes_avail
+	format = "~ %avail"
+}
+
+disk "/" {
+	low_threshold = "2"
+	threshold_type = gbytes_avail
+	format = "/ %avail"
+}
+
+volume_status {
+	button_mute = 2
+	button_up = 4
+	button_down = 5
+	device = "pulse"
+	thresholds = [ (0, 'good'), (40, 'degraded'), (70, 'bad') ]
+}
+
+spotify {
+	format = "{title} @ {album} ~ {artist}"
+	color_good = "#ffffff"
+	color_degraded = ""
+	on_click 1 = "[class=\"Spotify\"] focus"
+	on_click 2 = "exec playerctl.bin -p spotify play-pause"
+	on_click 4 = "exec playerctl.bin -p spotify previous"
+	on_click 5 = "exec playerctl.bin -p spotify next"
+}
+
+selinux {
+	color_good = ""
+}
