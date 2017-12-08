@@ -8,6 +8,7 @@ fi
 shopt -s checkwinsize  # update rows/cols after each command
 shopt -s globstar  # recursive ** expansion
 shopt -s histappend  # append to histfile
+shopt -s histverify  # do not immediately execute a command from history
 
 export HISTCONTROL=ignoredups:erasedups
 export HISTFILESIZE=99999
@@ -19,13 +20,14 @@ __prompt_command() {
     local EXIT_STATUS="$?"
     local CURRENT_DATETIME="$(date --iso-8601=seconds)"
     local GIT_REVISION="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+    local XTERM_TITLE="\[\e]0;\w\007\]"
 
     cInvert="\[\e[7m\]"
     cReset="\[\e[0m\]"
     cBold="\[\e[1m\]"
     cUnderline="\[\e[4m\]"
 
-    PS1="${cInvert}${EXIT_STATUS}${cReset} ${cInvert}\w${cReset} [${cBold}${GIT_REVISION}${cReset}] ${CURRENT_DATETIME}${cInvert}\n#${cReset} "
+    PS1="${cInvert}${EXIT_STATUS}${XTERM_TITLE}${cReset} ${cInvert}\w${cReset} [${cBold}${GIT_REVISION}${cReset}] ${CURRENT_DATETIME}${cInvert}\n#${cReset} "
 }
 PROMPT_COMMAND=__prompt_command
 
@@ -63,11 +65,16 @@ alias gl='git log'
 alias gls='git log --graph --all --simplify-by-decoration'
 alias gP='git push'
 alias gf='git pull'
-alias gs='git status'
+gs() {
+	git worktree list
+	git status $@
+}
 alias tiga='tig --all'
 
 alias d='colordiff -u'
 alias dr='d -r'
+
+alias sctl='systemctl --user'
 
 alias openssl-cert-print-ascii='openssl x509 -text -noout -in'
 PATH="$HOME/.local/bin:$HOME/.local/usr/bin:$HOME/bin${PATH:+:${PATH}}"
