@@ -186,13 +186,13 @@ bindsym $mod+Escape exec xscreensaver-command -lock
 bindsym XF86AudioLowerVolume exec amixer -q -D pulse sset Master 5%- && killall -SIGUSR1 py3status
 bindsym XF86AudioRaiseVolume exec amixer -q -D pulse sset Master 5%+ && killall -SIGUSR1 py3status
 bindsym XF86AudioMute exec amixer -q -D pulse sset Master toggle && killall -SIGUSR1 py3status
-bindsym XF86MonBrightnessUp exec xbacklight -inc 5
-bindsym XF86MonBrightnessDown exec xbacklight -dec 5
-bindsym $mod+Prior exec xbacklight -inc 5
-bindsym $mod+Next exec xbacklight -dec 5
-#bindsym XF86AudioPlay exec ~/bin/playerctl.bin -p spotify play-pause
-#bindsym XF86AudioPrev exec ~/bin/playerctl.bin -p spotify previous
-#bindsym XF86AudioNext exec ~/bin/playerctl.bin -p spotify next
+bindsym XF86MonBrightnessUp exec xbacklight -inc 5 -time 0 && killall -SIGUSR1 py3status
+bindsym XF86MonBrightnessDown exec xbacklight -dec 6 -time 0 && xbacklight -inc 1 -time 0 && killall -SIGUSR1 py3status
+bindsym $mod+Prior exec xbacklight -inc 5 -time 0 && killall -SIGUSR1 py3status
+bindsym $mod+Next exec xbacklight -dec 6 -time 0 && xbacklight -inc 1 -time 0 && killall -SIGUSR1 py3status
+bindsym XF86AudioPlay exec playerctl.bin -p spotify play-pause
+bindsym XF86AudioPrev exec playerctl.bin -p spotify previous
+bindsym XF86AudioNext exec playerctl.bin -p spotify next
 
 bindsym F12 focus right
 bindsym $mod+F11 focus output left
