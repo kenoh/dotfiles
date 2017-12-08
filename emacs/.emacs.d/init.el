@@ -52,7 +52,7 @@
       (let ((ff-mono (first-eligible-font-of '("Liberation Mono" "Terminus" "Terminal")))
 	    (ff-sans (first-eligible-font-of '("Liberation Sans"))))
 	(message ff-mono)
-	(set-face-attribute 'default nil :height 100 :family ff-mono :foreground "#000000" :background "#f8f8ee")
+	(set-face-attribute 'default nil :height 110 :family ff-mono :foreground "#000000" :background "#f8f8ee")
 	(set-face-attribute 'cursor nil :background "orange")
 	(set-face-attribute 'mode-line nil :height 0.9 :family ff-sans)
 	(set-face-attribute 'mode-line-inactive nil :inherit 'mode-line)
@@ -103,28 +103,50 @@
 (global-set-key (kbd "C-<mouse-5>") 'text-scale-decrease)
 (global-set-key (kbd "C-M-+") 'text-scale-increase)
 (global-set-key (kbd "C-M-_") 'text-scale-decrease)
+(global-set-key (kbd "C-x C-j") #'dired-jump)
 
 (global-auto-revert-mode 1)
 (add-hook 'dired-mode-hook 'auto-revert-mode)
 (add-hook 'dired-mode-hook 'hl-line-mode)
 
-(global-set-key [next] (lambda () (interactive)
-			 (setq this-command 'next-line)
-			 (next-line
-			  (- (window-text-height)
-			     next-screen-context-lines))))
-(global-set-key [prior] (lambda () (interactive)
-			  (setq this-command 'previous-line)
-			  (previous-line
-			   (- (window-text-height)
-			      next-screen-context-lines))))
+;; set next/prior to return back to previous location
+(defmacro k/better-movement (cmd)
+  `(lambda () (interactive)
+     (setq this-command ',cmd)
+     (,cmd
+      (- (window-text-height)
+         next-screen-context-lines))))
+(k/better-movement next-line)
+(global-set-key [next] (k/better-movement next-line))
+(global-set-key [prior] (k/better-movement previous-line))
 
 ;; whitespace
 (require 'whitespace)
-(setq whitespace-style '(face empty tabs lines-tail trailing))
+(setq whitespace-style '(face empty lines-tail trailing space-before-tab))
+(add-hook 'prog-mode-hook 'whitespace-mode)
+(add-hook 'text-mode-hook 'whitespace-mode)
 
 
-;; align-regexp - use spaces instead of tabs
+;; ibuffer
+(defun k/ibuffer-mode-hook ()
+  (let ((groups (list (append '("default"
+				("erc" (mode . erc-mode))
+				("mail" (or (mode . notmuch-hello-mode)
+					    (mode . notmuch-search-mode)
+					    (mode . notmuch-tree-mode)
+					    (mode . notmuch-message-mode)
+					    (mode . notmuch-show-mode))))
+			      (ibuffer-projectile-generate-filter-groups)))))
+    (setq ibuffer-saved-filter-groups groups)
+    (ibuffer-switch-to-saved-filter-groups "default")
+    (let ((ibuf (get-buffer "*Ibuffer*")))
+    (when ibuf
+      (with-current-buffer ibuf
+        (pop-to-buffer ibuf)
+        (ibuffer-update nil t))))))
+(add-hook 'ibuffer-hook 'k/ibuffer-mode-hook)
+
+;; align-regexp
 (defadvice align-regexp (around align-regexp-with-spaces activate)
   (let ((indent-tabs-mode nil))
     ad-do-it))
@@ -208,7 +230,7 @@
           helm-move-to-line-cycle-in-source t
           helm-ff-search-library-in-sexp t
           helm-scroll-amount 8
-          helm-ff-file-name-history-use-recentf t
+	  helm-ff-file-name-history-use-recentf t
 	  recentf-max-saved-items 100
           helm-M-x-fuzzy-match t)
 
@@ -337,6 +359,11 @@
   (progn
     (global-set-key (kbd "C-c g g") 'magit-status)
     (global-set-key (kbd "C-c g b") 'magit-blame)
+    (add-hook 'git-gutter-mode-hook (lambda ()
+				      (local-set-key (kbd "C-c g d") 'git-gutter:popup-hunk)
+				      (local-set-key (kbd "C-c g r") 'git-gutter:revert-hunk)))
+    (setq magit-display-buffer-function (lambda (buffer)
+					  (display-buffer buffer '(display-buffer-same-window))))
     (which-key-add-key-based-replacements "C-c g" "magit")))
 
 (use-package ggtags :ensure t :config
@@ -364,7 +391,7 @@
 
 (use-package macrostep :ensure t)
 
-(use-package nameless :ensure t :config
+(use-package nameless :ensure t :diminish nameless-mode :config
   (progn
     (setq nameless-global-aliases '(("πσ" . "parsec")))
     (add-hook 'emacs-lisp-mode-hook 'nameless-mode)))
@@ -453,6 +480,12 @@
   (progn
     (persistent-scratch-setup-default)
     (setq persistent-scratch-autosave-interval 60)))
+
+(defun k/face-under-point (pos)
+  (interactive "d")
+  (let ((face (or (get-char-property (or pos (point)) 'read-face-name)
+                  (get-char-property (or pos (point)) 'face))))
+    (if face (message "Face: %s" face) (message "No face at %d" pos))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
