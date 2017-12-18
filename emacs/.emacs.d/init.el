@@ -481,6 +481,8 @@
     (persistent-scratch-setup-default)
     (setq persistent-scratch-autosave-interval 60)))
 
+(use-package markdown-mode :ensure t)
+
 (defun k/face-under-point (pos)
   (interactive "d")
   (let ((face (or (get-char-property (or pos (point)) 'read-face-name)
