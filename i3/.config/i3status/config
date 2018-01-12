@@ -38,6 +38,7 @@ backlight {
 
 battery_level {
 	format = "{icon} {percent}% {time_remaining}"
+	battery_id = all
 	hide_seconds = True
 	threshold_full = 95
 	threshold_degraded = 70
