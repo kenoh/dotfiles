@@ -417,9 +417,6 @@
                "* %?%^g\n#+DATE: %t\n%i")))
       (define-key global-map "\C-cc" 'org-capture))))
 
-(use-package org-plus-contrib :ensure t :config
-  (require 'org-notmuch))
-
 (use-package yaml-mode :ensure t :config
   (progn
     (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
@@ -456,8 +453,6 @@
 (use-package graphviz-dot-mode :ensure t :config
   (progn
     (setq graphviz-dot-view-command "xdot %s")))
-
-(use-package org-mind-map :ensure t)
 
 (use-package persistent-scratch :ensure t :config
   (progn
