@@ -257,6 +257,7 @@
         (global-set-key (kbd "M-I") 'helm-multi-swoop-projectile)
         (setq helm-swoop-split-with-multiple-windows t
               helm-swoop-split-direction 'split-window-vertically
+              helm-swoop-speed-or-color t ; for the below to work, see https://github.com/ShingoFukuyama/helm-swoop/issues/121
               helm-swoop-use-line-number-face t)))
 
     (helm-mode 1)))
