@@ -172,7 +172,14 @@
 
 ;; modeline
 (size-indication-mode t)  ; show size of buffer in modeline
-
+(use-package spaceline :ensure t :config
+  (progn
+    (require 'spaceline-config)
+    (setq spaceline-version-control-p t
+          spaceline-selection-info-p t
+          spaceline-projectile-root-p t)
+    (spaceline-emacs-theme)
+    (spaceline-helm-mode 1)))
 
 
 ;; semantic
@@ -311,27 +318,15 @@
   (setq ediff-split-window-function 'split-window-horizontally
         ediff-window-setup-function 'ediff-setup-windows-plain))
 
-(use-package projectile :ensure t :config
+(use-package projectile :ensure t :diminish 'projectile-mode :config
   (progn
     (add-to-list 'projectile-project-root-files "Vagrantfile" t)
     (setq projectile-switch-project-action 'projectile-dired
           projectile-use-git-grep t
-	  projectile-project-name-function (lambda (project-root)
-					     (->> project-root
-						  (replace-regexp-in-string (concat "^" (getenv "HOME") "/?") "~/")
-						  (replace-regexp-in-string "/*$" "")))
-	  projectile-mode-line '(:propertize
-				 (:eval (if (file-remote-p default-directory)
-					    " Pr"
-					  (format " %s@%s@%s"
-						  (projectile-project-name)
-						  (or (magit-get-current-branch)
-						      (magit-get-current-tag))
-						  (let ((fn tags-file-name))
-						    (if (stringp fn)
-							(file-relative-name fn)
-						      "(void)")))))
-				 face modeline-buffer-id))
+          projectile-project-name-function (lambda (project-root)
+                                             (->> project-root
+                                                  (replace-regexp-in-string (concat "^" (getenv "HOME") "/?") "~/")
+                                                  (replace-regexp-in-string "/*$" ""))))
     (which-key-add-key-based-replacements "C-c p" "projectile")
     (use-package ibuffer-projectile :ensure t)
     (use-package projectile-speedbar :ensure t
