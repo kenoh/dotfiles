@@ -9,12 +9,6 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;;; init req-package
-(unless (package-installed-p 'req-package)
-  (package-refresh-contents)
-  (package-install 'req-package))
-(require 'req-package)
-
 ;;; init use-package
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -34,7 +28,7 @@
         ;(desktop-save-mode 1)
         (setq confirm-kill-emacs 'y-or-n-p))))
 
-(req-package solarized-theme :config
+(use-package solarized-theme :config
   (progn
     (setq solarized-scale-org-headlines nil
           solarized-high-contrast-mode-line t
@@ -201,15 +195,6 @@
 ;; C
 (setq c-default-style "k&r"
       c-basic-offset 4)
-
-
-(req-package el-get ;; prepare el-get (optional)
-  :force t ;; load package immediately, no dependency resolution
-  :config
-  (progn (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get/el-get/recipes")
-	 (el-get 'sync)
-	 (require 'el-get-bundle)))
-
 
 (use-package strace-mode :ensure t)
 
@@ -446,10 +431,7 @@
         (use-package ansible-doc :ensure t :config
           (add-hook 'ansible-hook 'ansible-doc-mode))))))
 
-;; (el-get-bundle zweifisch/ob-ansible
-;;   (require 'ob-ansible))
-
-(req-package helm-dash)
+(use-package helm-dash :ensure t)
 
 (use-package rpm-spec-mode :ensure t :config
   (progn
@@ -498,7 +480,3 @@
 ;; ditch the customize feature
 (setq custom-file "~/.emacs.d/custom.el")
 ;;(load custom-file 'noerror)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (require 'ob-ansible)
-(req-package-finish)
