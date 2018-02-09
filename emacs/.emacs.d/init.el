@@ -4,7 +4,7 @@
         ("marmalade" . "http://marmalade-repo.org/packages/")
         ("melpa-stable" . "https://stable.melpa.org/packages/")
         ("melpa" . "https://melpa.org/packages/")
-	("org" . "http://orgmode.org/elpa/")))
+        ("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -27,7 +27,7 @@
 (use-package "s" :ensure t)
 
 (if (display-graphic-p)
-    (progn      
+    (progn
       (require 'server)
       (unless (server-running-p)
         (server-mode)
@@ -37,18 +37,18 @@
 (req-package solarized-theme :config
   (progn
     (setq solarized-scale-org-headlines nil
-	  solarized-high-contrast-mode-line t
-	  solarized-use-variable-pitch nil
-	  solarized-distinct-fringe-background t
-	  solarized-distinct-doc-face t
-	  solarized-emphasize-indicators t)
+          solarized-high-contrast-mode-line t
+          solarized-use-variable-pitch nil
+          solarized-distinct-fringe-background t
+          solarized-distinct-doc-face t
+          solarized-emphasize-indicators t)
     (load-theme 'solarized-light t)
     (setq cursor-type 'box
-	  use-dialog-box nil
-	  mouse-yank-at-point t)
+          use-dialog-box nil
+          mouse-yank-at-point t)
     (cl-flet ((first-eligible-font-of
-	       (lambda (fonts)
-		 (--first (member it (font-family-list)) fonts))))
+               (lambda (fonts)
+                 (--first (member it (font-family-list)) fonts))))
       (let ((ff-mono (first-eligible-font-of '("Liberation Mono" "Terminus" "Terminal")))
 	    (ff-sans (first-eligible-font-of '("Liberation Sans"))))
 	(message ff-mono)
@@ -130,20 +130,20 @@
 ;; ibuffer
 (defun k/ibuffer-mode-hook ()
   (let ((groups (list (append '("default"
-				("erc" (mode . erc-mode))
-				("mail" (or (mode . notmuch-hello-mode)
-					    (mode . notmuch-search-mode)
-					    (mode . notmuch-tree-mode)
-					    (mode . notmuch-message-mode)
-					    (mode . notmuch-show-mode))))
-			      (ibuffer-projectile-generate-filter-groups)))))
+                                ("erc" (mode . erc-mode))
+                                ("mail" (or (mode . notmuch-hello-mode)
+                                            (mode . notmuch-search-mode)
+                                            (mode . notmuch-tree-mode)
+                                            (mode . notmuch-message-mode)
+                                            (mode . notmuch-show-mode))))
+                              (ibuffer-projectile-generate-filter-groups)))))
     (setq ibuffer-saved-filter-groups groups)
     (ibuffer-switch-to-saved-filter-groups "default")
     (let ((ibuf (get-buffer "*Ibuffer*")))
-    (when ibuf
-      (with-current-buffer ibuf
-        (pop-to-buffer ibuf)
-        (ibuffer-update nil t))))))
+      (when ibuf
+        (with-current-buffer ibuf
+          (pop-to-buffer ibuf)
+          (ibuffer-update nil t))))))
 (add-hook 'ibuffer-hook 'k/ibuffer-mode-hook)
 
 ;; align-regexp
@@ -230,8 +230,8 @@
           helm-move-to-line-cycle-in-source t
           helm-ff-search-library-in-sexp t
           helm-scroll-amount 8
-	  helm-ff-file-name-history-use-recentf t
-	  recentf-max-saved-items 100
+          helm-ff-file-name-history-use-recentf t
+          recentf-max-saved-items 100
           helm-M-x-fuzzy-match t)
 
     (global-set-key (kbd "C-c h") 'helm-command-prefix)
@@ -253,11 +253,11 @@
     (use-package helm-projectile :ensure t :config (helm-projectile-on))
     (use-package helm-swoop :ensure t :config
       (progn
-	(global-set-key (kbd "M-i") 'helm-swoop)
-	(global-set-key (kbd "M-I") 'helm-multi-swoop-projectile)
-	(setq helm-swoop-split-with-multiple-windows t
-	      helm-swoop-split-direction 'split-window-vertically
-	      helm-swoop-use-line-number-face t)))
+        (global-set-key (kbd "M-i") 'helm-swoop)
+        (global-set-key (kbd "M-I") 'helm-multi-swoop-projectile)
+        (setq helm-swoop-split-with-multiple-windows t
+              helm-swoop-split-direction 'split-window-vertically
+              helm-swoop-use-line-number-face t)))
 
     (helm-mode 1)))
 
@@ -271,10 +271,10 @@
     (set-face-attribute 'which-key-command-description-face nil :height 1.0)
     (set-face-attribute 'which-key-local-map-description-face nil :height 1.0)
     (setq-default which-key-replacement-alist '(((nil . "^c-") . (nil . "c."))
-						((nil . "ggtags-") . (nil . "gg."))
-						((nil . "paredit-") . (nil . "()."))
-						((nil . "projectile-") . (nil . "p."))
-						((nil . "helm-") . (nil . "h."))))
+                                                ((nil . "ggtags-") . (nil . "gg."))
+                                                ((nil . "paredit-") . (nil . "()."))
+                                                ((nil . "projectile-") . (nil . "p."))
+                                                ((nil . "helm-") . (nil . "h."))))
     (which-key-add-key-based-replacements "C-x a" "abbrev")
     (which-key-add-key-based-replacements "C-x n" "narrow")
     (which-key-add-key-based-replacements "C-x r" "register/rectangle")
@@ -319,7 +319,7 @@
 
 (use-package ediff :ensure t :config
   (setq ediff-split-window-function 'split-window-horizontally
-	ediff-window-setup-function 'ediff-setup-windows-plain))
+        ediff-window-setup-function 'ediff-setup-windows-plain))
 
 (use-package projectile :ensure t :config
   (progn
@@ -351,7 +351,7 @@
       "adds a possibility to open the shell even outside of a project"
       (interactive)
       (let ((projectile-require-project-root nil))
-	ad-do-it))
+        ad-do-it))
     (projectile-cleanup-known-projects)
     (projectile-global-mode)))
 
@@ -359,18 +359,19 @@
   (progn
     (global-set-key (kbd "C-c g g") 'magit-status)
     (global-set-key (kbd "C-c g b") 'magit-blame)
-    (add-hook 'git-gutter-mode-hook (lambda ()
-				      (local-set-key (kbd "C-c g d") 'git-gutter:popup-hunk)
-				      (local-set-key (kbd "C-c g r") 'git-gutter:revert-hunk)))
+    (add-hook 'git-gutter-mode-hook
+              (lambda ()
+                (local-set-key (kbd "C-c g d") 'git-gutter:popup-hunk)
+                (local-set-key (kbd "C-c g r") 'git-gutter:revert-hunk)))
     (setq magit-display-buffer-function (lambda (buffer)
-					  (display-buffer buffer '(display-buffer-same-window))))
+                                          (display-buffer buffer '(display-buffer-same-window))))
     (which-key-add-key-based-replacements "C-c g" "magit")))
 
 (use-package ggtags :ensure t :config
   (progn
     (add-hook 'c-mode-common-hook
-	      (lambda () (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-		      (ggtags-mode 1))))
+              (lambda () (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                      (ggtags-mode 1))))
     (define-key ggtags-mode-map (kbd "C-c t s") 'ggtags-find-other-symbol)
     (define-key ggtags-mode-map (kbd "C-c t h") 'ggtags-view-tag-history)
     (define-key ggtags-mode-map (kbd "C-c t r") 'ggtags-find-reference)
@@ -403,7 +404,7 @@
     (use-package clojure-mode-extra-font-locking :ensure t)
     (use-package cider :ensure t)))
 
-(use-package org :ensure t :defer t :config 
+(use-package org :ensure t :defer t :config
   (progn
     (add-hook 'org-mode-hook 'org-indent-mode)
     ;; active Babel languages
@@ -413,12 +414,12 @@
     (require 'cider)
     (setq org-babel-clojure-backend 'cider)
     (org-babel-do-load-languages 'org-babel-load-languages
-				 '((shell . t)
-				   (emacs-lisp . t)
-				   (python . t)
-				   (gnuplot . t)
-				   (clojure . t)
-				   (dot . t)))
+                                 '((shell . t)
+                                   (emacs-lisp . t)
+                                   (python . t)
+                                   (gnuplot . t)
+                                   (clojure . t)
+                                   (dot . t)))
     (add-to-list 'org-structure-template-alist '("n" "#+NAME: ?"))
     ;; do not bother when C-c C-c
     (defun kenoh/org-confirm-babel-evaluate (lang body)
@@ -427,8 +428,8 @@
     (progn
       (setq org-default-notes-file "~/kb.org")
       (setq org-capture-templates
-	    `(("k" "Knowledge" entry (file ,(expand-file-name "~/kb.org"))
-	       "* %?%^g\n#+DATE: %t\n%i")))
+            `(("k" "Knowledge" entry (file ,(expand-file-name "~/kb.org"))
+               "* %?%^g\n#+DATE: %t\n%i")))
       (define-key global-map "\C-cc" 'org-capture))))
 
 (use-package org-plus-contrib :ensure t :config
@@ -439,11 +440,11 @@
     (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
     (use-package ansible :ensure t :config
       (progn
-	(add-hook 'yaml-mode-hook 'ansible)
-	(use-package company-ansible :ensure t :config
-	  (add-hook 'ansible-hook 'company-mode))
-	(use-package ansible-doc :ensure t :config
-	  (add-hook 'ansible-hook 'ansible-doc-mode))))))
+        (add-hook 'yaml-mode-hook 'ansible)
+        (use-package company-ansible :ensure t :config
+          (add-hook 'ansible-hook 'company-mode))
+        (use-package ansible-doc :ensure t :config
+          (add-hook 'ansible-hook 'ansible-doc-mode))))))
 
 ;; (el-get-bundle zweifisch/ob-ansible
 ;;   (require 'ob-ansible))
@@ -465,7 +466,7 @@
 (use-package slime :ensure t :config
   (progn
     (setq inferior-lisp-program "sbcl"
-	  slime-contribs '(slime-fancy))))
+          slime-contribs '(slime-fancy))))
 
 (use-package docker :ensure t)
 (use-package dockerfile-mode :ensure t)
