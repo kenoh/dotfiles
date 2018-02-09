@@ -68,6 +68,11 @@
 
 (hl-line-mode 1)
 
+;; vc-mode
+(add-hook 'dired-mode-hook 'vc-mode)
+(add-hook 'prog-mode-hook 'vc-mode)
+(add-hook 'text-mode-hook 'vc-mode)
+
 ;;; setup basic
 (setf inhibit-startup-screen t)
 (setf show-trailing-whitespace t)
@@ -349,7 +354,8 @@
                 (local-set-key (kbd "C-c g d") 'git-gutter:popup-hunk)
                 (local-set-key (kbd "C-c g r") 'git-gutter:revert-hunk)))
     (setq magit-display-buffer-function (lambda (buffer)
-                                          (display-buffer buffer '(display-buffer-same-window))))
+                                          (display-buffer buffer '(display-buffer-same-window)))
+          magit-diff-refine-hunk t)
     (which-key-add-key-based-replacements "C-c g" "magit")))
 
 (use-package ggtags :ensure t :config
