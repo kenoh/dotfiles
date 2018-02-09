@@ -50,6 +50,8 @@
         (set-face-attribute 'cursor nil :background "orange")
         (set-face-attribute 'mode-line nil :height 0.9 :family ff-sans)
         (set-face-attribute 'mode-line-inactive nil :inherit 'mode-line)
+
+        (require 'speedbar)
         (set-face-attribute 'speedbar-button-face nil :height 0.8 :family ff-sans)
         (set-face-attribute 'speedbar-file-face nil :height 0.8 :family ff-sans)
         (set-face-attribute 'speedbar-directory-face nil :height 0.8 :family ff-sans)
