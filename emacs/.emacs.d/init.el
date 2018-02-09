@@ -127,6 +127,7 @@
 
 
 ;; ibuffer
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 (defun k/ibuffer-mode-hook ()
   (let ((groups (list (append '("default"
                                 ("erc" (mode . erc-mode))
@@ -152,6 +153,8 @@
 
 
 ;; emacs-lisp
+(add-hook 'emacs-lisp-mode-hook
+          (lambda () (local-set-key (kbd "C-c C-c") 'eval-buffer)))
 (setq tab-always-indent 'complete)
 (add-to-list 'completion-styles 'initials t)
 
