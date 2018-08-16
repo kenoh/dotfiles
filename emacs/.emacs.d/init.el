@@ -6,6 +6,12 @@
         ("melpa" . "https://melpa.org/packages/")
         ("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
+(package-refresh-contents)
+
+(let ((default-directory  "~/.emacs.d/k-private/"))
+  (add-to-list 'load-path default-directory t)
+  (normal-top-level-add-subdirs-to-load-path))
+(require 'k-utils)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 (define-key key-translation-map (kbd "<insert>") (kbd "C-c"))
@@ -127,6 +133,7 @@
 (require 'whitespace)
 (setq tab-width 3)
 (setq whitespace-style '(face empty trailing space-before-tab))
+(which-key-add-key-based-replacements (kbd "C-c w") "whitespace")
 (gsk "C-c w 0" "ws: no highlighting"
      (whitespace-mode -1) (setq whitespace-style '()) (whitespace-mode 1))
 (gsk "C-c w 1" "ws: only probably messed up whitespace"
