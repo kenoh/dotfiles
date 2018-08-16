@@ -355,6 +355,7 @@
                                              (->> project-root
                                                   (replace-regexp-in-string (concat "^" (getenv "HOME") "/?") "~/")
                                                   (replace-regexp-in-string "/*$" ""))))
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
     (which-key-add-key-based-replacements "C-c p" "projectile")
     (use-package ibuffer-projectile :ensure t)
     (use-package projectile-speedbar :ensure t
