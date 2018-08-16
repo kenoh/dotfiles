@@ -39,38 +39,29 @@
         ;(desktop-save-mode 1)
         (setq confirm-kill-emacs 'y-or-n-p))))
 
-(use-package solarized-theme :config
-  (progn
-    (setq solarized-scale-org-headlines nil
-          solarized-high-contrast-mode-line t
-          solarized-use-variable-pitch nil
-          solarized-distinct-fringe-background t
-          solarized-distinct-doc-face t
-          solarized-emphasize-indicators t)
-    (load-theme 'solarized-light t)
-    (setq cursor-type 'box
-          use-dialog-box nil
-          mouse-yank-at-point t)
-    (cl-flet ((first-eligible-font-of
-               (lambda (fonts)
-                 (--first (member it (font-family-list)) fonts))))
-      (let ((ff-mono (first-eligible-font-of '("Liberation Mono" "Terminus" "Terminal")))
-            (ff-sans (first-eligible-font-of '("Liberation Sans"))))
-        (message ff-mono)
-        (set-face-attribute 'default nil :height 110 :family ff-mono :foreground "#000000" :background "#f8f8ee")
-        (set-face-attribute 'cursor nil :background "orange")
-        (set-face-attribute 'mode-line nil :height 0.9 :family ff-sans)
-        (set-face-attribute 'mode-line-inactive nil :inherit 'mode-line)
+(load-theme 'leuven t)
+(setq cursor-type 'box
+		use-dialog-box nil
+		mouse-yank-at-point t)
+(cl-flet ((first-eligible-font-of
+	   (lambda (fonts)
+	     (--first (member it (font-family-list)) fonts))))
+  (let ((ff-mono (first-eligible-font-of '("Source Code Pro" "Liberation Mono" "Terminus" "Terminal")))
+	(ff-sans (first-eligible-font-of '("Liberation Sans"))))
+    (message ff-mono)
+    (set-face-attribute 'default nil :height 100 :family ff-mono :foreground "#000000" :background "#f8f8ee")
+    (set-face-attribute 'cursor nil :background "orange")
+    (set-face-attribute 'mode-line nil :height 0.9 :family ff-sans)
+    (set-face-attribute 'mode-line-inactive nil :inherit 'mode-line)
 
-        (require 'speedbar)
-        (set-face-attribute 'speedbar-button-face nil :height 0.8 :family ff-sans)
-        (set-face-attribute 'speedbar-file-face nil :height 0.8 :family ff-sans)
-        (set-face-attribute 'speedbar-directory-face nil :height 0.8 :family ff-sans)
-        (set-face-attribute 'speedbar-highlight-face nil :height 0.8 :family ff-sans)
-        (set-face-attribute 'speedbar-selected-face nil :height 0.8 :family ff-sans)
-        (set-face-attribute 'speedbar-separator-face nil :height 0.8 :family ff-sans)
-        (set-face-attribute 'speedbar-tag-face nil :height 0.8 :family ff-sans)))))
-
+    (require 'speedbar)
+    (set-face-attribute 'speedbar-button-face nil :height 0.8 :family ff-sans)
+    (set-face-attribute 'speedbar-file-face nil :height 0.8 :family ff-sans)
+    (set-face-attribute 'speedbar-directory-face nil :height 0.8 :family ff-sans)
+    (set-face-attribute 'speedbar-highlight-face nil :height 0.8 :family ff-sans)
+    (set-face-attribute 'speedbar-selected-face nil :height 0.8 :family ff-sans)
+    (set-face-attribute 'speedbar-separator-face nil :height 0.8 :family ff-sans)
+    (set-face-attribute 'speedbar-tag-face nil :height 0.8 :family ff-sans)))
 
 (ignore-errors
   (menu-bar-mode -1)
