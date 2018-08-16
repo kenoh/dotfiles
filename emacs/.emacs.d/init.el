@@ -123,7 +123,14 @@
 
 ;; whitespace
 (require 'whitespace)
-(setq whitespace-style '(face empty lines-tail trailing space-before-tab))
+(setq tab-width 3)
+(setq whitespace-style '(face empty trailing space-before-tab))
+(gsk "C-c w 0" "ws: no highlighting"
+     (whitespace-mode -1) (setq whitespace-style '()) (whitespace-mode 1))
+(gsk "C-c w 1" "ws: only probably messed up whitespace"
+     (whitespace-mode -1) (setq whitespace-style '(face empty trailing space-before-tab)) (whitespace-mode 1))
+(gsk "C-c w 2" "ws: as 1 plus long lines"
+     (whitespace-mode -1) (setq whitespace-style '(face empty trailing space-before-tab lines-tail)) (whitespace-mode 1))
 (add-hook 'prog-mode-hook 'whitespace-mode)
 (add-hook 'text-mode-hook 'whitespace-mode)
 
