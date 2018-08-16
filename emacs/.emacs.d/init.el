@@ -8,6 +8,7 @@
 (package-initialize)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
+(define-key key-translation-map (kbd "<insert>") (kbd "C-c"))
 (progn
   (defun tilix (arg)
     (interactive "P")
