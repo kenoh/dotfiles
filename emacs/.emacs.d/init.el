@@ -167,13 +167,18 @@
   (progn
     ))
 
-(defun k/sm-greek-lambda ()
-  (font-lock-add-keywords nil `(("\\<lambda\\>"
-                                 (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                                           ,(make-char 'greek-iso8859-7 107))
-                                           nil))))))
-(add-hook 'emacs-lisp-mode-hook 'k/sm-greek-lambda)
+(progn "ligatures"
+       (global-prettify-symbols-mode)
+       (defun emacs-lisp-mode-ligatures ()
+	 (setq prettify-symbols-alist '(("lambda" . "λ")
+					("defun" . "ƒ")
+					("defmacro" . "Ɱ"))))
+       (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-mode-ligatures)
 
+       (defun python-mode-ligatures ()
+	 (setq prettify-symbols-alist '(("lambda" . "lambda")
+					("def" . "ƒ"))))
+       (add-hook 'python-mode-hook 'python-mode-ligatures))
 
 ;; modeline
 (size-indication-mode t)  ; show size of buffer in modeline
