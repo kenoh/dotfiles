@@ -79,5 +79,5 @@ PATH="$HOME/.local/bin:$HOME/.local/usr/bin:$HOME/bin${PATH:+:${PATH}}"
 #export GUILE_LOAD_PATH="$HOME/src:..."
 
 [ -f ~/.bash_private ] && source ~/.bash_private
-[ -f ~/src/z/z.sh ] && source ~/src/z/z.sh
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+#[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
