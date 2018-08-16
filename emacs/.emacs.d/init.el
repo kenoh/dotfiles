@@ -415,6 +415,7 @@
 (use-package org :ensure t :defer t :config
   (progn
     (add-hook 'org-mode-hook 'org-indent-mode)
+    (add-hook 'org-mode-hook (lambda () (whitespace-mode -1)))
     ;; active Babel languages
     (require 'ob-shell)
     (require 'ob-python)
