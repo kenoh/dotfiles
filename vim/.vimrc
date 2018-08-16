@@ -125,7 +125,6 @@ set iskeyword+=-
 set hidden
 set listchars=tab:>-,trail:·
 set updatetime=1000
-set number
 hi CursorLine     cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
 hi Underlined     cterm=reverse ctermbg=NONE ctermfg=NONE gui=reverse guibg=NONE guifg=NONE  " hl under cursor
 hi LineNr         cterm=NONE ctermfg=white ctermbg=darkgrey gui=NONE guifg=white guibg=darkgrey
