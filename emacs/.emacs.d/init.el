@@ -287,7 +287,8 @@
     (set-face-attribute 'which-key-group-description-face nil :height 1.0)
     (set-face-attribute 'which-key-command-description-face nil :height 1.0)
     (set-face-attribute 'which-key-local-map-description-face nil :height 1.0)
-    (setq-default which-key-replacement-alist '(((nil . "^c-") . (nil . "c."))
+    (setq-default which-key-sort-order 'which-key-description-order
+		  which-key-replacement-alist '(((nil . "^c-") . (nil . "c."))
                                                 ((nil . "ggtags-") . (nil . "gg."))
                                                 ((nil . "paredit-") . (nil . "()."))
                                                 ((nil . "projectile-") . (nil . "p."))
