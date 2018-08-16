@@ -26,8 +26,10 @@
 (setq load-prefer-newer t)
 
 ;; general use packages
-(use-package "dash" :ensure t)
-(use-package "s" :ensure t)
+(use-package dash :ensure t)
+(use-package dash-functional :ensure t)
+(use-package s :ensure t)
+(use-package f :ensure t)
 
 (if (display-graphic-p)
     (progn
