@@ -8,6 +8,14 @@
 (package-initialize)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
+(progn
+  (defun tilix (arg)
+    (interactive "P")
+    (call-process "tilix" nil 0 nil
+		  "-w" default-directory
+		  "-a" (if arg "session-add-right" "app-new-session")
+		  "--focus-window"))
+  (global-set-key (kbd "C-c t") 'tilix))
 
 ;;; init use-package
 (unless (package-installed-p 'use-package)
