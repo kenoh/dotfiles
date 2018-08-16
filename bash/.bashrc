@@ -16,20 +16,11 @@ export HISTSIZE=9999
 
 export EDITOR="vim"
 
-__prompt_command() {
-    local EXIT_STATUS="$?"
-    local CURRENT_DATETIME="$(date --iso-8601=seconds)"
-    local GIT_REVISION="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
-    local XTERM_TITLE="\[\e]0;\w\007\]"
-
-    cInvert="\[\e[7m\]"
-    cReset="\[\e[0m\]"
-    cBold="\[\e[1m\]"
-    cUnderline="\[\e[4m\]"
-
-    PS1="${cInvert}${EXIT_STATUS}${XTERM_TITLE}${cReset} ${cInvert}\w${cReset} [${cBold}${GIT_REVISION}${cReset}] ${CURRENT_DATETIME}${cInvert}\n#${cReset} "
-}
-PROMPT_COMMAND=__prompt_command
+cInvert="\[\e[7m\]"
+cReset="\[\e[0m\]"
+cBold="\[\e[1m\]"
+cUnderline="\[\e[4m\]"
+PS1="${cInvert}$?${cReset}\[\e]0;\w\007\] ${cInvert}\w${cReset} $(date --iso-8601=seconds)\n${cInvert}#${cReset} "
 
 alias rm='rm -i'
 
