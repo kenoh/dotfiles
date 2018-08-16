@@ -365,6 +365,7 @@
   (progn
     (global-set-key (kbd "C-c g g") 'magit-status)
     (global-set-key (kbd "C-c g b") 'magit-blame)
+    (global-set-key (kbd "C-c g l") 'magit-log-buffer-file)
     (add-hook 'git-gutter-mode-hook
               (lambda ()
                 (local-set-key (kbd "C-c g d") 'git-gutter:popup-hunk)
