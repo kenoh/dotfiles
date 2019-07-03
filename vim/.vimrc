@@ -13,6 +13,7 @@ set runtimepath+=~/.vim/repos/github.com/Shougo/dein.vim/
 call dein#begin(expand('~/.vim'))
 call dein#add('Shougo/dein.vim')
 call dein#add('tpope/vim-fugitive')
+call dein#add('tpope/vim-commentary')
 call dein#add('ctrlpvim/ctrlp.vim')
 call dein#add('airblade/vim-gitgutter')
 if dein#check_install()
@@ -26,7 +27,7 @@ call dein#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " General {{{
-let mapleader = " "
+let mapleader = ";"
 filetype plugin indent on
 syntax on
 set t_Co=256
@@ -155,4 +156,4 @@ nnoremap <silent> <F4> :tabe<CR>
 nnoremap <silent> <leader><space> :set list!<CR>
 
 """ run last shell command
-nnoremap <silent> <F1> :!!<CR>
+nnoremap <silent> <leader>r :!!<CR>
