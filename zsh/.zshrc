@@ -9,6 +9,7 @@ bindkey -e
 zstyle :compinstall filename "$HOME/.zshrc"
 
 autoload -Uz compinit
+autoload -U zargs
 compinit
 # End of lines added by compinstall
 
@@ -19,22 +20,30 @@ compinit
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export ZSH=$HOME/.oh-my-zsh
 export LS_COLORS="$(echo "$LS_COLORS" | sed -E 's/:mi=[0-9;]+/:mi=01;37/')"
-ZSH_THEME="lambda"
+ZSH_THEME="agnoster"
 COMPLETION_WAITING_DOTS="true"
 CASE_SENSITIVE="false"
 HIST_STAMPS="yyyy-mm-dd"
 plugins=(
     git
+    git-extras
+    git-auto-fetch
     emacs
     vagrant
     docker
-    fedora
+    dnf
     fzf
     fasd
+    colorize
 )
 source $ZSH/oh-my-zsh.sh
 
 ########################################################################
+
+# extend loadpath
+fpath=( ~/.zsh.d "${fpath[@]}" )
+
+source ~/.zprofile || true
 
 unsetopt beep notify incappendhistory sharehistory
 setopt appendhistory autocd extendedglob nomatch
@@ -75,23 +84,34 @@ dbrp.() {
 	dbrp "$(pwd | xargs basename)" "$PORT" "${@}"
 }
 dbr.() {
-	set -x;	for x in DUMMY; do local "${x:-}"="${1:-}"; shift; done
+	set -x
 	dbr "$(pwd | xargs basename)" "${@}"
 }
 dexec() {
 	set -x;	for x in NAME; do local "${x:-}"="${1:-}"; shift; done
 	$DOCKERNAME exec -ti "$NAME" "${@}"
 }
+dshell() {
+	set -x;	for x in NAME; do local "${x:-}"="${1:-}"; shift; done
+	if [ -n "$NAME" ]; then
+		dexec "$NAME" /bin/bash
+	else
+		dexec "$(docker ps -l --format '{{.ID}}')" /bin/bash
+	fi
+}
 alias dp='$DOCKERNAME ps'
 alias dpa='$DOCKERNAME ps --all'
 alias tiga='tig --all'
+
+alias vs='vagrant ssh'
+alias vst='vagrant status'
+alias vgs='vagrant global-status --prune'
+alias vup='vagrant up'
+alias vpa='vagrant provision --provision-with=ansible'
 
 gdcommits() {
 	d <(git show "$1") <(git show "$2")
 }
 
-# load scripts from a dir
-[ -d ~/.zsh.d/ ] && fpath=(~/.zsh.d/ $fpath)
-
 # source zsh-syntax-highlighter must be the last line:
-source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh || true
