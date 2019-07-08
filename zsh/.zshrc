@@ -38,12 +38,35 @@ plugins=(
 )
 source $ZSH/oh-my-zsh.sh
 
+# Adjust agnoster theme
+SEGMENT_SEPARATOR=""
+PRIMARY_FG=black
+prompt_status() {
+  local symbols
+  symbols=()
+  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}$RETVAL"
+  [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}!!"
+  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}&"
+
+  [[ -n "$symbols" ]] && prompt_segment "$PRIMARY_FG" default "$symbols"
+}
+prompt_end() {
+  if [[ -n $CURRENT_BG ]]; then
+    print -n "%{%k%K{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{%f%}\n"
+  else
+    print -n "%{%k%}"
+  fi;
+  print -n "#%{%f%k%}"
+  CURRENT_BG=''
+}
+
 ########################################################################
 
 # extend loadpath
 fpath=( ~/.zsh.d "${fpath[@]}" )
 
-source ~/.zprofile || true
+F=~/.zprofile
+[ -f "$F" ] && source "$F"
 
 unsetopt beep notify incappendhistory sharehistory
 setopt appendhistory autocd extendedglob nomatch
@@ -114,4 +137,5 @@ gdcommits() {
 }
 
 # source zsh-syntax-highlighter must be the last line:
-source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh || true
+F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+[ -f "$F" ] && source "$F"
