@@ -16,6 +16,7 @@ call dein#add('tpope/vim-fugitive')
 call dein#add('tpope/vim-commentary')
 call dein#add('ctrlpvim/ctrlp.vim')
 call dein#add('airblade/vim-gitgutter')
+call dein#add('liuchengxu/vim-which-key')
 if dein#check_install()
 	call dein#install()
 endif
