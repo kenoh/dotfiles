@@ -14,6 +14,7 @@ call dein#begin(expand('~/.vim'))
 call dein#add('Shougo/dein.vim')
 call dein#add('tpope/vim-fugitive')
 call dein#add('tpope/vim-commentary')
+call dein#add('tpope/vim-sleuth')  " automatic buffer variables (indent,...)
 call dein#add('ctrlpvim/ctrlp.vim')
 call dein#add('airblade/vim-gitgutter')
 call dein#add('liuchengxu/vim-which-key')
@@ -97,10 +98,10 @@ nnoremap gj j
 " indentation
 set backspace=indent,eol,start
 set complete-=i
-set noexpandtab
-set softtabstop=0
-set tabstop=4
-set shiftwidth=4
+"set noexpandtab
+"set softtabstop=0
+"set tabstop=4
+"set shiftwidth=4
 set cindent
 set cinoptions=(0,u0,U0
 " }}}
