@@ -71,6 +71,8 @@ F=~/.zprofile
 unsetopt beep notify incappendhistory sharehistory
 setopt appendhistory autocd extendedglob nomatch
 
+export EDITOR=vim
+
 alias vim=nvim
 
 alias al='alias | grep'
