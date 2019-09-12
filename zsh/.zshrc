@@ -20,7 +20,7 @@ compinit
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export ZSH=$HOME/.oh-my-zsh
 export LS_COLORS="$(echo "$LS_COLORS" | sed -E 's/:mi=[0-9;]+/:mi=01;37/')"
-ZSH_THEME="agnoster"
+ZSH_THEME=""
 COMPLETION_WAITING_DOTS="true"
 CASE_SENSITIVE="false"
 HIST_STAMPS="yyyy-mm-dd"
@@ -38,32 +38,14 @@ plugins=(
 )
 source $ZSH/oh-my-zsh.sh
 
-# Adjust agnoster theme
-SEGMENT_SEPARATOR=""
-PRIMARY_FG=black
-prompt_status() {
-  local symbols
-  symbols=()
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}$RETVAL"
-  [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}!!"
-  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}&"
-
-  [[ -n "$symbols" ]] && prompt_segment "$PRIMARY_FG" default "$symbols"
-}
-prompt_end() {
-  if [[ -n $CURRENT_BG ]]; then
-    print -n "%{%k%K{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{%f%}\n"
-  else
-    print -n "%{%k%}"
-  fi;
-  print -n "#%{%f%k%}"
-  CURRENT_BG=''
-}
-
 ########################################################################
 
 # extend loadpath
 fpath=( ~/.zsh.d "${fpath[@]}" )
+
+# this for https://github.com/sindresorhus/pure
+fpath+=( "$HOME/.zsh.d/pure" )
+autoload -U promptinit; promptinit; prompt pure
 
 F=~/.zprofile
 [ -f "$F" ] && source "$F"
@@ -73,6 +55,7 @@ setopt appendhistory autocd extendedglob nomatch
 
 export EDITOR=vim
 
+# aliases
 alias vim=nvim
 
 alias al='alias | grep'
@@ -137,6 +120,8 @@ alias vpa='vagrant provision --provision-with=ansible'
 gdcommits() {
 	d <(git show "$1") <(git show "$2")
 }
+
+alias openssl-cert-print-ascii='openssl x509 -text -noout -in'
 
 # source zsh-syntax-highlighter must be the last line:
 F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
