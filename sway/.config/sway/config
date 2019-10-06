@@ -1,0 +1,194 @@
+set $mod Mod4
+
+# automagic for outputs (bindswitch is available since sway-1.1)
+set $laptop eDP-1
+bindswitch --locked lid:off output $laptop enable
+bindswitch --locked lid:on output $laptop disable
+
+input * xkb_options ctrl:nocaps
+input * tap enabled
+
+# look&feel
+font pango: Sans 10
+
+default_border pixel 3
+default_floating_border pixel
+
+set $cl_high #009ddc
+set $cl_indi #d9d8d8
+set $cl_back #231f20
+set $cl_fore #d9d8d8
+set $cl_urge #ee2e24
+
+# Colors                border   bg       text     indi     childborder
+client.focused          $cl_high $cl_high $cl_fore $cl_indi $cl_high
+client.focused_inactive $cl_back $cl_back $cl_fore $cl_back $cl_back
+client.unfocused        $cl_back $cl_back $cl_fore $cl_back $cl_back
+client.urgent           $cl_urge $cl_urge $cl_fore $cl_urge $cl_urge
+
+for_window [class="."] title_format "<b>%class</b> :: %title [%shell]"
+
+# general
+floating_modifier $mod
+workspace_layout tabbed
+hide_edge_borders smart
+# do not go outside of a container when changing focus (thus, one needs to use focus child/parent)
+# ... in effect won't wrap between screens :)
+focus_wrapping force
+focus_on_window_activation focus
+
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+e exec " -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+# containers
+bindsym $mod+Shift+q kill
+
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+bindsym $mod+q focus parent
+bindsym $mod+a focus child
+
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+bindsym $mod+v split toggle
+
+bindsym $mod+f fullscreen toggle
+
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+
+bindsym $mod+Shift+Up sticky toggle
+
+# scratchpad
+bindsym $mod+grave scratchpad show
+bindsym $mod+Shift+grave move scratchpad
+
+set $ws1 number 1 一
+set $ws2 number 2 二
+set $ws3 number 3 三
+set $ws4 number 4 四
+set $ws5 number 5 五
+set $ws6 number 6 六
+set $ws7 number 7 七
+set $ws8 number 8 八
+set $ws9 number 9 九
+set $ws0 number 10 十
+
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws0
+
+bindsym $mod+z workspace back_and_forth
+bindsym Print workspace back_and_forth
+bindsym Menu workspace back_and_forth
+
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws0
+
+# screens
+bindsym $mod+Shift+Control+h move workspace to output left
+bindsym $mod+Shift+Control+j move workspace to output down
+bindsym $mod+Shift+Control+k move workspace to output up
+bindsym $mod+Shift+Control+l move workspace to output right
+
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+bar {
+	status_command py3status
+	status_padding 0
+	position bottom
+	strip_workspace_numbers yes
+	separator_symbol " · "
+	font pango: Liberation Sans 10
+	modifier $mod
+	colors {
+		background $cl_back
+		focused_workspace $cl_high $cl_high $cl_fore
+		active_workspace $cl_back $cl_back $cl_fore
+		inactive_workspace $cl_back $cl_back $cl_fore
+		urgent_workspace $cl_urge $cl_urge $cl_fore
+	}
+}
+
+set $mymenu <span font_style='normal'>MyMenu ::: <b>e</b>macsclient</span>
+mode --pango_markup "$mymenu" {
+	bindsym e exec --no-startup-id emacsclient --no-wait -c || notify-send 'emacsclient' 'problem running it' ; mode "default"
+	bindsym Escape mode "default"
+}
+bindsym $mod+x mode "$mymenu"
+
+set $lock swaylock --ignore-empty-password --show-failed-attempts --color 000000
+set $barup && killall -SIGUSR1 py3status
+
+# launchers
+#bindsym $mod+d exec sh -c 'PATH="$HOME/bin:$PATH" rofi -show run'
+bindsym $mod+d exec PATH="$HOME/bin:$PATH" rofi -show rn
+bindsym $mod+Return exec tilix --action=app-new-window
+bindsym $mod+Shift+Return exec xterm
+bindsym $mod+Escape exec $lock
+bindsym XF86AudioLowerVolume exec amixer -q -D pulse sset Master 5%- $barup
+bindsym XF86AudioRaiseVolume exec amixer -q -D pulse sset Master 5%+ $barup
+bindsym XF86AudioMute exec amixer -q -D pulse sset Master toggle $barup
+
+# brightness
+bindsym --locked XF86MonBrightnessUp exec --no-startup-id light -A 10 $barup
+bindsym --locked XF86MonBrightnessDown exec --no-startup-id light -U 10 $barup
+
+# playerctl
+bindsym XF86AudioPlay exec playerctl -p spotify play-pause $barup
+bindsym XF86AudioPrev exec playerctl -p spotify previous $barup
+bindsym XF86AudioNext exec playerctl -p spotify next $barup
+
+# Notifications
+bindsym $mod+Backspace exec makoctl dismiss
+
+# sugar
+bindsym F12 focus right
+bindsym $mod+F11 focus output left
+bindsym $mod+F12 focus output right
+
+# startup
+exec --no-startup-id mako  # notifications
+exec --no-startup-id ~/bin/kanshi  # display outputs auto layout
+exec --no-startup-id nohup emacs --daemon
+exec --no-startup-id ~/bin/startup.sh
+exec --no-startup-id swayidle \
+    timeout 300 'exec $lock' \
+    before-sleep 'exec $lock'
