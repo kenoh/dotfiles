@@ -159,7 +159,7 @@ set $barup && killall -SIGUSR1 py3status
 
 # launchers
 #bindsym $mod+d exec sh -c 'PATH="$HOME/bin:$PATH" rofi -show run'
-bindsym $mod+d exec PATH="$HOME/bin:$PATH" rofi -show rn
+bindsym $mod+d exec PATH="$HOME/bin:$PATH" rofi -show run
 bindsym $mod+Return exec tilix --action=app-new-window
 bindsym $mod+Shift+Return exec xterm
 bindsym $mod+Escape exec $lock
