@@ -13,8 +13,9 @@ font pango: Sans 10
 
 default_border pixel 3
 default_floating_border pixel
+titlebar_border_thickness 1
 
-set $cl_high #009ddc
+set $cl_high #9d0000
 set $cl_indi #d9d8d8
 set $cl_back #231f20
 set $cl_fore #d9d8d8
@@ -27,6 +28,7 @@ client.unfocused        $cl_back $cl_back $cl_fore $cl_back $cl_back
 client.urgent           $cl_urge $cl_urge $cl_fore $cl_urge $cl_urge
 
 for_window [class="."] title_format "<b>%class</b> :: %title [%shell]"
+for_window [app_id="pavucontrol"] floating enable
 
 # general
 floating_modifier $mod
@@ -154,6 +156,9 @@ mode --pango_markup "$mymenu" {
 }
 bindsym $mod+x mode "$mymenu"
 
+# don't lock when in fullscreen mode
+for_window [shell=".*"] inhibit_idle fullscreen
+
 set $lock swaylock --ignore-empty-password --show-failed-attempts --color 000000
 set $barup && killall -SIGUSR1 py3status
 
@@ -183,6 +188,9 @@ bindsym $mod+Backspace exec makoctl dismiss
 bindsym F12 focus right
 bindsym $mod+F11 focus output left
 bindsym $mod+F12 focus output right
+
+# fullscreen in a window
+bindsym $mod+y fullscreen disable; floating enable; resize set 600 400; sticky enable
 
 # startup
 exec --no-startup-id mako  # notifications

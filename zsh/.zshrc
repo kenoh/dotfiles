@@ -17,7 +17,7 @@ compinit
 # Oh-My-ZSH
 ########################################################################
 
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 export ZSH=$HOME/.oh-my-zsh
 export LS_COLORS="$(echo "$LS_COLORS" | sed -E 's/:mi=[0-9;]+/:mi=01;37/')"
 ZSH_THEME=""
