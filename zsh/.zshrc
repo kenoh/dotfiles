@@ -27,7 +27,6 @@ HIST_STAMPS="yyyy-mm-dd"
 plugins=(
     git
     git-extras
-    git-auto-fetch
     emacs
     vagrant
     docker

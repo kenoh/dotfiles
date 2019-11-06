@@ -151,8 +151,12 @@ set pastetoggle=<leader>p
 
 """ tabs movement
 nnoremap <silent> <F2> :tabprev<CR>
+nnoremap <silent> <leader><F2> :tabe<CR>
 nnoremap <silent> <F3> :tabnext<CR>
-nnoremap <silent> <F4> :tabe<CR>
+
+""" windows movement
+nnoremap <silent> <F4> <C-W><C-W>
+nnoremap <silent> <leader><F4> :vsplit<CR>
 
 """ toggle listchars
 nnoremap <silent> <leader><space> :set list!<CR>
