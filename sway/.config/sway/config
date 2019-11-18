@@ -9,26 +9,37 @@ input * xkb_options ctrl:nocaps
 input * tap enabled
 
 # look&feel
-font pango: Sans 10
+font pango: Sans 7
 
 default_border pixel 3
 default_floating_border pixel
 titlebar_border_thickness 1
 
-set $cl_high #9d0000
-set $cl_indi #d9d8d8
+set $cl_high #d8d8d8
+set $cl_indi #ffd8d8
 set $cl_back #231f20
 set $cl_fore #d9d8d8
 set $cl_urge #ee2e24
 
 # Colors                border   bg       text     indi     childborder
-client.focused          $cl_high $cl_high $cl_fore $cl_indi $cl_high
-client.focused_inactive $cl_back $cl_back $cl_fore $cl_back $cl_back
-client.unfocused        $cl_back $cl_back $cl_fore $cl_back $cl_back
+client.focused          $cl_back $cl_high $cl_back $cl_indi $cl_high
+client.focused_inactive $cl_high $cl_back $cl_fore $cl_back $cl_back
+client.unfocused        $cl_high $cl_back $cl_fore $cl_back $cl_back
 client.urgent           $cl_urge $cl_urge $cl_fore $cl_urge $cl_urge
 
 for_window [class="."] title_format "<b>%class</b> :: %title [%shell]"
-for_window [app_id="pavucontrol"] floating enable
+for_window [app_id="(pavucontrol|nm-connection-manager)"] \
+           floating enable
+
+# colors in titles
+for_window [class="Emacs"] \
+           title_format "<span foreground='#a020f0'>E</span> <b>%title</b>"
+for_window [app_id="(firefox)"] \
+           title_format "<span foreground='#ffcc00'>F</span> <b>%title</b>"
+for_window [app_id="(tilix)"] \
+           title_format "<span foreground='#ff8888'>T</span> <b>%title</b>"
+
+
 
 # general
 floating_modifier $mod
@@ -133,7 +144,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 bar {
-	status_command py3status
+	swaybar_command waybar
 	status_padding 0
 	position bottom
 	strip_workspace_numbers yes
@@ -160,11 +171,9 @@ bindsym $mod+x mode "$mymenu"
 for_window [shell=".*"] inhibit_idle fullscreen
 
 set $lock swaylock --ignore-empty-password --show-failed-attempts --color 000000
-set $barup && killall -SIGUSR1 py3status
 
 # launchers
-#bindsym $mod+d exec sh -c 'PATH="$HOME/bin:$PATH" rofi -show run'
-bindsym $mod+d exec PATH="$HOME/bin:$PATH" rofi -show run
+bindsym $mod+d exec PATH="$HOME/bin:$PATH" bemenu-run --fn 'Monospace [13]' -l 15 --scrollbar always
 bindsym $mod+Return exec tilix --action=app-new-window
 bindsym $mod+Shift+Return exec xterm
 bindsym $mod+Escape exec $lock
@@ -194,7 +203,7 @@ bindsym $mod+y fullscreen disable; floating enable; resize set 600 400; sticky e
 
 # startup
 exec --no-startup-id mako  # notifications
-exec --no-startup-id ~/bin/kanshi  # display outputs auto layout
+exec_always --no-startup-id pkill kanshi ; kanshi  # display outputs auto layout
 exec --no-startup-id nohup emacs --daemon
 exec --no-startup-id ~/bin/startup.sh
 exec --no-startup-id swayidle \

@@ -1,0 +1,78 @@
+{
+    "layer": "top",
+    "position": "bottom",
+    "height": 20,
+    "modules-left": ["sway/workspaces", "sway/mode", "tray"],
+    "modules-center": [],
+    "modules-right": [ "pulseaudio", "cpu", "memory", "disk", "custom/vpn", "network", "backlight", "battery", "clock", "idle_inhibitor"],
+    "sway/workspaces": {
+        "disable-scroll": true,
+        "format": "{icon}"
+    },
+    "sway/window": {
+        "max-length": 100
+    },
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    "tray": {
+        "spacing": 0
+    },
+    "clock": {
+        "interval": 1
+    },
+    "cpu": {
+        "format": " {load}%"
+    },
+    "memory": {
+        "format": " {}%"
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{icon} {percent}%",
+        "format-icons": ["", ""]
+    },
+    "network": {
+        // "interface": "wlp2s0", // (Optional) To force the use of this interface
+        "format-wifi": "  {essid}",
+        "format-ethernet": " {ifname}: {ipaddr}/{cidr}",
+        "format-disconnected": "⚠ Disconnected",
+        "on-click": "nm-connection-editor"
+    },
+    "pulseaudio": {
+        "scroll-step": 2,
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon} {volume}%",
+        "format-muted": "",
+        "format-icons": {
+            "headphones": "",
+            "handsfree": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "battery": {
+      "interval": 10,
+      "states": {
+          "warning": 60,
+          "critical": 20
+      },
+      "format": "{icon} {capacity}%",
+      "format-icons": ["", "", "", "", ""]
+    },
+    "custom/vpn": {
+      "return-type": "json",
+      "exec": "~/.config/waybar/k-vpn.sh"
+    }
+}
