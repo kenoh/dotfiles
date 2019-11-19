@@ -3,10 +3,12 @@
 function vpn {
   vpn="$(ifconfig | grep "tun0")"
   if [ -n "$vpn" ]; then
-    vpn="🔒"
+    # vpn="🔒"
+    vpn="⚈"
     class=on
   else
-    vpn="🔓"
+    # vpn="🔓"
+    vpn="⚆"
     class=off
   fi
    printf '{"text": "%s", "tooltip": "", "class": "%s"}\n' "$vpn" "$class"

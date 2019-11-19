@@ -4,7 +4,7 @@
     "height": 20,
     "modules-left": ["sway/workspaces", "sway/mode", "tray"],
     "modules-center": [],
-    "modules-right": [ "pulseaudio", "cpu", "memory", "disk", "custom/vpn", "network", "backlight", "battery", "clock", "idle_inhibitor"],
+    "modules-right": [ "pulseaudio", "cpu", "memory", "custom/disk", "custom/vpn", "network", "backlight", "battery", "clock", "idle_inhibitor"],
     "sway/workspaces": {
         "disable-scroll": true,
         "format": "{icon}"
@@ -74,5 +74,10 @@
     "custom/vpn": {
       "return-type": "json",
       "exec": "~/.config/waybar/k-vpn.sh"
+    },
+    "custom/disk": {
+      "interval": 5,
+      "return-type": "json",
+      "exec": "~/.config/waybar/k-disk.sh"
     }
 }
