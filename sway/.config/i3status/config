@@ -1,0 +1,122 @@
+# i3status configuration file.
+# see "man i3status" for documentation.
+
+# It is important that this file is edited as UTF-8.
+# The following line should contain a sharp s:
+# ß
+# If the above line is not correctly displayed, fix your editor first!
+
+general {
+	colors = true
+	color = "#aaaaaa"
+	interval = 5
+	markup = "pango"
+}
+
+order += "external_script systemd"
+order += "selinux"
+order += "sysdata"
+order += "disk /"
+order += "disk /tmp"
+order += "disk /home"
+order += "vpn_status"
+order += "backlight"
+order += "battery_level"
+order += "volume_status"
+order += "keyboard_layout"
+order += "tztime date"
+order += "tztime time"
+
+external_script systemd {
+	format = "{output}"
+	color = "#ffff00"
+	script_path = "systemctl --user --state=failed --all --no-legend --no-pager | cut -d ' ' -f 1 | tr '\n' ' ' | head -c 60;"
+}
+
+backlight {
+	format = "☼ {level}"
+}
+
+battery_level {
+	battery_id = all
+	format = "{icon} {percent}% {time_remaining}"
+	hide_seconds = True
+	threshold_full = 95
+	threshold_degraded = 70
+	threshold_bad = 30
+	color_good = ""
+}
+
+tztime date {
+	format = "%Y-%m-%d"
+}
+
+tztime time {
+	format = "%time"
+	format_time = "%H:%M"
+	color = "#ffffff"
+}
+
+keyboard_layout {
+	layouts = ['us', 'sk', 'ru']
+	color_us = ""
+	color_sk = "#ffff00"
+	color_ru = "#ff0000"
+}
+
+sysdata {
+	format = "[\?color=load l: {load1}], [\?color=mem m: {mem_used_percent}%]"
+	color_good = ""
+	thresholds = [(0, "good"), (70, "degraded"), (85, "bad")]
+}
+
+disk "/home" {
+	low_threshold = "9"
+	threshold_type = gbytes_avail
+	format = "~:%avail"
+}
+
+disk "/tmp" {
+	low_threshold = "4"
+	threshold_type = gbytes_avail
+	format = "/tmp:%avail"
+}
+
+disk "/" {
+	low_threshold = "2"
+	threshold_type = gbytes_avail
+	format = "/:%avail"
+}
+
+volume_status {
+	button_mute = 2
+	button_up = 4
+	button_down = 5
+	command = "pactl"
+	thresholds = [ (0, 'good'), (40, 'degraded'), (70, 'bad') ]
+}
+
+spotify {
+	format = "{title} @ {album} ~ {artist}"
+	color_good = "#ffffff"
+	color_degraded = ""
+	color_bad = ""
+	on_click 1 = "[class=\"Spotify\"] focus"
+	on_click 2 = "exec playerctl -p spotify play-pause"
+	on_click 4 = "exec playerctl -p spotify previous"
+	on_click 5 = "exec playerctl -p spotify next"
+}
+
+selinux {
+	color_good = ""
+	format = "se:{state}"
+	state_disabled = "dis"
+	state_permissive = "per"
+	state_enforcing = "enf"
+}
+
+vpn_status {
+	color_good = "#ffffff"
+	color_bad = ""
+	format = "{name}|(no vpn)"
+}

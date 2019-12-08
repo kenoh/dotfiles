@@ -144,16 +144,16 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 bar {
-	swaybar_command waybar
+	status_command py3status
 	status_padding 0
 	position bottom
 	strip_workspace_numbers yes
 	separator_symbol " · "
-	font pango: Liberation Sans 10
+	font pango: Liberation Sans 9
 	modifier $mod
 	colors {
 		background $cl_back
-		focused_workspace $cl_high $cl_high $cl_fore
+		focused_workspace $cl_high $cl_high $cl_back
 		active_workspace $cl_back $cl_back $cl_fore
 		inactive_workspace $cl_back $cl_back $cl_fore
 		urgent_workspace $cl_urge $cl_urge $cl_fore
@@ -201,11 +201,12 @@ bindsym $mod+F12 focus output right
 # fullscreen in a window
 bindsym $mod+y fullscreen disable; floating enable; resize set 600 400; sticky enable
 
+set $wrap ~/bin/sway-exec-wrapper.sh
 # startup
-exec --no-startup-id mako  # notifications
-exec_always --no-startup-id pkill kanshi ; kanshi  # display outputs auto layout
-exec --no-startup-id nohup emacs --daemon
+exec --no-startup-id $wrap mako  # notifications
+exec_always --no-startup-id pkill kanshi ; $wrap kanshi  # display outputs auto layout
+exec --no-startup-id $wrap emacs --daemon
 exec --no-startup-id ~/bin/startup.sh
-exec --no-startup-id swayidle \
+exec --no-startup-id $wrap swayidle \
     timeout 300 'exec $lock' \
     before-sleep 'exec $lock'
