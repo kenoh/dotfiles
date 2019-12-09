@@ -54,7 +54,10 @@ setopt appendhistory autocd extendedglob nomatch
 export EDITOR=vim
 
 # aliases
+alias zshrc-reload='. ~/.zshrc'
+
 alias vim=nvim
+alias e='emacsclient --no-wait'
 
 alias al='alias | grep'
 alias g='grep'
