@@ -22,6 +22,7 @@ order += "disk /home"
 order += "vpn_status"
 order += "backlight"
 order += "battery_level"
+order += "bluetooth"
 order += "volume_status"
 order += "keyboard_layout"
 order += "tztime date"
@@ -65,7 +66,7 @@ keyboard_layout {
 }
 
 sysdata {
-	format = "[\?color=load l: {load1}], [\?color=mem m: {mem_used_percent}%]"
+	format = "[\?color=load l:{load1}], [\?color=mem m:{mem_used_percent}%]"
 	color_good = ""
 	thresholds = [(0, "good"), (70, "degraded"), (85, "bad")]
 }
@@ -110,8 +111,6 @@ spotify {
 selinux {
 	color_good = ""
 	format = "se:{state}"
-	state_disabled = "dis"
-	state_permissive = "per"
 	state_enforcing = "enf"
 }
 

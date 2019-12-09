@@ -145,6 +145,7 @@ bindsym $mod+r mode "resize"
 
 bar {
 	status_command py3status
+	swaybar_command swaybar
 	status_padding 0
 	position bottom
 	strip_workspace_numbers yes
@@ -203,6 +204,7 @@ bindsym $mod+y fullscreen disable; floating enable; resize set 600 400; sticky e
 
 set $wrap ~/bin/sway-exec-wrapper.sh
 # startup
+exec_always --no-startup-id stat $wrap || swaynag -m '$wrap does not exist! Check your config and binaries.'
 exec --no-startup-id $wrap mako  # notifications
 exec_always --no-startup-id pkill kanshi ; $wrap kanshi  # display outputs auto layout
 exec --no-startup-id $wrap emacs --daemon
