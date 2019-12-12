@@ -57,7 +57,11 @@ export EDITOR=vim
 alias zshrc-reload='. ~/.zshrc'
 
 alias vim=nvim
+
+test -n "$TILIX_ID" && export TERM=xterm-24bit
 alias e='emacsclient --no-wait'
+alias et='emacsclient -t'
+etdiff() { emacsclient -t --eval "(ediff-files \"$1\" \"$2\")"; }
 
 alias al='alias | grep'
 alias g='grep'
