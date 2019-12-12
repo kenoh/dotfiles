@@ -40,10 +40,10 @@ backlight {
 
 battery_level {
 	battery_id = all
-	format = "{icon} {percent}% {time_remaining}"
+	format = "{icon} {percent}%[ {time_remaining}]"
 	hide_seconds = True
 	threshold_full = 95
-	threshold_degraded = 70
+	threshold_degraded = 65
 	threshold_bad = 30
 	color_good = ""
 }
@@ -97,15 +97,8 @@ volume_status {
 	thresholds = [ (0, 'good'), (40, 'degraded'), (70, 'bad') ]
 }
 
-spotify {
-	format = "{title} @ {album} ~ {artist}"
-	color_good = "#ffffff"
-	color_degraded = ""
+bluetooth {
 	color_bad = ""
-	on_click 1 = "[class=\"Spotify\"] focus"
-	on_click 2 = "exec playerctl -p spotify play-pause"
-	on_click 4 = "exec playerctl -p spotify previous"
-	on_click 5 = "exec playerctl -p spotify next"
 }
 
 selinux {

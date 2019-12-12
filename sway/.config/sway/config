@@ -172,6 +172,7 @@ bindsym $mod+x mode "$mymenu"
 for_window [shell=".*"] inhibit_idle fullscreen
 
 set $lock swaylock --ignore-empty-password --show-failed-attempts --color 000000
+set $barup && killall -SIGUSR1 py3status
 
 # launchers
 bindsym $mod+d exec PATH="$HOME/bin:$PATH" bemenu-run --fn 'Monospace [13]' -l 15 --scrollbar always
