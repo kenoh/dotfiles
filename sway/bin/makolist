@@ -1,0 +1,2 @@
+#!/bin/sh
+makoctl list | jq '(.data[0] | [{summary: .[].summary.data, body: .[].body.data}] | reverse)'

@@ -13,6 +13,7 @@ general {
 	markup = "pango"
 }
 
+order += "external_script mako"
 order += "external_script systemd"
 order += "selinux"
 order += "sysdata"
@@ -32,6 +33,12 @@ external_script systemd {
 	format = "{output}"
 	color = "#ffff00"
 	script_path = "systemctl --user --state=failed --all --no-legend --no-pager | cut -d ' ' -f 1 | tr '\n' ' ' | head -c 60;"
+}
+
+external_script mako {
+	format = "mako: {output}"
+	color = "#ff0000"
+	script_path = "makoctl list | jq '.data[0] | length' | sed '/^0$/d'"
 }
 
 backlight {
