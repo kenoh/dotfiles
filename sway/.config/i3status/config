@@ -13,6 +13,7 @@ general {
 	markup = "pango"
 }
 
+order += "scratchpad"
 order += "external_script mako"
 order += "external_script systemd"
 order += "selinux"
@@ -28,6 +29,12 @@ order += "volume_status"
 order += "keyboard_layout"
 order += "tztime date"
 order += "tztime time"
+
+scratchpad {
+  ipc = "swaymsg"
+  on_click 1 = 'scratchpad show'
+  thresholds = [ (0, "") ]
+}
 
 external_script systemd {
 	format = "{output}"
