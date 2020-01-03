@@ -131,3 +131,11 @@ alias openssl-cert-print-ascii='openssl x509 -text -noout -in'
 # source zsh-syntax-highlighter must be the last line:
 F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [ -f "$F" ] && source "$F"
+
+# kaychain
+which keychain && keychain id_rsa
+[ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
+[ -f $HOME/.keychain/$HOSTNAME-sh ] && \
+		. $HOME/.keychain/$HOSTNAME-sh
+[ -f $HOME/.keychain/$HOSTNAME-sh-gpg ] && \
+		. $HOME/.keychain/$HOSTNAME-sh-gpg
