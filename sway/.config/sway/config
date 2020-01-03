@@ -205,11 +205,11 @@ bindsym $mod+y fullscreen disable; floating enable; resize set 600 400; sticky e
 
 set $wrap ~/bin/sway-exec-wrapper.sh
 # startup
-exec_always --no-startup-id stat $wrap || swaynag -m '$wrap does not exist! Check your config and binaries.'
-exec_always --no-startup-id pkill mako ; $wrap mako  # notifications
-exec_always --no-startup-id pkill kanshi ; $wrap kanshi  # display outputs auto layout
-exec --no-startup-id $wrap emacs --daemon
-exec --no-startup-id ~/bin/startup.sh
-exec --no-startup-id $wrap swayidle \
+exec_always stat $wrap || swaynag -m '$wrap does not exist! Check your config and binaries.'
+exec_always pkill mako ; $wrap mako  # notifications
+exec_always pkill kanshi ; $wrap kanshi  # display outputs auto layout
+exec $wrap emacs --daemon
+exec ~/bin/startup.sh
+exec $wrap swayidle \
     timeout 300 'exec $lock' \
     before-sleep 'exec $lock'
