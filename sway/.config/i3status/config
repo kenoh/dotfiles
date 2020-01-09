@@ -17,6 +17,7 @@ order += "scratchpad"
 order += "external_script mako"
 order += "external_script systemd"
 order += "selinux"
+order += "loadavg"
 order += "sysdata"
 order += "disk /"
 order += "disk /tmp"
@@ -79,8 +80,14 @@ keyboard_layout {
 	color_ru = "#ff0000"
 }
 
+loadavg {
+  format = "[\?color=1avg {1min}] {5min} {15min}"
+  cache_timeout = 2
+  thresholds = [ (0, ""), (25, "degraded"), (50, "bad") ]
+}
+
 sysdata {
-	format = "[\?color=load l:{load1}], [\?color=mem m:{mem_used_percent}%]"
+	format = "[\?color=mem {mem_used_percent}%]"
 	color_good = ""
 	thresholds = [(0, "good"), (70, "degraded"), (85, "bad")]
 }
