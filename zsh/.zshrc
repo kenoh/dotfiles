@@ -75,7 +75,7 @@ alias d='colordiff -u'
 alias sctl='systemctl --user'
 alias jctl='journalctl --user'
 
-DOCKERNAME=docker
+DOCKERNAME=podman
 dbuild() {
 	set -x;	for x in NAME; do local "${x:-}"="${1:-}"; shift; done
 	$DOCKERNAME build -t "$NAME" .
