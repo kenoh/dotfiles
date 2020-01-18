@@ -33,6 +33,7 @@ plugins=(
     fzf
     fasd
     colorize
+    fancy-ctrl-z
 )
 source $ZSH/oh-my-zsh.sh
 
