@@ -33,11 +33,11 @@ for_window [app_id="(pavucontrol|nm-connection-manager)"] \
 
 # colors in titles
 for_window [class="Emacs"] \
-           title_format "<span foreground='#a020f0'>E</span> <b>%title</b>"
+           title_format "<span foreground='#a020f0' size='xx-large'>𝓔</span> <b>%title</b>"
 for_window [app_id="(firefox)"] \
-           title_format "<span foreground='#ffcc00'>F</span> <b>%title</b>"
+           title_format "<span foreground='#ffcc00' size='xx-large'>🦊</span> <b>%title</b>"
 for_window [app_id="(tilix)"] \
-           title_format "<span foreground='#ff8888'>T</span> <b>%title</b>"
+           title_format "<span foreground='#a0ffa0' size='xx-large'>⌨</span> <b>%title</b>"
 
 
 
