@@ -136,7 +136,7 @@ F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [ -f "$F" ] && source "$F"
 
 # kaychain
-which keychain && keychain id_rsa
+which keychain 1>/dev/null 2>&1 && keychain id_rsa
 [ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
 [ -f $HOME/.keychain/$HOSTNAME-sh ] && \
 		. $HOME/.keychain/$HOSTNAME-sh
