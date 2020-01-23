@@ -116,7 +116,7 @@ dshell() {
 alias dp='$DOCKERNAME ps'
 alias dpa='$DOCKERNAME ps --all'
 
-alias gbvv='git branch -vv'
+alias gbvv='git -P branch -vv'
 alias tiga='tig --all'
 
 alias vs='vagrant ssh'
