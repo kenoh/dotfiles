@@ -100,7 +100,9 @@ cdg() {
 }
 alias la='ll -a'
 alias lt='ll -tr'
-alias d='colordiff -u'
+which colordiff 1>/dev/null 2>&1 \
+    && alias d='colordiff -u' \
+    || alias d='diff -u'
 alias sctl='systemctl --user'
 alias jctl='journalctl --user'
 
