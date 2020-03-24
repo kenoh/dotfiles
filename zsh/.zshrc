@@ -52,7 +52,32 @@ F=~/.zprofile
 unsetopt beep notify incappendhistory sharehistory
 setopt appendhistory autocd extendedglob nomatch
 
+
+# history magic
+setopt incappendhistory sharehistory
+
+bindkey "^[[A" up-line-or-local-history
+bindkey "^P" up-line-or-local-history
+bindkey "^[[B" down-line-or-local-history
+bindkey "^N" down-line-or-local-history
+
+up-line-or-local-history() {
+    zle set-local-history 1
+    zle up-line-or-history
+    zle set-local-history 0
+}
+zle -N up-line-or-local-history
+down-line-or-local-history() {
+    zle set-local-history 1
+    zle down-line-or-history
+    zle set-local-history 0
+}
+zle -N down-line-or-local-history
+
+
+# my editor
 export EDITOR=vim
+
 
 # aliases
 alias zshrc-reload='. ~/.zshrc'
@@ -76,6 +101,7 @@ alias d='colordiff -u'
 alias sctl='systemctl --user'
 alias jctl='journalctl --user'
 
+# docker/podman
 DOCKERNAME=podman
 dbuild() {
 	set -x;	for x in NAME; do local "${x:-}"="${1:-}"; shift; done
@@ -131,9 +157,11 @@ gdcommits() {
 
 alias openssl-cert-print-ascii='openssl x509 -text -noout -in'
 
+
 # source zsh-syntax-highlighter must be the last line:
 F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [ -f "$F" ] && source "$F"
+
 
 # kaychain
 which keychain 1>/dev/null 2>&1 && keychain id_rsa
