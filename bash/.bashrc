@@ -6,6 +6,8 @@ shopt -s globstar  # recursive ** expansion
 shopt -s histappend  # append to histfile
 shopt -s histverify  # do not immediately execute a command from history
 
+unset command_not_found_handle
+
 export HISTCONTROL=ignoredups:erasedups
 export HISTFILESIZE=99999
 export HISTSIZE=9999

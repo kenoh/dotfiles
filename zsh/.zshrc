@@ -49,6 +49,8 @@ autoload -U promptinit; promptinit; prompt pure
 F=~/.zprofile
 [ -f "$F" ] && source "$F"
 
+unset command_not_found_handler
+
 unsetopt beep notify incappendhistory sharehistory
 setopt appendhistory autocd extendedglob nomatch
 
