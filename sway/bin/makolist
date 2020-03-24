@@ -1,2 +1,3 @@
 #!/bin/sh
-makoctl list | jq '.data[][] | [.summary.data, .body.data]'
+makoctl list | jq '.data[][] | "\(.summary.data) ..... \(.body.data)"'
+# makoctl list | jq '.data[][] | [.summary.data, .body.data]'
