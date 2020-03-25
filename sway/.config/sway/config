@@ -15,7 +15,7 @@ default_border pixel 3
 default_floating_border pixel
 titlebar_border_thickness 1
 
-set $cl_high #d8d8d8
+set $cl_high #ffd898
 set $cl_indi #ffd8d8
 set $cl_back #231f20
 set $cl_fore #d9d8d8
