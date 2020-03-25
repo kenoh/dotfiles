@@ -93,6 +93,7 @@ etdiff() { $EMACSTERM emacsclient -t --eval "(ediff-files \"$1\" \"$2\")"; }
 
 alias al='alias | grep'
 alias g='grep'
+alias gi='grep -i'
 cdg() {
 	local maybe_path="$(git rev-parse --show-toplevel)"
 	[ $? -eq 0 ] && cd "$maybe_path"
