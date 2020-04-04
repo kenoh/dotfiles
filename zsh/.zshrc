@@ -39,6 +39,10 @@ source $ZSH/oh-my-zsh.sh
 
 ########################################################################
 
+maybe() {
+    which "$1" 1>/dev/null 2>&1
+}
+
 # extend loadpath
 fpath=( ~/.zsh.d "${fpath[@]}" )
 
@@ -162,6 +166,8 @@ gdcommits() {
 
 alias openssl-cert-print-ascii='openssl x509 -text -noout -in'
 
+# virtualenvwrapper
+maybe virtualenvwrapper.sh && source virtualenvwrapper.sh
 
 # source zsh-syntax-highlighter must be the last line:
 F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -169,7 +175,7 @@ F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 
 # kaychain
-which keychain 1>/dev/null 2>&1 && keychain id_rsa
+maybe keychain && keychain id_rsa
 [ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
 [ -f $HOME/.keychain/$HOSTNAME-sh ] && \
 		. $HOME/.keychain/$HOSTNAME-sh
