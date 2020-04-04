@@ -205,8 +205,8 @@ bindsym $mod+y fullscreen disable; floating enable; resize set 600 400; sticky e
 
 set $wrap ~/bin/sway-exec-wrapper.sh
 # startup
+exec_always systemctl --user import-environment WAYLAND_DISPLAY  # for mako
 exec_always stat $wrap || swaynag -m '$wrap does not exist! Check your config and binaries.'
-exec_always pkill mako ; $wrap mako  # notifications
 exec_always pkill kanshi ; $wrap kanshi  # display outputs auto layout
 exec $wrap emacs --daemon
 exec ~/bin/startup.sh
