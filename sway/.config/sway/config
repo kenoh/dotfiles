@@ -32,12 +32,13 @@ for_window [app_id="(pavucontrol|nm-connection-manager)"] \
            floating enable
 
 # colors in titles
+## note: there is a bug in Pango such that setting a size for the very first text in the title_format simply does not work. Preceeding it with a space does the trick. Anyway, enlarging the text substantially enlarges the titlebar itself, so no, thanks.
 for_window [class="Emacs"] \
-           title_format "<span foreground='#a020f0' size='xx-large'>𝓔</span> <b>%title</b>"
+           title_format "<span foreground='#a020f0'>𝓔</span> <b>%title</b>"
 for_window [app_id="(firefox)"] \
-           title_format "<span foreground='#ffcc00' size='xx-large'>🦊</span> <b>%title</b>"
+           title_format "<span foreground='#ffcc00'>🦊</span> <b>%title</b>"
 for_window [app_id="(tilix)"] \
-           title_format "<span foreground='#a0ffa0' size='xx-large'>⌨</span> <b>%title</b>"
+           title_format "<span foreground='#a0ffa0'>⌨</span> <b>%title</b>"
 
 
 
