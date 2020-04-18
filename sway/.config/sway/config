@@ -175,7 +175,7 @@ bindsym $mod+x mode "$mymenu"
 # don't lock when in fullscreen mode
 for_window [shell=".*"] inhibit_idle fullscreen
 
-set $lock swaylock --ignore-empty-password --show-failed-attempts --color 000000
+set $lock sh -c "hostname | md5sum | sed 's/\(.\)\(.\)\(.\).*/1\11\21\3/' | xargs swaylock --ignore-empty-password --show-failed-attempts --color"
 set $barup && killall -SIGUSR1 py3status
 
 # launchers
