@@ -111,58 +111,30 @@ alias sctl='systemctl --user'
 alias jctl='journalctl --user'
 
 # docker/podman
-DOCKERNAME=podman
-dbuild() {
-	set -x;	for x in NAME; do local "${x:-}"="${1:-}"; shift; done
-	$DOCKERNAME build -t "$NAME" .
-}
-drun() {
-	set -x;	for x in NAME; do local "${x:-}"="${1:-}"; shift; done
-	$DOCKERNAME run -ti --rm=true "$NAME" "${@}"
-}
-dbr() {
-	set -x;	for x in NAME; do local "${x:-}"="${1:-}"; shift; done
-	dbuild "$NAME" . && drun "$NAME" "${@}"
-}
-dbrp() {
-	set -x;	for x in NAME PORT; do local "${x:-}"="${1:-}"; shift; done
-	dbuild "$NAME" . && drun -p "$PORT" "$NAME" "${@}"
-}
-dbrp.() {
-	set -x;	for x in PORT; do local "${x:-}"="${1:-}"; shift; done
-	dbrp "$(pwd | xargs basename)" "$PORT" "${@}"
-}
-dbr.() {
-	set -x
-	dbr "$(pwd | xargs basename)" "${@}"
-}
-dexec() {
-	set -x;	for x in NAME; do local "${x:-}"="${1:-}"; shift; done
-	$DOCKERNAME exec -ti "$NAME" "${@}"
-}
-dshell() {
-	set -x;	for x in NAME; do local "${x:-}"="${1:-}"; shift; done
-	if [ -n "$NAME" ]; then
-		dexec "$NAME" /bin/bash
-	else
-		dexec "$(docker ps -l --format '{{.ID}}')" /bin/bash
-	fi
-}
+DOCKERNAME=docker
+dbuild() { $DOCKERNAME build -t "$(basename "$PWD")" "${@}"; }
+dbuild.() { dbuild "${@}" .; }
+drun() { $DOCKERNAME run -ti --rm=true "${@}"; }
+drun.() { drun "$(basename "$PWD")" "${@}"; }
+dexec() { $DOCKERNAME exec -ti "${@}"; }
+dshell() { $DOCKERNAME exec "$(docker ps -l --format '{{.ID}}')" /bin/bash; }
 alias dp='$DOCKERNAME ps'
 alias dpa='$DOCKERNAME ps --all'
 
+# git
 alias gbvv='git -P branch -vv'
 alias tiga='tig --all'
+gdcommits() {
+	d <(git show "$1") <(git show "$2")
+}
 
+
+# vagrant
 alias vs='vagrant ssh'
 alias vst='vagrant status'
 alias vgs='vagrant global-status --prune'
 alias vup='vagrant up'
 alias vpa='vagrant provision --provision-with=ansible'
-
-gdcommits() {
-	d <(git show "$1") <(git show "$2")
-}
 
 alias openssl-cert-print-ascii='openssl x509 -text -noout -in'
 
