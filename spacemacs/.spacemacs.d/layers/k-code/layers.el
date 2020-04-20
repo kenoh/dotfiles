@@ -1,19 +1,19 @@
 (configuration-layer/declare-layers
- '(systemd
-   python
-   helm
-   auto-completion
+ '(
+   ansible
+   (auto-completion :variables
+                    auto-completion-return-key-behavior nil
+                    auto-completion-tab-key-behavior 'complete)
    better-defaults
    emacs-lisp
    git
-   ;; markdown
+   helm
+   markdown
    multiple-cursors
-   ;; org
-   ;; (shell :variables
-   ;;        shell-default-height 30
-   ;;        shell-default-position 'bottom)
-   ;; spell-checking
+   python
    syntax-checking
-   version-control
+   systemd
    treemacs
+   version-control
+   yaml
    ))
