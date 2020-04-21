@@ -25,7 +25,7 @@
    magit-diff-refine-hunk t
    magit-diff-refine-ignore-whitespace nil
    magit-display-buffer-function (lambda (buffer)
-                                   (display-buffer buffer '(display-buffer-same-window))))))
+                                   (display-buffer buffer '(display-buffer-same-window)))))
 
 
 (defun k-code/post-init-persistent-scratch ()
@@ -34,5 +34,6 @@
 
 
 (defun k-code/post-init-projectile ()
-  (add-to-list 'projectile-project-root-files "Vagrantfile" t)
-  (setq-default projectile-switch-project-action 'projectile-vc))
+  (with-eval-after-load "projectile"
+    (add-to-list 'projectile-project-root-files "Vagrantfile" t)
+    (setq-default projectile-switch-project-action 'projectile-vc)))

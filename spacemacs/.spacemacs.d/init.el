@@ -6,10 +6,9 @@
   "Layer configuration:
 This function should only modify configuration layer settings."
   (let ((pth (expand-file-name "~/.spacemacs.d/layers.el")))
-    (if (load pth t)
-        (unless (listp k-layers)
-          (error "Loaded layers.el but 'k-layers was not set to a list!"))
-      (setq k-layers '())))
+    (load pth t)
+    (unless (listp k-layers)
+      (error "Loaded layers.el but 'k-layers was not set to a list!")))
   (setq-default
    ;; Base distribution to use. This is a layer contained in the directory
    ;; `+distribution'. For now available distributions are `spacemacs-base'

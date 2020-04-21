@@ -1,7 +1,10 @@
 (global-set-key (kbd "<f2>") 'other-window)
 (global-set-key (kbd "<f3>") 'mode-line-other-buffer)
 
-(spaceline-spacemacs-theme '(projectile-root))
+;; FIXME: this does not work (even the spaceline-toggle-* does not)
+;; (with-eval-after-load "spaceline-config"
+;;   (setq spacemacs-spaceline-additional-segments '((projectile-root)))
+;;   (spaceline-compile))
 
 (progn "ediff"
        (progn "workaround for issues when highlighting stuff in ediff-regions-*"
