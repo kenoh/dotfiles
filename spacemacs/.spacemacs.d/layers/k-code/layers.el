@@ -10,7 +10,9 @@
    helm
    markdown
    multiple-cursors
-   python
+   (python :variables
+           python-shell-interpreter "python"
+           python-test-runner 'pytest)
    syntax-checking
    systemd
    treemacs

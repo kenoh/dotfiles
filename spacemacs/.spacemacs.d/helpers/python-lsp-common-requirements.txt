@@ -1,0 +1,17 @@
+# From https://develop.spacemacs.org/layers/+lang/python/README.html#python-language-server
+
+python-language-server[all]
+
+# for import sorting
+pyls-isort
+
+# for mypy checking (python 3.4+ is needed)
+pyls-mypy
+pyls-black
+rope
+pyflakes
+mccabe
+pycodestyle
+pydocstyle
+autopep8
+yapf
