@@ -1,3 +1,4 @@
 .config
 .config/sway
+.config/systemd/user
 bin

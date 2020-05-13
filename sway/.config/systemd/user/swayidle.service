@@ -1,0 +1,12 @@
+[Unit]
+Description=Idle desktop manager
+Documentation=man:swayidle(1)
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+ExecCondition=/bin/sh -c '[ -n "$WAYLAND_DISPLAY" ]'
+ExecStart=/usr/bin/swayidle timeout 300 'exec ~/bin/lock' before-sleep 'exec ~/bin/lock'
+
+[Install]
+WantedBy=graphical-session.target

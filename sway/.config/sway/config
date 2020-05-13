@@ -30,6 +30,7 @@ client.urgent           $cl_urge $cl_urge $cl_fore $cl_urge $cl_urge
 for_window [class="."] title_format "<b>%class</b> :: %title [%shell]"
 for_window [app_id="(pavucontrol|nm-connection-manager)"] \
            floating enable
+for_window [title="Firefox - Sharing Indicator"] move scratchpad
 
 # colors in titles
 ## note: there is a bug in Pango such that setting a size for the very first text in the title_format simply does not work. Preceeding it with a space does the trick. Anyway, enlarging the text substantially enlarges the titlebar itself, so no, thanks.
@@ -175,7 +176,7 @@ bindsym $mod+x mode "$mymenu"
 # don't lock when in fullscreen mode
 for_window [shell=".*"] inhibit_idle fullscreen
 
-set $lock sh -c "hostname | md5sum | sed 's/\(.\)\(.\)\(.\).*/1\11\21\3/' | xargs swaylock --ignore-empty-password --show-failed-attempts --color"
+set $lock ~/bin/lock
 set $barup && killall -SIGUSR1 py3status
 
 # launchers
@@ -209,11 +210,7 @@ bindsym $mod+y fullscreen disable; floating enable; resize set 600 400; sticky e
 
 set $wrap ~/bin/sway-exec-wrapper.sh
 # startup
-exec_always systemctl --user import-environment WAYLAND_DISPLAY  # for mako
+exec_always systemctl --user import-environment WAYLAND_DISPLAY  # for mako, kanshi
 exec_always stat $wrap || swaynag -m '$wrap does not exist! Check your config and binaries.'
-exec_always pkill kanshi ; $wrap kanshi  # display outputs auto layout
 exec $wrap emacs --daemon
 exec ~/bin/startup.sh
-exec $wrap swayidle \
-    timeout 300 'exec $lock' \
-    before-sleep 'exec $lock'

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -e
+
+CMD="$0"
+
+tst() {
+	if [ ! -x "$(which $1)" ]; then
+		swaynag -m "$CMD: $1 is not executable or is even missing" &
+		return 1
+	fi
+}
+
+tst swaylock
+
+# backup
+trap 'swaylock --ignore-empty-password --show-failed-attempts --color ff0000' ERR
+
+# fancy default
+tst hostname
+tst md5sum
+tst sed
+tst xargs
+hostname | md5sum | sed 's/\(.\)\(.\)\(.\).*/1\11\21\3/' \
+	| xargs swaylock --ignore-empty-password --show-failed-attempts --color
