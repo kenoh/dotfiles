@@ -6,6 +6,7 @@
     persistent-scratch
     projectile
     rainbow-mode
+    evil
     ))
 
 
@@ -37,3 +38,21 @@
   (with-eval-after-load "projectile"
     (add-to-list 'projectile-project-root-files "Vagrantfile" t)
     (setq-default projectile-switch-project-action 'projectile-vc)))
+
+(defun k/term-set-cursor-to-block ()
+  (send-string-to-terminal "\033[0 q"))
+(defun k/term-set-cursor-to-bar ()
+  (send-string-to-terminal "\033[5 q"))
+(defun k-code/post-init-evil ()
+  (progn "Have vertical bar as a cursor in terminal."
+         ;; So, there is a package for it, evil-terminal-cursor-changer,
+         ;; but this below just seems to be enough for now.
+         (when (not (display-graphic-p))
+           (add-hook 'evil-insert-state-entry-hook 'k/term-set-cursor-to-bar)
+           (add-hook 'evil-normal-state-entry-hook 'k/term-set-cursor-to-block))))
+
+;; These no-op functions are to silence warnings from https://github.com/syl20bnr/spacemacs/blob/c7a103a772d808101d7635ec10f292ab9202d9ee/core/core-configuration-layer.el#L658
+(defun k-code/post-init-helm-unicode ()
+  t)
+(defun k-code/post-init-rainbow-mode ()
+  t)
