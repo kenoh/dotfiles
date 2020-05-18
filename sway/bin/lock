@@ -22,4 +22,4 @@ tst md5sum
 tst sed
 tst xargs
 hostname | md5sum | sed 's/\(.\)\(.\)\(.\).*/1\11\21\3/' \
-	| xargs swaylock --ignore-empty-password --show-failed-attempts --color
+	| xargs swaylock --ignore-empty-password --show-failed-attempts --image "$HOME/pic" --color

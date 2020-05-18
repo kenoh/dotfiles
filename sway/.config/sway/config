@@ -170,9 +170,12 @@ bar {
 	}
 }
 
-set $mymenu <span font_style='normal'>MyMenu ::: <b>e</b>macsclient</span>
+set $mymenu <span font_style='normal'>MyMenu ::: <b>e</b>macsclient : <b>p</b>ulsemixer : <b>b</b>lueman : <b>n</b>mtui</span>
 mode --pango_markup "$mymenu" {
-	bindsym e exec --no-startup-id emacsclient --no-wait -c || notify-send 'emacsclient' 'problem running it' ; mode "default"
+	bindsym e exec emacsclient --no-wait -c || notify-send 'emacsclient' 'problem running it' ; mode "default"
+	bindsym p exec tilix -e pulsemixer ; mode "default"
+	bindsym n exec tilix -e nmtui ; mode "default"
+	bindsym b exec blueman-manager ; mode "default"
 	bindsym Escape mode "default"
 }
 bindsym $mod+x mode "$mymenu"
@@ -193,8 +196,8 @@ bindsym XF86AudioRaiseVolume exec amixer -q -D pulse sset Master 5%+ $barup
 bindsym XF86AudioMute exec amixer -q -D pulse sset Master toggle $barup
 
 # brightness
-bindsym --locked XF86MonBrightnessUp exec --no-startup-id light -A 10 $barup
-bindsym --locked XF86MonBrightnessDown exec --no-startup-id light -U 10 $barup
+bindsym --locked XF86MonBrightnessUp exec light -A 10 $barup
+bindsym --locked XF86MonBrightnessDown exec light -U 10 $barup
 
 # playerctl
 bindsym XF86AudioPlay exec playerctl -p spotify play-pause $barup
