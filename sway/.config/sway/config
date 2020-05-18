@@ -5,7 +5,11 @@ set $laptop eDP-1
 bindswitch --locked lid:off output $laptop enable
 bindswitch --locked lid:on output $laptop disable
 
-input * xkb_options ctrl:nocaps
+input * {
+  xkb_options "ctrl:nocaps,grp:ctrls_toggle"
+  xkb_layout "us,sk,cz"
+  xkb_variant ",qwerty,qwerty"
+}
 input * tap enabled
 
 # look&feel
