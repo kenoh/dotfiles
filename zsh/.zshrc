@@ -81,6 +81,10 @@ down-line-or-local-history() {
 zle -N down-line-or-local-history
 
 
+# colors
+export TERM=xterm-256color
+
+
 # my editor
 export EDITOR=vim
 
@@ -90,10 +94,9 @@ alias zshrc-reload='. ~/.zshrc'
 
 alias vim=nvim
 
-test -n "$TILIX_ID" && export EMACSTERM=(env TERM=xterm-24bit)
 alias e='emacsclient --no-wait'
-alias et='$EMACSTERM emacsclient -t'
-etdiff() { $EMACSTERM emacsclient -t --eval "(ediff-files \"$1\" \"$2\")"; }
+alias et='emacsclient -t'
+etdiff() { emacsclient -t --eval "(ediff-files \"$1\" \"$2\")"; }
 
 alias al='alias | grep'
 alias g='grep'
