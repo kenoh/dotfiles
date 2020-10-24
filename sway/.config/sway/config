@@ -197,7 +197,7 @@ bindsym XF86AudioMute exec amixer -q -D pulse sset Master toggle $barup
 
 # brightness
 bindsym --locked XF86MonBrightnessUp exec light -A 10 $barup
-bindsym --locked XF86MonBrightnessDown exec light -U 10 $barup
+bindsym --locked XF86MonBrightnessDown exec light -U 10 && light -A 1 $barup
 
 # playerctl
 bindsym XF86AudioPlay exec playerctl -p spotify play-pause $barup
@@ -217,7 +217,7 @@ bindsym $mod+y fullscreen disable; floating enable; resize set 600 400; sticky e
 
 set $wrap ~/bin/sway-exec-wrapper.sh
 # startup
-exec_always systemctl --user import-environment WAYLAND_DISPLAY  # for mako, kanshi
+exec_always systemctl --user import-environment WAYLAND_DISPLAY SWAYSOCK # for mako, kanshi
 exec_always stat $wrap || swaynag -m '$wrap does not exist! Check your config and binaries.'
 exec $wrap emacs --daemon
 exec ~/bin/startup.sh
