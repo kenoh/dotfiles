@@ -8,6 +8,7 @@
    emacs-lisp
    git
    helm
+   json
    markdown
    multiple-cursors
    (python :variables
