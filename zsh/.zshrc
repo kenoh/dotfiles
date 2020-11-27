@@ -34,6 +34,7 @@ plugins=(
     fasd
     colorize
     fancy-ctrl-z
+    z
 )
 source $ZSH/oh-my-zsh.sh
 
@@ -120,7 +121,12 @@ dbuild.() { dbuild "${@}" .; }
 drun() { $DOCKERNAME run -ti --rm=true "${@}"; }
 drun.() { drun "$(basename "$PWD")" "${@}"; }
 dexec() { $DOCKERNAME exec -ti "${@}"; }
-dshell() { $DOCKERNAME exec "$(docker ps -l --format '{{.ID}}')" /bin/bash; }
+dshell() {
+    LASTID="$(docker ps -l --format '{{.ID}}')"
+    ID="${1:-$LASTID}"
+    echo "$ID"
+    $DOCKERNAME exec -ti "$ID" /bin/bash
+}
 alias dp='$DOCKERNAME ps'
 alias dpa='$DOCKERNAME ps --all'
 
