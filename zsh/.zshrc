@@ -63,10 +63,15 @@ setopt appendhistory autocd extendedglob nomatch
 # history magic
 setopt incappendhistory sharehistory
 
-bindkey "^[[A" up-line-or-local-history
+# local and global history at fingertips
+## local
+bindkey "^[OA" up-line-or-local-history
 bindkey "^P" up-line-or-local-history
-bindkey "^[[B" down-line-or-local-history
+bindkey "^[OB" down-line-or-local-history
 bindkey "^N" down-line-or-local-history
+## global
+bindkey "^[[1;5A" up-line-or-search
+bindkey "^[[1;5B" down-line-or-search
 
 up-line-or-local-history() {
     zle set-local-history 1
