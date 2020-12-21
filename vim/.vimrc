@@ -1,3 +1,7 @@
+" prolly workarounds a messed-up locale (https://stackoverflow.com/a/18321539)
+scriptencoding utf-8
+set encoding=utf-8
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGINS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -18,6 +22,7 @@ call dein#add('tpope/vim-sleuth')  " automatic buffer variables (indent,...)
 call dein#add('ctrlpvim/ctrlp.vim')
 call dein#add('airblade/vim-gitgutter')
 call dein#add('liuchengxu/vim-which-key')
+call dein#add('igankevich/mesonic')  " meson support
 if dein#check_install()
 	call dein#install()
 endif
