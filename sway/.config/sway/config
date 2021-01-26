@@ -108,14 +108,14 @@ set $ws9 number 9 九
 set $ws0 number 10 十
 
 bindsym $mod+1 workspace $ws1
-bindsym $mod+2 workspace $ws2
-bindsym $mod+3 workspace $ws3
-bindsym $mod+4 workspace $ws4
-bindsym $mod+5 workspace $ws5
-bindsym $mod+6 workspace $ws6
-bindsym $mod+7 workspace $ws7
-bindsym $mod+8 workspace $ws8
-bindsym $mod+9 workspace $ws9
+bindsym $mod+2 workspace $ws3 ; workspace $ws2
+bindsym $mod+3 workspace $ws2 ; workspace $ws3
+bindsym $mod+4 workspace $ws5 ; workspace $ws4
+bindsym $mod+5 workspace $ws4 ; workspace $ws5
+bindsym $mod+6 workspace $ws7 ; workspace $ws6
+bindsym $mod+7 workspace $ws6 ; workspace $ws7
+bindsym $mod+8 workspace $ws9 ; workspace $ws8
+bindsym $mod+9 workspace $ws8 ; workspace $ws9
 bindsym $mod+0 workspace $ws0
 
 bindsym $mod+z workspace back_and_forth
@@ -159,7 +159,6 @@ bar {
 	position bottom
 	strip_workspace_numbers yes
 	separator_symbol " · "
-	font pango: Liberation Sans 9
 	modifier $mod
 	colors {
 		background $cl_back
@@ -170,12 +169,15 @@ bar {
 	}
 }
 
-set $mymenu <span font_style='normal'>MyMenu ::: <b>e</b>macsclient : <b>p</b>ulsemixer : <b>b</b>lueman : <b>n</b>mtui</span>
+set $mymenu <span font_style='normal'>MyMenu ::: <b>B</b>lueman :: <b>E</b>macs :: <b>F</b>irefox :: <b>N</b>mtui :: <b>P</b>ulsemixer :: <b>S</b>ignal :: <b>T</b>hunderbird :</span>
 mode --pango_markup "$mymenu" {
-	bindsym e exec emacsclient --no-wait -c || notify-send 'emacsclient' 'problem running it' ; mode "default"
-	bindsym p exec tilix -e pulsemixer ; mode "default"
-	bindsym n exec tilix -e nmtui ; mode "default"
 	bindsym b exec blueman-manager ; mode "default"
+	bindsym e exec emacsclient --no-wait -c || notify-send 'emacsclient' 'problem running it' ; mode "default"
+	bindsym f exec firefox-wayland ; mode "default"
+	bindsym n exec tilix -e nmtui ; mode "default"
+	bindsym p exec tilix -e pulsemixer ; mode "default"
+	bindsym s exec flatpak run org.signal.Signal ; mode "default"
+	bindsym t exec thunderbird-wayland ; mode "default"
 	bindsym Escape mode "default"
 }
 bindsym $mod+x mode "$mymenu"
@@ -187,7 +189,7 @@ set $lock ~/bin/lock
 set $barup && killall -SIGUSR1 py3status
 
 # launchers
-bindsym $mod+d exec PATH="$HOME/bin:$PATH" bemenu-run --fn 'Monospace [13]' -l 15 --scrollbar always
+bindsym $mod+d exec PATH="$HOME/bin:$PATH" bemenu-run --fn 'Monospace [13]' -l 15 --scrollbar always -m all
 bindsym $mod+Return exec tilix --action=app-new-window
 bindsym $mod+Shift+Return exec xterm
 bindsym $mod+Escape exec $lock
@@ -216,8 +218,11 @@ bindsym $mod+F12 focus output right
 bindsym $mod+y fullscreen disable; floating enable; resize set 600 400; sticky enable
 
 set $wrap ~/bin/sway-exec-wrapper.sh
+set $recur ~/bin/recur.sh
 # startup
 exec_always systemctl --user import-environment WAYLAND_DISPLAY SWAYSOCK # for mako, kanshi
 exec_always stat $wrap || swaynag -m '$wrap does not exist! Check your config and binaries.'
 exec $wrap emacs --daemon
+exec $recur kanshi
+exec_always pkill kanshi
 exec ~/bin/startup.sh

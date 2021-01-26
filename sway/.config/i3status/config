@@ -1,3 +1,4 @@
+# -*- mode: conf -*-
 # i3status configuration file.
 # see "man i3status" for documentation.
 
@@ -27,14 +28,14 @@ order += "backlight"
 order += "battery_level"
 order += "bluetooth"
 order += "volume_status"
-order += "keyboard_layout"
+order += "xkb_input"
 order += "tztime date"
 order += "tztime time"
 
 scratchpad {
   ipc = "swaymsg"
-  on_click 1 = 'scratchpad show'
-  thresholds = [ (0, "") ]
+  on_click 1 = "scratchpad show"
+  thresholds = [ (0, ""), (1, "deepskyblue") ]
 }
 
 external_script systemd {
@@ -73,11 +74,11 @@ tztime time {
 	color = "#ffffff"
 }
 
-keyboard_layout {
-	layouts = ['us', 'sk', 'ru']
-	color_us = ""
-	color_sk = "#ffff00"
-	color_ru = "#ff0000"
+xkb_input {
+  switcher = "swaymsg"
+  inputs = [{"identifier": "1:1:AT_Translated_Set_2_keyboard"}]
+  format_input = "[\?color=s {s}]"
+  thresholds = [("us", ""), ("sk", "red"), ("cz", "red")]
 }
 
 loadavg {
