@@ -13,6 +13,8 @@
 
 ;; Private config
 (load-file (expand-file-name "~/.emacs.d/private.el"))
+(let ((f 'k--private--before))
+  (if (fboundp f) (funcall f)))
 
 ;; GUI
 (ignore-errors
@@ -108,6 +110,9 @@
   :init 
   (add-hook 'prog-mode-hook 'company-mode-on))
 
+(use-package persistent-scratch :ensure t
+  :config
+  (persistent-scratch-setup-default))
 
 ;; Org ------------------------------------------
 (use-package org :ensure t
@@ -169,7 +174,8 @@
    "o" '(:ignore t :which-key "org")
    "oo" '(counsel-org-files :which-key "open org files")
    "oc" '(counsel-org-capture :which-key "capture")
-   "oa" '(org-agenda :which-key "agenda")
+   "oa" '(:ignore t :which-key "agenda")
+   "oaa" '(org-agenda :which-key "agenda")
    ;; org-roam
    "or" '(:ignore t :which-key "roam")
    "orr" '(org-roam :which-key "side bar")
@@ -177,14 +183,20 @@
    "ori" '(org-roam-insert : which-key "insert link"))
   (general-define-key
    :states '(normal visual)
+   "<f1>" '(evil-window-next :which-key "next window")
+   ;; smartparens
    "," '(:ignore t :which-key "smartparens")
    ",0" '(sp-forward-slurp-sexp :which-key "slurp forward")
    ",9" '(sp-backward-slurp-sexp :which-key "slurp backward")
    ",)" '(sp-forward-barf-sexp :which-key "barf forward")
-   ",(" '(sp-backward-barf-sexp :which-key "barf backward"))
+   ",(" '(sp-backward-barf-sexp :which-key "barf backward")
+   ",r" '(sp-raise-sexp :which-key "raise"))
   )
 
 ;;; Addendum ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(let ((f 'k--private--after))
+  (if (fboundp f) (funcall f)))
+
 ;; Custom-*
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
