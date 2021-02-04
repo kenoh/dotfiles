@@ -19,7 +19,7 @@ compinit
 
 WANNA_PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin"
 case ":$PATH:" in
-    *:"$HOME/bin":*)
+    *:"$WANNA_PATH":*)
 	;;
     *)
 	export PATH="$WANNA_PATH:$PATH"
