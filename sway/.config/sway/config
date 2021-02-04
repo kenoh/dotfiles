@@ -43,7 +43,9 @@ for_window [class="Emacs"] \
 for_window [app_id="(firefox)"] \
            title_format "<span foreground='#ffcc00'>🦊</span> <b>%title</b>"
 for_window [app_id="(tilix)"] \
-           title_format "<span foreground='#a0ffa0'>⌨</span> <b>%title</b>"
+           title_format "<span foreground='#90ff90'>⌨</span> <b>%title</b>"
+for_window [class="Code"] \
+           title_format "<span foreground='#0078d7'>𝘾</span> <b>%title</b>"
 
 
 
