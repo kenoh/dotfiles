@@ -30,6 +30,8 @@
 (setq show-paren-delay 0)
 (show-paren-mode  1)
 
+;; Navigation
+(setq scroll-preserve-screen-position 'always)
 
 ;;; Packages ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; some stats to gather here:
@@ -38,20 +40,31 @@
 ;; delight is for :delight in use-package
 (use-package delight :ensure t)
 
-(use-package evil :ensure t
+(use-package evil :ensure t :after (persistent-scratch)
   :init
   (setq evil-want-keybinding nil) ;; otherwise we get a warning: https://github.com/emacs-evil/evil-collection/issues/60
+  (setq evil-respect-visual-line-mode t) ;; so that j/k don't skip multiple lines at once
   :config
   (evil-mode 1))
 
-(use-package evil-collection :ensure t :after evil
+(use-package evil-collection :ensure t :after (evil)
     :config
     (evil-collection-init))
+
+(use-package evil-surround :ensure t :after (evil evil-collection)
+  :config
+  (global-evil-surround-mode 1))
+
+(use-package evil-mc :ensure t :after (evil evil-collection)
+  :config
+  (global-evil-mc-mode 1))
 
 (use-package expand-region :ensure t :defer t)
 
 (use-package undo-tree :ensure t
   :delight)
+
+(use-package rainbow-mode :ensure t :defer t)
 
 (use-package smartparens-config :ensure smartparens
   :config
@@ -59,7 +72,7 @@
   (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
   (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode))
   
-(use-package evil-smartparens :ensure t
+(use-package evil-smartparens :ensure t :requires (evil)
   :init (require 'evil-smartparens)
   :after (evil general smartparens evil-surround))
 
@@ -72,10 +85,19 @@
 (use-package which-key :ensure t :delight
   :init
   (setq which-key-separator " ")
+  (add-to-list 'which-key-replacement-alist '((nil . "^org-agenda") . (nil . "OA")))
+  (add-to-list 'which-key-replacement-alist '((nil . "^evil") . (nil . "E")))
+  (add-to-list 'which-key-replacement-alist '((nil . "^magit") . (nil . "M")))
+  (add-to-list 'which-key-replacement-alist '((nil . "^org") . (nil . "O")))
   :config
   (which-key-mode 1))
 
-(use-package magit :ensure t)
+(use-package magit :ensure t
+  :defer t
+  :commands (magit-status)
+  :init
+  (setq magit-display-buffer-function
+	(lambda (buf) (display-buffer-same-window buf '()))))
 
 (use-package counsel :ensure t
   :delight ivy-mode
@@ -99,7 +121,7 @@
   (counsel-projectile-mode 1))
 
 (use-package projectile :ensure t
-  :delight '(:eval (concat " " (projectile-project-name)))
+  :delight '(:eval (concat " <" (projectile-project-name) ">"))
   :init
   (setq projectile-require-project-root nil)
   :config
@@ -107,6 +129,7 @@
   )
 
 (use-package company :ensure t
+  :delight " ©"
   :init 
   (add-hook 'prog-mode-hook 'company-mode-on))
 
@@ -128,9 +151,24 @@
   (add-hook 'after-init-hook 'org-roam-mode))
 
 ;; Languages ------------------------------------
-(use-package lsp-mode :ensure t)
-(use-package lsp-ui :ensure t)
+(use-package lsp-mode :ensure t
+  :defer t
+  :commands (lsp lsp-deferred))
 
+(use-package lsp-ui :ensure t
+  :defer t
+  :hook (lsp-mode . lsp-ui-mode))
+
+;;; Python
+(use-package lsp-pyright :ensure t :defer t
+  :init
+  (setq lsp-pyright-disable-language-service nil
+	lsp-pyright-disable-organize-imports nil
+	lsp-pyright-auto-import-completions t
+	lsp-pyright-use-library-code-for-types t)
+  :hook ((python-mode . (lambda () (require 'lsp-pyright) (lsp-deferred)))))
+
+(use-package jinja2-mode :ensure t :defer t)
 
 ;; Keybindings ----------------------------------
 (use-package general :ensure t :config
@@ -148,18 +186,24 @@
    ;; buffer
    "TAB" '(evil-switch-to-windows-last-buffer :which-key "previous buffer")
    "b" '(:ignore t :which-key "buffer")
-   "bb" '(ivy-switch-buffer :which-key "switch buffer")
-   "bd" '(evil-delete-buffer :which-key "delete buffer")
+   "bb" '(ivy-switch-buffer :which-key "switch")
+   "bd" '(evil-delete-buffer :which-key "delete")
+   "br" '(revert-buffer :which-key "revert")
    ;; window
    "w" '(:ignore t :which-key "window")
    "w/" '(split-window-right :which-key "split right")
    "w-" '(split-window-below :which-key "split bottom")
-   "wd" '(delete-window :which-key "delete window")
+   "wd" '(delete-window :which-key "delete")
    "wo" '(delete-other-windows :which-key "single window")
    ;; file
    "f" '(:ignore t :which-key "file")
-   "fs" '(save-buffer :which-key "save buffer")
    "ff" '(counsel-find-file :which-key "find file")
+   "fj" '(dired-jump :which-key "dired jump")
+   "fs" '(save-buffer :which-key "save buffer")
+   ;; toggle
+   "t" '(:ignore t :which-key "toggle")
+   "tt" '(toggle-truncate-lines :which-key "truncate lines")
+   "tw" '(which-key-show-top-level :wk "which-key top level")
    ;; projectile
    "p" '(:ignore t :which-key "projectile")
    "pp" '(counsel-projectile-switch-project :which-key "switch project")
@@ -180,17 +224,26 @@
    "or" '(:ignore t :which-key "roam")
    "orr" '(org-roam :which-key "side bar")
    "orf" '(org-roam-find-file :which-key "find file")
-   "ori" '(org-roam-insert : which-key "insert link"))
+   "ori" '(org-roam-insert : which-key "insert link")
+   )
   (general-define-key
    :states '(normal visual)
-   "<f1>" '(evil-window-next :which-key "next window")
    ;; smartparens
    "," '(:ignore t :which-key "smartparens")
    ",0" '(sp-forward-slurp-sexp :which-key "slurp forward")
    ",9" '(sp-backward-slurp-sexp :which-key "slurp backward")
    ",)" '(sp-forward-barf-sexp :which-key "barf forward")
    ",(" '(sp-backward-barf-sexp :which-key "barf backward")
-   ",r" '(sp-raise-sexp :which-key "raise"))
+   ",r" '(sp-raise-sexp :which-key "raise")
+   ;; lsp
+   ";" '(:ignore t :which-key "LSP fu")
+   ";;" '(:package lsp :keymap lsp-mode-map :which-key "lsp")
+   ";'" '(:package lsp-ui :keymap lsp-ui-mode-map :which-key "lsp ui")
+   )
+  (general-define-key
+   :states '(normal visual emacs insert)
+   "<f2>" '(evil-window-next :which-key "next window")
+   )
   )
 
 ;;; Addendum ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
