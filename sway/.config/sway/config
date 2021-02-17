@@ -26,9 +26,9 @@ set $cl_fore #d9d8d8
 set $cl_urge #ee2e24
 
 # Colors                border   bg       text     indi     childborder
-client.focused          $cl_back $cl_high $cl_back $cl_indi $cl_high
+client.focused          $cl_high $cl_high $cl_back $cl_indi $cl_high
 client.focused_inactive $cl_high $cl_back $cl_fore $cl_back $cl_back
-client.unfocused        $cl_high $cl_back $cl_fore $cl_back $cl_back
+client.unfocused        $cl_fore $cl_back $cl_fore $cl_back $cl_back
 client.urgent           $cl_urge $cl_urge $cl_fore $cl_urge $cl_urge
 
 for_window [class="."] title_format "<b>%class</b> :: %title [%shell]"
@@ -57,6 +57,10 @@ hide_edge_borders smart
 # ... in effect won't wrap between screens :)
 focus_wrapping force
 focus_on_window_activation focus
+
+# mouse
+bindsym --border button2 kill
+bindsym --border button1 nop "I simply cannot strafe the Firefox tabs properly..."
 
 # BUG: these two lines, otherwise Shift+C would be interpreted literally (https://github.com/swaywm/sway/issues/4975)
 bindsym $mod+Shift+c nop
@@ -98,6 +102,7 @@ bindsym $mod+Shift+Up sticky toggle
 bindsym $mod+grave scratchpad show
 bindsym $mod+Shift+grave move scratchpad
 
+set $ws0 number 0 〇
 set $ws1 number 1 一
 set $ws2 number 2 二
 set $ws3 number 3 三
@@ -107,23 +112,41 @@ set $ws6 number 6 六
 set $ws7 number 7 七
 set $ws8 number 8 八
 set $ws9 number 9 九
-set $ws0 number 10 十
+set $wsf0 number 10 f〇
+set $wsf1 number 11 f一
+set $wsf2 number 12 f二
+set $wsf3 number 13 f三
+set $wsf4 number 14 f四
+set $wsf5 number 15 f五
+set $wsf6 number 16 f六
+set $wsf7 number 17 f七
+set $wsf8 number 18 f八
+set $wsf9 number 19 f九
 
-bindsym $mod+1 workspace $ws1
-bindsym $mod+2 workspace $ws3 ; workspace $ws2
-bindsym $mod+3 workspace $ws2 ; workspace $ws3
-bindsym $mod+4 workspace $ws5 ; workspace $ws4
-bindsym $mod+5 workspace $ws4 ; workspace $ws5
-bindsym $mod+6 workspace $ws7 ; workspace $ws6
-bindsym $mod+7 workspace $ws6 ; workspace $ws7
-bindsym $mod+8 workspace $ws9 ; workspace $ws8
-bindsym $mod+9 workspace $ws8 ; workspace $ws9
-bindsym $mod+0 workspace $ws0
+bindsym $mod+0 workspace $wsf0 ; workspace $ws0
+bindsym $mod+1 workspace $wsf1 ; workspace $ws1
+bindsym $mod+2 workspace $wsf2 ; workspace $ws2
+bindsym $mod+3 workspace $wsf3 ; workspace $ws3
+bindsym $mod+4 workspace $wsf4 ; workspace $ws4
+bindsym $mod+5 workspace $wsf5 ; workspace $ws5
+bindsym $mod+6 workspace $wsf6 ; workspace $ws6
+bindsym $mod+8 workspace $wsf8 ; workspace $ws8
+bindsym $mod+9 workspace $wsf9 ; workspace $ws9
+bindsym $mod+F10 workspace $ws0 ; workspace $wsf0
+bindsym $mod+F1 workspace $ws1 ; workspace $wsf1
+bindsym $mod+F2 workspace $ws2 ; workspace $wsf2
+bindsym $mod+F3 workspace $ws3 ; workspace $wsf3
+bindsym $mod+F4 workspace $ws4 ; workspace $wsf4
+bindsym $mod+F5 workspace $ws5 ; workspace $wsf5
+bindsym $mod+F6 workspace $ws6 ; workspace $wsf6
+bindsym $mod+F8 workspace $ws8 ; workspace $wsf8
+bindsym $mod+F9 workspace $ws9 ; workspace $wsf9
 
 bindsym $mod+z workspace back_and_forth
 bindsym Print workspace back_and_forth
 bindsym Menu workspace back_and_forth
 
+bindsym $mod+Shift+0 move container to workspace $ws0
 bindsym $mod+Shift+1 move container to workspace $ws1
 bindsym $mod+Shift+2 move container to workspace $ws2
 bindsym $mod+Shift+3 move container to workspace $ws3
@@ -133,7 +156,16 @@ bindsym $mod+Shift+6 move container to workspace $ws6
 bindsym $mod+Shift+7 move container to workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
-bindsym $mod+Shift+0 move container to workspace $ws0
+bindsym $mod+Shift+F10 move container to workspace $wsf0
+bindsym $mod+Shift+F1 move container to workspace $wsf1
+bindsym $mod+Shift+F2 move container to workspace $wsf2
+bindsym $mod+Shift+F3 move container to workspace $wsf3
+bindsym $mod+Shift+F4 move container to workspace $wsf4
+bindsym $mod+Shift+F5 move container to workspace $wsf5
+bindsym $mod+Shift+F6 move container to workspace $wsf6
+bindsym $mod+Shift+F7 move container to workspace $wsf7
+bindsym $mod+Shift+F8 move container to workspace $wsf8
+bindsym $mod+Shift+F9 move container to workspace $wsf9
 
 # screens
 bindsym $mod+Shift+Control+h move workspace to output left
