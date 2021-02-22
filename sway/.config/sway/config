@@ -34,7 +34,8 @@ client.urgent           $cl_urge $cl_urge $cl_fore $cl_urge $cl_urge
 for_window [class="."] title_format "<b>%class</b> :: %title [%shell]"
 for_window [app_id="(pavucontrol|nm-connection-manager)"] \
            floating enable
-for_window [title="Firefox - Sharing Indicator"] move scratchpad
+for_window [title="Firefox – Sharing Indicator"] floating enable; move scratchpad
+no_focus [title="Firefox – Sharing Indicator"]
 
 # colors in titles
 ## note: there is a bug in Pango such that setting a size for the very first text in the title_format simply does not work. Preceeding it with a space does the trick. Anyway, enlarging the text substantially enlarges the titlebar itself, so no, thanks.
