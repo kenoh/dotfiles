@@ -85,11 +85,11 @@
 (use-package which-key :ensure t :delight
   :init
   (setq which-key-separator " ")
+  :config
   (add-to-list 'which-key-replacement-alist '((nil . "^org-agenda") . (nil . "OA")))
   (add-to-list 'which-key-replacement-alist '((nil . "^evil") . (nil . "E")))
   (add-to-list 'which-key-replacement-alist '((nil . "^magit") . (nil . "M")))
   (add-to-list 'which-key-replacement-alist '((nil . "^org") . (nil . "O")))
-  :config
   (which-key-mode 1))
 
 (use-package magit :ensure t
@@ -208,6 +208,7 @@
    "p" '(:ignore t :which-key "projectile")
    "pp" '(counsel-projectile-switch-project :which-key "switch project")
    "pf" '(counsel-projectile-find-file-dwim :which-key "find file")
+   "ps" '(counsel-projectile-rg :wk "search project")
    ;; magit
    "g" '(:ignore t :which-key "git")
    "gs" '(magit-status :which-key "magit status")
