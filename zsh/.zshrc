@@ -126,20 +126,24 @@ alias sctl='systemctl --user'
 alias jctl='journalctl --user'
 
 # docker/podman
-DOCKERNAME=docker
-dbuild() { $DOCKERNAME build -t "$(basename "$PWD")" "${@}"; }
-dbuild.() { dbuild "${@}" .; }
-drun() { $DOCKERNAME run -ti --rm=true "${@}"; }
-drun.() { drun "$(basename "$PWD")" "${@}"; }
-dexec() { $DOCKERNAME exec -ti "${@}"; }
+alias dlastid='docker ps -l -q'
+alias dbuild.='docker build -t k-$(basename "$PWD") .'
+alias drunp='docker run -ti'
+alias drunr='docker run -ti --rm=true'
+alias dexec='docker exec -ti'
 dshell() {
     LASTID="$(docker ps -l --format '{{.ID}}')"
     ID="${1:-$LASTID}"
     echo "$ID"
-    $DOCKERNAME exec -ti "$ID" /bin/bash
+    docker exec -ti "$ID" /bin/bash
 }
-alias dp='$DOCKERNAME ps'
-alias dpa='$DOCKERNAME ps --all'
+alias dp='docker ps'
+alias dpa='docker ps --all'
+dinspect() {
+    docker inspect "$1" | jq
+}
+alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
+alias dip,="docker inspect --format '{{ .NetworkSettings.IPAddress }}' $(dlastid)"
 
 # git
 alias gbvv='git -P branch -vv'
