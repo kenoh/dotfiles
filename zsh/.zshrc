@@ -31,15 +31,16 @@ COMPLETION_WAITING_DOTS="true"
 CASE_SENSITIVE="false"
 HIST_STAMPS="yyyy-mm-dd"
 plugins=(
+    colorize
+    dnf
+    docker
+    docker-compose
+    fancy-ctrl-z
+    fasd
+    fzf
     git
     git-extras
     vagrant
-    docker
-    dnf
-    fzf
-    fasd
-    colorize
-    fancy-ctrl-z
     z
 )
 source $ZSH/oh-my-zsh.sh
