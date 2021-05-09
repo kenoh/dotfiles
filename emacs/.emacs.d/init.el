@@ -1,10 +1,17 @@
 (require 'package)
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
 
 ;; Ensure we have repos downloaded (especially an issue the first time)
 (unless package-archive-contents (package-refresh-contents))
+
+;; Server
+(server-start)
+
+;; Killing Emacs
+(setq confirm-kill-emacs 'y-or-n-p)
 
 ;; Have use-package
 (dolist (package '(use-package))
@@ -45,6 +52,8 @@
   (setq evil-want-keybinding nil) ;; otherwise we get a warning: https://github.com/emacs-evil/evil-collection/issues/60
   (setq evil-respect-visual-line-mode t) ;; so that j/k don't skip multiple lines at once
   :config
+  (define-key evil-motion-state-map "j" 'evil-next-visual-line)
+  (define-key evil-motion-state-map "k" 'evil-previous-visual-line)
   (evil-mode 1))
 
 (use-package evil-collection :ensure t :after (evil)
@@ -59,10 +68,19 @@
   :config
   (global-evil-mc-mode 1))
 
+(use-package evil-org :ensure t
+  :after (evil org)
+  :hook (org-mode . (lambda () evil-org-mode))
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+
 (use-package expand-region :ensure t :defer t)
 
 (use-package undo-tree :ensure t
-  :delight)
+  :delight
+  :config
+  (global-undo-tree-mode))
 
 (use-package rainbow-mode :ensure t :defer t)
 
@@ -97,7 +115,14 @@
   :commands (magit-status)
   :init
   (setq magit-display-buffer-function
-	(lambda (buf) (display-buffer-same-window buf '()))))
+	(lambda (buf) (display-buffer-same-window buf '()))
+	magit-diff-refine-hunk t))
+
+(use-package diff-hl :ensure t
+  :config
+  (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
+  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+  (global-diff-hl-mode 1))
 
 (use-package counsel :ensure t
   :delight ivy-mode
@@ -126,6 +151,8 @@
   (setq projectile-require-project-root nil)
   :config
   ;; (projectile-mode 1) ; (counsel-projectile-mode) runs this for us
+  (add-to-list 'projectile-project-root-files "Vagrantfile" t)
+  (setq-default projectile-switch-project-action 'projectile-vc)
   )
 
 (use-package company :ensure t
@@ -137,10 +164,30 @@
   :config
   (persistent-scratch-setup-default))
 
+(use-package dashboard
+  :ensure t
+  :init
+  (setq dashboard-projects-backend 'projectile
+	dashboard-startup-banner nil
+	dashboard-items '((projects . 7)
+			  (recents . 12)
+			  (agenda . 5)
+			  (bookmarks . 5)
+			  (registers . 5)))
+  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))  ;; for new frames
+	inhibit-startup-screen nil)
+  :config
+  (dashboard-setup-startup-hook))
+
+(use-package idle-highlight-in-visible-buffers-mode :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'idle-highlight-in-visible-buffers-mode))
+
 ;; Org ------------------------------------------
 (use-package org :ensure t
   :init
-  (setq org-hide-leading-stars t)
+  (setq org-hide-leading-stars t
+	org-startup-truncated nil)
   :config
   (add-hook 'org-mode-hook (lambda () (org-indent-mode 1)))
   (k-private-org))
@@ -182,7 +229,7 @@
    ;; quit
    "q" '(:ignore t :which-key "quit")
    "qf" '(delete-frame :which-key "delete frame")
-   "qq" '(kill-emacs :which-key "quit")
+   "qq" '(save-buffers-kill-emacs :which-key "quit")
    ;; buffer
    "TAB" '(evil-switch-to-windows-last-buffer :which-key "previous buffer")
    "b" '(:ignore t :which-key "buffer")
@@ -211,6 +258,12 @@
    "ps" '(counsel-projectile-rg :wk "search project")
    ;; magit
    "g" '(:ignore t :which-key "git")
+   "gb" '(magit-blame :wk "magit blame")
+   "gh" '(:ignore t :wk "hunk")
+   "ghj" '(diff-hl-next-hunk :wk "next")
+   "ghk" '(diff-hl-previous-hunk :wh "previous")
+   "ghr" '(diff-hl-revert-hunk :wk "revert")
+   "gl" '(magit-log-buffer-file :wk "magit log file")
    "gs" '(magit-status :which-key "magit status")
    ;; search
    "s" '(:ignore t :which-key "search")
@@ -236,6 +289,7 @@
    ",)" '(sp-forward-barf-sexp :which-key "barf forward")
    ",(" '(sp-backward-barf-sexp :which-key "barf backward")
    ",r" '(sp-raise-sexp :which-key "raise")
+   ",s" '(sp-split-sexp :which-key "split")
    ;; lsp
    ";" '(:ignore t :which-key "LSP fu")
    ";;" '(:package lsp :keymap lsp-mode-map :which-key "lsp")
