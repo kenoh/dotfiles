@@ -123,6 +123,10 @@ alias lt='ll -tr'
 which colordiff 1>/dev/null 2>&1 \
     && alias d='colordiff -u' \
     || alias d='diff -u'
+douts() {
+    eval "${DIFFTOOL:-d} $4 <($1 $2 $5) <($1 $3 $5)"
+}
+
 alias sctl='systemctl --user'
 alias jctl='journalctl --user'
 
