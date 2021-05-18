@@ -51,6 +51,7 @@
   :init
   (setq evil-want-keybinding nil) ;; otherwise we get a warning: https://github.com/emacs-evil/evil-collection/issues/60
   (setq evil-respect-visual-line-mode t) ;; so that j/k don't skip multiple lines at once
+  (setq evil-undo-system 'undo-tree)
   :config
   (define-key evil-motion-state-map "j" 'evil-next-visual-line)
   (define-key evil-motion-state-map "k" 'evil-previous-visual-line)
@@ -183,6 +184,9 @@
   :config
   (add-hook 'prog-mode-hook 'idle-highlight-in-visible-buffers-mode))
 
+(use-package treemacs :ensure t)
+
+
 ;; Org ------------------------------------------
 (use-package org :ensure t
   :init
@@ -198,13 +202,22 @@
   (add-hook 'after-init-hook 'org-roam-mode))
 
 ;; Languages ------------------------------------
-(use-package lsp-mode :ensure t
-  :defer t
+(use-package lsp-mode :ensure t :defer t
+  :hook ((rust-mode . lsp-deferred)
+	 (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred))
 
 (use-package lsp-ui :ensure t
   :defer t
   :hook (lsp-mode . lsp-ui-mode))
+
+(use-package lsp-treemacs :ensure t
+  :commands lsp-treemacs-errors-list
+  :config
+  (lsp-treemacs-sync-mode 1))
+
+(use-package lsp-ivy :ensure t
+  :commands lsp-ivy-workspace-symbol)
 
 ;;; Python
 (use-package lsp-pyright :ensure t :defer t
