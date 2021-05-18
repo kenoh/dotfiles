@@ -218,6 +218,8 @@
 (use-package jinja2-mode :ensure t :defer t)
 
 ;; Keybindings ----------------------------------
+(defun k--other-buffer () (interactive) (switch-to-buffer (other-buffer (current-buffer))))
+
 (use-package general :ensure t :config
   (general-define-key
    :states '(normal visual insert emacs)
@@ -231,7 +233,7 @@
    "qf" '(delete-frame :which-key "delete frame")
    "qq" '(save-buffers-kill-emacs :which-key "quit")
    ;; buffer
-   "TAB" '(evil-switch-to-windows-last-buffer :which-key "previous buffer")
+   "TAB" '(k--other-buffer :which-key "previous buffer")
    "b" '(:ignore t :which-key "buffer")
    "bb" '(ivy-switch-buffer :which-key "switch")
    "bd" '(evil-delete-buffer :which-key "delete")
