@@ -18,6 +18,10 @@
    (unless (package-installed-p package)
        (package-install package)))
 
+;; Performance
+(setq gc-cons-threshold 100000000)  ; lsp
+(setq read-process-output-max (* 1024 1024)) ;; 1mb, also lsp
+
 ;; Private config
 (load-file (expand-file-name "~/.emacs.d/private.el"))
 (let ((f 'k--private--before))
@@ -47,11 +51,16 @@
 ;; delight is for :delight in use-package
 (use-package delight :ensure t)
 
+(use-package dired :ensure nil
+  :init
+  (setq dired-dwim-target t))
+
 (use-package evil :ensure t :after (persistent-scratch)
   :init
   (setq evil-want-keybinding nil) ;; otherwise we get a warning: https://github.com/emacs-evil/evil-collection/issues/60
   (setq evil-respect-visual-line-mode t) ;; so that j/k don't skip multiple lines at once
   (setq evil-undo-system 'undo-tree)
+  (set-default 'evil-symbol-word-search t)  ;; because words are usually not what we want to match on '*' or '#' search
   :config
   (define-key evil-motion-state-map "j" 'evil-next-visual-line)
   (define-key evil-motion-state-map "k" 'evil-previous-visual-line)
@@ -194,12 +203,13 @@
 	org-startup-truncated nil)
   :config
   (add-hook 'org-mode-hook (lambda () (org-indent-mode 1)))
-  (k-private-org))
+  (let ((f 'k-private-org))
+    (if (fboundp f) (funcall f))))
 
-(use-package org-roam :ensure t :after org :delight
-  :init
-  (setq org-roam-directory "~/org/roam")
-  (add-hook 'after-init-hook 'org-roam-mode))
+(use-package org :ensure org-plus-contrib :after (org)
+  :config
+  (require 'ox-extra)
+  (ox-extras-activate '(ignore-headlines)))
 
 ;; Languages ------------------------------------
 (use-package lsp-mode :ensure t :defer t
@@ -235,7 +245,7 @@
 
 (use-package general :ensure t :config
   (general-define-key
-   :states '(normal visual insert emacs)
+   :states '(normal visual insert motion emacs)
    :keymaps 'override
    :prefix "SPC"
    :non-normal-prefix "M-SPC"
@@ -291,9 +301,9 @@
    "oaa" '(org-agenda :which-key "agenda")
    ;; org-roam
    "or" '(:ignore t :which-key "roam")
-   "orr" '(org-roam :which-key "side bar")
-   "orf" '(org-roam-find-file :which-key "find file")
-   "ori" '(org-roam-insert : which-key "insert link")
+   "orb" '(org-roam-buffer-toggle :which-key "toggle buffer")
+   "orf" '(org-roam-node-find :which-key "find node")
+   "ori" '(org-roam-node-insert : which-key "insert node link")
    )
   (general-define-key
    :states '(normal visual)
@@ -311,7 +321,7 @@
    ";'" '(:package lsp-ui :keymap lsp-ui-mode-map :which-key "lsp ui")
    )
   (general-define-key
-   :states '(normal visual emacs insert)
+   :states '(normal visual emacs motion insert)
    "<f2>" '(evil-window-next :which-key "next window")
    )
   )
