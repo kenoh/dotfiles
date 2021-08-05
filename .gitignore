@@ -1,5 +1,7 @@
-spacemacs/.spacemacs.d/layers.el
-spacemacs/.spacemacs.d/.spacemacs.env
-spacemacs/.spacemacs.d/**/*~
+/spacemacs/.spacemacs.d/layers.el
+/spacemacs/.spacemacs.d/.spacemacs.env
+/spacemacs/.spacemacs.d/**/*~
 
-systemd/.config/systemd/user/default.target.wants
+/systemd/.config/systemd/user/default.target.wants
+
+/vim/.config/nvim/.netrwhist
