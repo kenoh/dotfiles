@@ -174,7 +174,6 @@ maybe virtualenvwrapper.sh && source virtualenvwrapper.sh
 F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [ -f "$F" ] && source "$F"
 
-
 # kaychain
 maybe keychain && keychain id_rsa
 [ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
@@ -182,3 +181,9 @@ maybe keychain && keychain id_rsa
 		. $HOME/.keychain/$HOSTNAME-sh
 [ -f $HOME/.keychain/$HOSTNAME-sh-gpg ] && \
 		. $HOME/.keychain/$HOSTNAME-sh-gpg
+
+# kitty terminal emulator
+if [ "x$TERM" = "xxterm-kitty" ]; then
+    kitty + complete setup zsh | source /dev/stdin
+    alias d="kitty +kitten diff"
+fi
