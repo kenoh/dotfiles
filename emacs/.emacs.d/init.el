@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 (require 'package)
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -64,6 +66,24 @@
   :config
   (define-key evil-motion-state-map "j" 'evil-next-visual-line)
   (define-key evil-motion-state-map "k" 'evil-previous-visual-line)
+  (progn "modeline bg color"
+	 (let* ((orig "#cccccc")
+		(other `((normal . ,orig)
+			 (insert . "dark sea green")
+			 (emacs . "medium purple")
+			 (visual . "light yellow")
+			 (motion . "sky blue"))))
+	   (dolist (it other)
+	     (let ((entry-hook (concat "evil-" (symbol-name (car it)) "-state-entry-hook"))
+	     	   (exit-hook (concat "evil-" (symbol-name (car it)) "-state-exit-hook")))
+		(let ((entry-fn (intern (concat "--k-" entry-hook "-f")))
+		      (exit-fn (intern (concat "--k-" exit-hook "-f"))))
+		  (defalias entry-fn
+			  `(lambda () ,(symbol-name entry-fn) (set-face-attribute 'mode-line nil :background ,(cdr it))))
+		(defalias exit-fn
+			  `(lambda () ,(symbol-name exit-fn) (set-face-attribute 'mode-line nil :background ,orig)))
+	     	(add-hook (intern entry-hook) entry-fn)
+	     	(add-hook (intern exit-hook) exit-fn))))))
   (evil-mode 1))
 
 (use-package evil-collection :ensure t :after (evil)
