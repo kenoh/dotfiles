@@ -187,3 +187,5 @@ if [ "x$TERM" = "xxterm-kitty" ]; then
     kitty + complete setup zsh | source /dev/stdin
     alias d="kitty +kitten diff"
 fi
+
+[ -x ~/bin/gits.sh ] && gits.sh
