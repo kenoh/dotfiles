@@ -1,4 +1,5 @@
 .config
+.config/kitty
 .config/sway
 .config/systemd/user
 .local
