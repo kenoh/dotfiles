@@ -24,11 +24,6 @@
 (setq gc-cons-threshold 100000000)  ; lsp
 (setq read-process-output-max (* 1024 1024)) ;; 1mb, also lsp
 
-;; Private config
-(load-file (expand-file-name "~/.emacs.d/private.el"))
-(let ((f 'k--private--before))
-  (if (fboundp f) (funcall f)))
-
 ;; GUI
 (ignore-errors
   (menu-bar-mode 0)
@@ -99,7 +94,7 @@
   (global-evil-mc-mode 1))
 
 (use-package evil-org :ensure t
-  :after (evil org)
+  :after (evil org evil-collection)
   :hook (org-mode . (lambda () evil-org-mode))
   :config
   (require 'evil-org-agenda)
@@ -347,8 +342,8 @@
   )
 
 ;;; Addendum ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(let ((f 'k--private--after))
-  (if (fboundp f) (funcall f)))
+;; Private config
+(load (expand-file-name "~/.emacs.d/private.el") t)
 
 ;; Custom-*
 (setq custom-file "~/.emacs.d/custom.el")
