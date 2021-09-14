@@ -46,7 +46,10 @@
 (setq use-package-compute-statistics t)
 
 ;; delight is for :delight in use-package
-(use-package delight :ensure t)
+(use-package delight :ensure t
+  :config
+  (delight '((evil-collection-unimpaired-mode nil evil-collection-unimpaire)
+	     (auto-revert-mode " AR" t))))
 
 (use-package dired :ensure nil
   :init
@@ -89,7 +92,7 @@
   :config
   (global-evil-surround-mode 1))
 
-(use-package evil-mc :ensure t :after (evil evil-collection)
+(use-package evil-mc :ensure t :after (evil evil-collection) :delight
   :config
   (global-evil-mc-mode 1))
 
@@ -99,6 +102,16 @@
   :config
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
+
+(use-package evil-owl :ensure t :after evil :delight
+  :config
+  (setq evil-owl-max-string-length 500)
+  (add-to-list 'display-buffer-alist
+               '("*evil-owl*"
+                 (display-buffer-in-side-window)
+                 (side . bottom)
+                 (window-height . 0.3)))
+  (evil-owl-mode))
 
 (use-package expand-region :ensure t :defer t)
 
