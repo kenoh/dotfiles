@@ -17,7 +17,7 @@ compinit
 # Oh-My-ZSH
 ########################################################################
 
-WANNA_PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin"
+WANNA_PATH="$HOME/Android/Sdk/platform-tools:$HOME/bin:$HOME/.local/bin:/usr/local/bin"
 case ":$PATH:" in
     *:"$WANNA_PATH":*)
 	;;
