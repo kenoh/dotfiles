@@ -41,9 +41,21 @@
 ;; Navigation
 (setq scroll-preserve-screen-position 'always)
 
+;; Editing
+(setq-default indent-tabs-mode nil)
+
 ;;; Packages ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; some stats to gather here:
 (setq use-package-compute-statistics t)
+
+;; quelpa allows use-package install from git
+(unless (package-installed-p 'quelpa)
+  (with-temp-buffer
+    (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
+    (eval-buffer)
+    (quelpa-self-upgrade)))
+
+(use-package quelpa-use-package :ensure t)
 
 ;; delight is for :delight in use-package
 (use-package delight :ensure t
@@ -58,6 +70,7 @@
 (use-package evil :ensure t :after (persistent-scratch)
   :init
   (setq evil-want-keybinding nil) ;; otherwise we get a warning: https://github.com/emacs-evil/evil-collection/issues/60
+  (setq evil-want-C-i-jump nil) ;; fixing TAB behaviour: https://github.com/Somelauw/evil-org-mode#common-issues
   (setq evil-respect-visual-line-mode t) ;; so that j/k don't skip multiple lines at once
   (setq evil-undo-system 'undo-tree)
   (set-default 'evil-symbol-word-search t)  ;; because words are usually not what we want to match on '*' or '#' search
@@ -154,7 +167,8 @@
   :init
   (setq magit-display-buffer-function
 	(lambda (buf) (display-buffer-same-window buf '()))
-	magit-diff-refine-hunk t))
+	magit-diff-refine-hunk t
+        magit-save-repository-buffers nil))
 
 (use-package diff-hl :ensure t
   :config
@@ -268,7 +282,7 @@
 
 (use-package jinja2-mode :ensure t :defer t)
 
-;; Keybindings ----------------------------------
+;;; Keybindings ----------------------------------
 (defun k--other-buffer () (interactive) (switch-to-buffer (other-buffer (current-buffer))))
 
 (use-package general :ensure t :config
@@ -277,80 +291,92 @@
    :keymaps 'override
    :prefix "SPC"
    :non-normal-prefix "M-SPC"
-   "SPC" '(counsel-M-x :which-key "M-x")
-   "v" '(er/expand-region :which-key "expand region")
+   "SPC" '(counsel-M-x :wk "M-x")
+   "v" '(er/expand-region :wk "expand region")
    ;; quit
-   "q" '(:ignore t :which-key "quit")
-   "qf" '(delete-frame :which-key "delete frame")
-   "qq" '(save-buffers-kill-emacs :which-key "quit")
+   "q" '(:ignore t :wk "quit")
+   "qf" '(delete-frame :wk "delete frame")
+   "qq" '(save-buffers-kill-emacs :wk "quit")
    ;; buffer
-   "TAB" '(k--other-buffer :which-key "previous buffer")
-   "b" '(:ignore t :which-key "buffer")
-   "bb" '(ivy-switch-buffer :which-key "switch")
-   "bd" '(evil-delete-buffer :which-key "delete")
-   "br" '(revert-buffer :which-key "revert")
+   "TAB" '(k--other-buffer :wk "previous buffer")
+   "b" '(:ignore t :wk "buffer")
+   "bb" '(ivy-switch-buffer :wk "switch")
+   "bd" '(evil-delete-buffer :wk "delete")
+   "br" '(revert-buffer :wk "revert")
    ;; window
-   "w" '(:ignore t :which-key "window")
-   "w/" '(split-window-right :which-key "split right")
-   "w-" '(split-window-below :which-key "split bottom")
-   "wd" '(delete-window :which-key "delete")
-   "wo" '(delete-other-windows :which-key "single window")
+   "w" '(:ignore t :wk "window")
+   "w/" '(split-window-right :wk "split right")
+   "w-" '(split-window-below :wk "split bottom")
+   "wd" '(delete-window :wk "delete")
+   "wo" '(delete-other-windows :wk "single window")
    ;; file
-   "f" '(:ignore t :which-key "file")
-   "ff" '(counsel-find-file :which-key "find file")
-   "fj" '(dired-jump :which-key "dired jump")
-   "fs" '(save-buffer :which-key "save buffer")
+   "f" '(:ignore t :wk "file")
+   "ff" '(counsel-find-file :wk "find file")
+   "fj" '(dired-jump :wk "dired jump")
+   "fs" '(save-buffer :wk "save buffer")
    ;; toggle
-   "t" '(:ignore t :which-key "toggle")
-   "tt" '(toggle-truncate-lines :which-key "truncate lines")
-   "tw" '(which-key-show-top-level :wk "which-key top level")
+   "t" '(:ignore t :wk "toggle")
+   "tt" '(toggle-truncate-lines :wk "truncate lines")
+   "tw" '(:ignore t :wk whitespace)
+   "tww" '(whitespace-mode :wk "on/off")
+   "two" '(whitespace-toggle-options :wk "options")
+   "twi" '((setq indent-tabs-mode (not indent-tabs-mode)))
+   "tW" '(which-key-show-top-level :wk "which-key show top level")
+   "tM" '(which-key-show-major-mode :wk "which-key show major mode")
    ;; projectile
-   "p" '(:ignore t :which-key "projectile")
-   "pp" '(counsel-projectile-switch-project :which-key "switch project")
-   "pf" '(counsel-projectile-find-file-dwim :which-key "find file")
+   "p" '(:ignore t :wk "projectile")
+   "pp" '(counsel-projectile-switch-project :wk "switch project")
+   "pf" '(counsel-projectile-find-file-dwim :wk "find file")
    "ps" '(counsel-projectile-rg :wk "search project")
    ;; magit
-   "g" '(:ignore t :which-key "git")
+   "g" '(:ignore t :wk "git")
    "gb" '(magit-blame :wk "magit blame")
    "gh" '(:ignore t :wk "hunk")
    "ghj" '(diff-hl-next-hunk :wk "next")
    "ghk" '(diff-hl-previous-hunk :wh "previous")
    "ghr" '(diff-hl-revert-hunk :wk "revert")
    "gl" '(magit-log-buffer-file :wk "magit log file")
-   "gs" '(magit-status :which-key "magit status")
+   "gs" '(magit-status :wk "magit status")
    ;; search
-   "s" '(:ignore t :which-key "search")
-   "ss" '(swiper :which-key "swiper C-s")
+   "s" '(:ignore t :wk "search")
+   "ss" '(swiper :wk "swiper C-s")
+   "sS" '(swiper-thing-at-point :wk "swiper C-s")
    ;; org
-   "o" '(:ignore t :which-key "org")
-   "oo" '(counsel-org-files :which-key "open org files")
-   "oc" '(counsel-org-capture :which-key "capture")
-   "oa" '(:ignore t :which-key "agenda")
-   "oaa" '(org-agenda :which-key "agenda")
+   "o" '(:ignore t :wk "org")
+   "oo" '(counsel-org-files :wk "open org files")
+   "oc" '(counsel-org-capture :wk "capture")
+   "oa" '(:ignore t :wk "agenda")
+   "oaA" '(org-agenda :wk "agenda dashboard")
+   "oaa" '(org-agenda-list :wk "agenda")
+   "oat" '(org-todo-list :wk "agenda")
    ;; org-roam
-   "or" '(:ignore t :which-key "roam")
-   "orb" '(org-roam-buffer-toggle :which-key "toggle buffer")
-   "orf" '(org-roam-node-find :which-key "find node")
-   "ori" '(org-roam-node-insert : which-key "insert node link")
+   "or" '(:ignore t :wk "roam")
+   "orb" '(org-roam-buffer-toggle :wk "toggle buffer")
+   "orf" '(org-roam-node-find :wk "find node")
+   "ori" '(org-roam-node-insert :wk "insert node link")
+   "oru" '(org-roam-ui :wk "UI")
+   ;; jump
+   "j" '(:ignore t :wk "jump")
+   "jo" '(counsel-outline :wk "outline")
    )
   (general-define-key
    :states '(normal visual)
    ;; smartparens
-   "," '(:ignore t :which-key "smartparens")
-   ",0" '(sp-forward-slurp-sexp :which-key "slurp forward")
-   ",9" '(sp-backward-slurp-sexp :which-key "slurp backward")
-   ",)" '(sp-forward-barf-sexp :which-key "barf forward")
-   ",(" '(sp-backward-barf-sexp :which-key "barf backward")
-   ",r" '(sp-raise-sexp :which-key "raise")
-   ",s" '(sp-split-sexp :which-key "split")
+   "," '(:ignore t :wk "smartparens")
+   ",0" '(sp-forward-slurp-sexp :wk "slurp fwd")
+   ",9" '(sp-backward-slurp-sexp :wk "slurp bwd")
+   ",)" '(sp-forward-barf-sexp :wk "barf fwd")
+   ",(" '(sp-backward-barf-sexp :wk "barf bwd")
+   ",r" '(sp-raise-sexp :wk "raise")
+   ",s" '(sp-split-sexp :wk "split")
    ;; lsp
-   ";" '(:ignore t :which-key "LSP fu")
-   ";;" '(:package lsp :keymap lsp-mode-map :which-key "lsp")
-   ";'" '(:package lsp-ui :keymap lsp-ui-mode-map :which-key "lsp ui")
+   ";" '(:ignore t :wk "LSP fu")
+   ";;" '(:package lsp :keymap lsp-mode-map :wk "lsp")
+   ";'" '(:package lsp-ui :keymap lsp-ui-mode-map :wk "lsp ui")
    )
   (general-define-key
    :states '(normal visual emacs motion insert)
-   "<f2>" '(evil-window-next :which-key "next window")
+   "<f2>" '(evil-window-next :wk "next window")
    )
   )
 
