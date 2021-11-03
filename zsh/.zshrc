@@ -167,6 +167,23 @@ alias vpa='vagrant provision --provision-with=ansible'
 
 alias openssl-cert-print-ascii='openssl x509 -text -noout -in'
 
+ssh-known-hosts-clean() {
+    HOST="$1"
+    test -n "$HOST" || { echo "Provide a hostname as an argument!" ; return 1; }
+    FN=~/.ssh/known_hosts
+    test -f "$FN" || { echo "File $FN not found!" ; return 1; }
+    RE="/^$HOST /d"
+    diff -u <(cat "$FN") <(sed "$RE" "$FN")
+    if read -q "?Remove the above lines from $FN? (y/[n])"; then
+	echo
+	sed -i "$RE" "$FN"
+	echo "Removed."
+    else
+	echo
+	echo "Did nothing."
+    fi
+}
+
 # virtualenvwrapper
 maybe virtualenvwrapper.sh && source virtualenvwrapper.sh
 
@@ -175,7 +192,7 @@ F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [ -f "$F" ] && source "$F"
 
 # kaychain
-maybe keychain && keychain id_rsa
+maybe keychain && keychain id_rsa id_ed25519
 [ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
 [ -f $HOME/.keychain/$HOSTNAME-sh ] && \
 		. $HOME/.keychain/$HOSTNAME-sh
@@ -187,5 +204,7 @@ if [ "x$TERM" = "xxterm-kitty" ]; then
     kitty + complete setup zsh | source /dev/stdin
     alias d="kitty +kitten diff"
 fi
+
+test -f ~/.gita-completion.zsh && source ~/.gita-completion.zsh
 
 [ -x ~/bin/gits.sh ] && gits.sh
