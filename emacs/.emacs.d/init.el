@@ -67,7 +67,7 @@
 (use-package delight :ensure t
   :config
   (delight '((evil-collection-unimpaired-mode nil evil-collection-unimpaired)
-	     (auto-revert-mode " AR" t))))
+             (auto-revert-mode " AR" t))))
 
 (use-package default-text-scale :ensure t
   :config
@@ -88,27 +88,27 @@
   (progn
     (defun nothing() (interactive))
     (define-key evil-normal-state-map (kbd "<down-mouse-1>") 'nothing) ;otherwise this would change primary selection always when just clicking (annoying)
-    )
+  )
   (define-key evil-motion-state-map "j" 'evil-next-visual-line)
   (define-key evil-motion-state-map "k" 'evil-previous-visual-line)
   (progn "modeline bg color"
-	 (let* ((orig "#cccccc")
-		(other `((normal . ,orig)
-			 (insert . "dark sea green")
-			 (emacs . "medium purple")
-			 (visual . "light yellow")
-			 (motion . "sky blue"))))
-	   (dolist (it other)
-	     (let ((entry-hook (concat "evil-" (symbol-name (car it)) "-state-entry-hook"))
-	     	   (exit-hook (concat "evil-" (symbol-name (car it)) "-state-exit-hook")))
-		(let ((entry-fn (intern (concat "--k-" entry-hook "-f")))
-		      (exit-fn (intern (concat "--k-" exit-hook "-f"))))
-		  (defalias entry-fn
-			  `(lambda () ,(symbol-name entry-fn) (set-face-attribute 'mode-line nil :background ,(cdr it))))
-		(defalias exit-fn
-			  `(lambda () ,(symbol-name exit-fn) (set-face-attribute 'mode-line nil :background ,orig)))
-	     	(add-hook (intern entry-hook) entry-fn)
-	     	(add-hook (intern exit-hook) exit-fn))))))
+         (let* ((orig "#cccccc")
+                (other `((normal . ,orig)
+                         (insert . "dark sea green")
+                         (emacs . "medium purple")
+                         (visual . "light yellow")
+                         (motion . "sky blue"))))
+           (dolist (it other)
+             (let ((entry-hook (concat "evil-" (symbol-name (car it)) "-state-entry-hook"))
+                   (exit-hook (concat "evil-" (symbol-name (car it)) "-state-exit-hook")))
+               (let ((entry-fn (intern (concat "--k-" entry-hook "-f")))
+                     (exit-fn (intern (concat "--k-" exit-hook "-f"))))
+                 (defalias entry-fn
+                   `(lambda () ,(symbol-name entry-fn) (set-face-attribute 'mode-line nil :background ,(cdr it))))
+                 (defalias exit-fn
+                   `(lambda () ,(symbol-name exit-fn) (set-face-attribute 'mode-line nil :background ,orig)))
+                 (add-hook (intern entry-hook) entry-fn)
+                 (add-hook (intern exit-hook) exit-fn))))))
   (evil-mode 1))
 
 (use-package evil-collection :ensure t :after (evil)
@@ -154,7 +154,7 @@
   (show-smartparens-global-mode t)
   (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
   (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode))
-  
+
 (use-package evil-smartparens :ensure t :requires (evil)
   :init (require 'evil-smartparens)
   :after (evil general smartparens evil-surround))
@@ -180,8 +180,8 @@
   :commands (magit-status)
   :init
   (setq magit-display-buffer-function
-	(lambda (buf) (display-buffer-same-window buf '()))
-	magit-diff-refine-hunk t
+        (lambda (buf) (display-buffer-same-window buf '()))
+        magit-diff-refine-hunk t
         magit-save-repository-buffers nil))
 
 (use-package diff-hl :ensure t
@@ -235,14 +235,14 @@
   :ensure t
   :init
   (setq dashboard-projects-backend 'projectile
-	dashboard-startup-banner nil
-	dashboard-items '((projects . 7)
-			  (recents . 12)
-			  (agenda . 5)
-			  (bookmarks . 5)
-			  (registers . 5)))
+        dashboard-startup-banner nil
+        dashboard-items '((projects . 7)
+                          (recents . 12)
+                          (agenda . 5)
+                          (bookmarks . 5)
+                          (registers . 5)))
   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))  ;; for new frames
-	inhibit-startup-screen nil)
+        inhibit-startup-screen nil)
   :config
   (dashboard-setup-startup-hook))
 
@@ -258,7 +258,7 @@
 (use-package org :ensure t :after (easy-kill)
   :init
   (setq org-hide-leading-stars t
-	org-startup-truncated nil)
+        org-startup-truncated nil)
   :config
   (add-hook 'org-mode-hook (lambda () (org-indent-mode 1)))
   (let ((f 'k-private-org))
@@ -280,7 +280,7 @@
 ;; Languages ------------------------------------
 (use-package lsp-mode :ensure t :defer t
   :hook ((rust-mode . lsp-deferred)
-	 (lsp-mode . lsp-enable-which-key-integration))
+         (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred))
 
 (use-package lsp-ui :ensure t
@@ -299,9 +299,9 @@
 (use-package lsp-pyright :ensure t :defer t
   :init
   (setq lsp-pyright-disable-language-service nil
-	lsp-pyright-disable-organize-imports nil
-	lsp-pyright-auto-import-completions t
-	lsp-pyright-use-library-code-for-types t)
+        lsp-pyright-disable-organize-imports nil
+        lsp-pyright-auto-import-completions t
+        lsp-pyright-use-library-code-for-types t)
   :hook ((python-mode . (lambda () (require 'lsp-pyright) (lsp-deferred)))))
 
 (use-package jinja2-mode :ensure t :defer t)
@@ -348,10 +348,12 @@
    ;; toggle
    "t" '(:ignore t :wk "toggle")
    "tt" '(toggle-truncate-lines :wk "truncate lines")
-   "tw" '(:ignore t :wk whitespace)
+   "tw" '(:ignore t :wk "whitespace")
    "tww" '(whitespace-mode :wk "on/off")
    "two" '(whitespace-toggle-options :wk "options")
-   "twi" '((setq indent-tabs-mode (not indent-tabs-mode)))
+   "twi" '((lambda () (interactive)
+             (setq indent-tabs-mode (not indent-tabs-mode)))
+           :wk "indent-tabs-mode")
    "tW" '(which-key-show-top-level :wk "which-key show top level")
    "tM" '(which-key-show-major-mode :wk "which-key show major mode")
    ;; projectile
