@@ -30,6 +30,12 @@
   (tool-bar-mode 0)
   (scroll-bar-mode 0))
 
+(defun paste-primary-selection ()
+  (interactive)
+  (insert
+   (x-get-selection 'PRIMARY)))
+(global-set-key (kbd "S-<insert>") 'paste-primary-selection)
+
 ;; modeline
 (column-number-mode t)
 (size-indication-mode t)
@@ -60,8 +66,12 @@
 ;; delight is for :delight in use-package
 (use-package delight :ensure t
   :config
-  (delight '((evil-collection-unimpaired-mode nil evil-collection-unimpaire)
+  (delight '((evil-collection-unimpaired-mode nil evil-collection-unimpaired)
 	     (auto-revert-mode " AR" t))))
+
+(use-package default-text-scale :ensure t
+  :config
+  (default-text-scale-mode t))
 
 (use-package dired :ensure nil
   :init
@@ -75,6 +85,10 @@
   (setq evil-undo-system 'undo-tree)
   (set-default 'evil-symbol-word-search t)  ;; because words are usually not what we want to match on '*' or '#' search
   :config
+  (progn
+    (defun nothing() (interactive))
+    (define-key evil-normal-state-map (kbd "<down-mouse-1>") 'nothing) ;otherwise this would change primary selection always when just clicking (annoying)
+    )
   (define-key evil-motion-state-map "j" 'evil-next-visual-line)
   (define-key evil-motion-state-map "k" 'evil-previous-visual-line)
   (progn "modeline bg color"
@@ -195,7 +209,10 @@
 
 (use-package counsel-projectile :ensure t :after (projectile counsel)
   :config
-  (counsel-projectile-mode 1))
+  (counsel-projectile-mode 1)
+  (counsel-projectile-modify-action 'counsel-projectile-switch-project-action
+                                    '((default "v")))  ;; by default will open VCS (e.g. magit) on project switch
+  )
 
 (use-package projectile :ensure t
   :delight '(:eval (concat " <" (projectile-project-name) ">"))
@@ -203,9 +220,7 @@
   (setq projectile-require-project-root nil)
   :config
   ;; (projectile-mode 1) ; (counsel-projectile-mode) runs this for us
-  (add-to-list 'projectile-project-root-files "Vagrantfile" t)
-  (setq-default projectile-switch-project-action 'projectile-vc)
-  )
+  (add-to-list 'projectile-project-root-files "Vagrantfile" t))
 
 (use-package company :ensure t
   :delight " ©"
@@ -237,16 +252,25 @@
 
 (use-package treemacs :ensure t)
 
+(use-package easy-kill :ensure t)  ;; mine org-src-copy-block dependency
 
 ;; Org ------------------------------------------
-(use-package org :ensure t
+(use-package org :ensure t :after (easy-kill)
   :init
   (setq org-hide-leading-stars t
 	org-startup-truncated nil)
   :config
   (add-hook 'org-mode-hook (lambda () (org-indent-mode 1)))
   (let ((f 'k-private-org))
-    (if (fboundp f) (funcall f))))
+    (if (fboundp f) (funcall f)))
+
+  (defun org-copy-src-block ()
+    """Copies contents of org's src_block."
+    (interactive)
+    (org-edit-src-code)
+    (mark-whole-buffer)
+    (easy-kill 1)
+    (org-edit-src-abort)))
 
 (use-package org :ensure org-plus-contrib :after (org)
   :config
@@ -282,6 +306,12 @@
 
 (use-package jinja2-mode :ensure t :defer t)
 
+;;; YAML/Ansible
+(use-package yaml-mode :ensure t)
+
+(use-package poly-ansible :ensure t)
+
+
 ;;; Keybindings ----------------------------------
 (defun k--other-buffer () (interactive) (switch-to-buffer (other-buffer (current-buffer))))
 
@@ -311,9 +341,10 @@
    "wo" '(delete-other-windows :wk "single window")
    ;; file
    "f" '(:ignore t :wk "file")
-   "ff" '(counsel-find-file :wk "find file")
-   "fj" '(dired-jump :wk "dired jump")
-   "fs" '(save-buffer :wk "save buffer")
+   "ff" '(counsel-find-file :wk "find File")
+   "fr" '(counsel-recentf :wk "find Recent file")
+   "fj" '(dired-jump :wk "dired Jump")
+   "fs" '(save-buffer :wk "Save buffer")
    ;; toggle
    "t" '(:ignore t :wk "toggle")
    "tt" '(toggle-truncate-lines :wk "truncate lines")
@@ -344,7 +375,7 @@
    ;; org
    "o" '(:ignore t :wk "org")
    "oo" '(counsel-org-files :wk "open org files")
-   "oc" '(counsel-org-capture :wk "capture")
+   "oC" '(counsel-org-capture :wk "capture")
    "oa" '(:ignore t :wk "agenda")
    "oaA" '(org-agenda :wk "agenda dashboard")
    "oaa" '(org-agenda-list :wk "agenda")
