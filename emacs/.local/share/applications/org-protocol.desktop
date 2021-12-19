@@ -1,7 +1,19 @@
 [Desktop Entry]
-Name=org-protocol
-Exec=emacsclient -nc %u
-Type=Application
-Terminal=false
 Categories=System;
-MimeType=x-scheme-handler/org-protocol;
+Comment[en_GB]=
+Comment=
+Exec=emacsclient -nc %u
+GenericName[en_GB]=
+GenericName=
+MimeType=
+Name[en_GB]=org-protocol
+Name=org-protocol
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=
