@@ -1,0 +1,33 @@
+#: once we have starship > 0.58, we can have right_prompt...
+# format = """$character"""
+# right_format = """$all"""
+# [line_break]
+# disabled = true
+
+add_newline = false
+
+[aws]
+disabled = true
+
+[battery]
+disabled = true
+
+[cmd_duration]
+min_time = 0
+show_milliseconds = true
+
+[conda]
+disabled = true
+
+[directory]
+read_only = " \uf83d"
+truncate_to_repo = false
+truncation_length = -1
+
+[gcloud]
+disabled = true
+
+[status]
+disabled = false
+symbol = ""
+

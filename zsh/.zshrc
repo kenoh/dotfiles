@@ -32,6 +32,7 @@ CASE_SENSITIVE="false"
 HIST_STAMPS="yyyy-mm-dd"
 plugins=(
     colorize
+    colored-man-pages
     dnf
     docker
     docker-compose
@@ -55,8 +56,8 @@ maybe() {
 fpath=( ~/.zsh.d "${fpath[@]}" )
 
 # this for https://github.com/sindresorhus/pure
-fpath+=( "$HOME/.zsh.d/pure" )
-autoload -U promptinit; promptinit; prompt pure
+# fpath+=( "$HOME/.zsh.d/pure" )
+# autoload -U promptinit; promptinit; prompt pure
 
 F=~/.zprofile
 [ -f "$F" ] && source "$F"
@@ -207,4 +208,4 @@ fi
 
 test -f ~/.gita-completion.zsh && source ~/.gita-completion.zsh
 
-[ -x ~/bin/gits.sh ] && gits.sh
+eval "$(starship init zsh)"
