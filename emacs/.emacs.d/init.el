@@ -1,24 +1,18 @@
 ;;; -*- lexical-binding: t -*-
 
-(require 'package)
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-(package-initialize)
+;;; Init debug helpers
+;; (toggle-debug-on-quit)
+(toggle-debug-on-error)
+(setq WITH-INTERNETS t)
 
-;; Ensure we have repos downloaded (especially an issue the first time)
-(unless package-archive-contents (package-refresh-contents))
+
+;;; Built-in options
 
 ;; Server
 (server-start)
 
 ;; Killing Emacs
 (setq confirm-kill-emacs 'y-or-n-p)
-
-;; Have use-package
-(dolist (package '(use-package))
-   (unless (package-installed-p package)
-       (package-install package)))
 
 ;; Performance
 (setq gc-cons-threshold 100000000)  ; lsp
@@ -50,9 +44,41 @@
 ;; Editing
 (setq-default indent-tabs-mode nil)
 
+
+;;; Packaging ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'package)
+(setq package-archives '(
+			  ("gnu" . "https://elpa.gnu.org/packages/")
+
+			  ;;("org" . "http://orgmode.org/elpa/")  ;; deprecated since org 9.5
+			  ("melpa" . "https://melpa.org/packages/")
+			  ("melpa-stable" . "https://stable.melpa.org/packages/")
+
+			  ;; alt github
+			  ;; ("melpa" . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/melpa/")
+			  ;; ("org"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/org/")
+			  ;; ("gnu"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/gnu/")
+
+			  ;; alt gitlab
+			  ;; ("melpa" . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/melpa/")
+			  ;; ("org"   . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/org/")
+			  ;; ("gnu"   . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/gnu/")
+			  ))
+(package-initialize)
+
+;; Ensure we have repos downloaded (especially an issue the first time)
+(if WITH-INTERNETS (unless package-archive-contents (package-refresh-contents)))
+
+;; Have use-package
+(dolist (package '(use-package))
+   (unless (package-installed-p package)
+       (package-install package)))
+(setq use-package-always-ensure WITH-INTERNETS)
+
+
 ;;; Packages ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; some stats to gather here:
-(setq use-package-compute-statistics t)
+;(setq use-package-compute-statistics t)
 
 ;; quelpa allows use-package install from git
 (unless (package-installed-p 'quelpa)
@@ -61,15 +87,15 @@
     (eval-buffer)
     (quelpa-self-upgrade)))
 
-(use-package quelpa-use-package :ensure t)
+(use-package quelpa-use-package)
 
 ;; delight is for :delight in use-package
-(use-package delight :ensure t
+(use-package delight
   :config
   (delight '((evil-collection-unimpaired-mode nil evil-collection-unimpaired)
              (auto-revert-mode " AR" t))))
 
-(use-package default-text-scale :ensure t
+(use-package default-text-scale
   :config
   (default-text-scale-mode t))
 
@@ -77,7 +103,7 @@
   :init
   (setq dired-dwim-target t))
 
-(use-package evil :ensure t :after (persistent-scratch)
+(use-package evil :after (persistent-scratch)
   :init
   (setq evil-want-keybinding nil) ;; otherwise we get a warning: https://github.com/emacs-evil/evil-collection/issues/60
   (setq evil-want-C-i-jump nil) ;; fixing TAB behaviour: https://github.com/Somelauw/evil-org-mode#common-issues
@@ -111,26 +137,26 @@
                  (add-hook (intern exit-hook) exit-fn))))))
   (evil-mode 1))
 
-(use-package evil-collection :ensure t :after (evil)
+(use-package evil-collection :after (evil)
     :config
     (evil-collection-init))
 
-(use-package evil-surround :ensure t :after (evil evil-collection)
+(use-package evil-surround :after (evil evil-collection)
   :config
   (global-evil-surround-mode 1))
 
-(use-package evil-mc :ensure t :after (evil evil-collection) :delight
+(use-package evil-mc :after (evil evil-collection) :delight
   :config
   (global-evil-mc-mode 1))
 
-(use-package evil-org :ensure t
+(use-package evil-org
   :after (evil org evil-collection)
   :hook (org-mode . (lambda () evil-org-mode))
   :config
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
-(use-package evil-owl :ensure t :after evil :delight
+(use-package evil-owl :after evil :delight
   :config
   (setq evil-owl-max-string-length 500)
   (add-to-list 'display-buffer-alist
@@ -140,32 +166,34 @@
                  (window-height . 0.3)))
   (evil-owl-mode))
 
-(use-package expand-region :ensure t :defer t)
+(use-package expand-region :defer t)
 
-(use-package undo-tree :ensure t
+(use-package undo-tree
   :delight
   :config
   (global-undo-tree-mode))
 
-(use-package rainbow-mode :ensure t :defer t)
+(use-package rainbow-mode :defer t)
 
-(use-package smartparens-config :ensure smartparens
+(use-package smartparens :no-require t
   :config
-  (show-smartparens-global-mode t)
-  (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
-  (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode))
+  (use-package smartparens-config :ensure nil  ;; the package name is 'smartparens' and we install it in the parent use-package
+	       :config
+	       (show-smartparens-global-mode t)
+	       (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+	       (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)))
 
-(use-package evil-smartparens :ensure t :requires (evil)
+(use-package evil-smartparens :requires (evil)
   :init (require 'evil-smartparens)
   :after (evil general smartparens evil-surround))
 
-(use-package symex :ensure t :config :disabled t
+(use-package symex :config :disabled t
   (global-set-key (kbd "s-;") 'symex-mode-interface)
   (dolist (mode-name symex-lisp-modes)
     (let ((mode-hook (intern (concat (symbol-name mode-name) "-hook"))))
       (add-hook mode-hook 'symex-mode))))
 
-(use-package which-key :ensure t :delight
+(use-package which-key :delight
   :init
   (setq which-key-separator " ")
   :config
@@ -175,7 +203,19 @@
   (add-to-list 'which-key-replacement-alist '((nil . "^org") . (nil . "O")))
   (which-key-mode 1))
 
-(use-package magit :ensure t
+(when nil """Keysee, (which requires Sortie)"""
+      ;; FIXME: the dependency between the two packages fails due to some wierd versioning issues.
+  (use-package sortie
+    :quelpa (sortie :fetcher url
+                    :version original
+                    :url "https://www.emacswiki.org/emacs/download/sortie.el"))
+
+  (use-package keysee :after (sortie)
+    :quelpa (keysee :fetcher url
+                    :version original
+                    :url "https://www.emacswiki.org/emacs/download/keysee.el")
+    ))
+(use-package magit
   :defer t
   :commands (magit-status)
   :init
@@ -184,13 +224,13 @@
         magit-diff-refine-hunk t
         magit-save-repository-buffers nil))
 
-(use-package diff-hl :ensure t
+(use-package diff-hl
   :config
   (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
   (global-diff-hl-mode 1))
 
-(use-package counsel :ensure t
+(use-package counsel
   :delight ivy-mode
   :delight counsel-mode
   :init
@@ -203,18 +243,18 @@
   (counsel-mode 1))
 
 ;; ivy-prescient does frequency history prioritisation
-(use-package ivy-prescient :ensure t :after counsel
+(use-package ivy-prescient :after counsel
   :config
   (ivy-prescient-mode 1))
 
-(use-package counsel-projectile :ensure t :after (projectile counsel)
+(use-package counsel-projectile :after (projectile counsel)
   :config
   (counsel-projectile-mode 1)
   (counsel-projectile-modify-action 'counsel-projectile-switch-project-action
-                                    '((default "v")))  ;; by default will open VCS (e.g. magit) on project switch
+                                    '((default "D")))  ;; by default will open dired on project switch
   )
 
-(use-package projectile :ensure t
+(use-package projectile
   :delight '(:eval (concat " <" (projectile-project-name) ">"))
   :init
   (setq projectile-require-project-root nil)
@@ -222,17 +262,16 @@
   ;; (projectile-mode 1) ; (counsel-projectile-mode) runs this for us
   (add-to-list 'projectile-project-root-files "Vagrantfile" t))
 
-(use-package company :ensure t
+(use-package company
   :delight " ©"
   :init 
   (add-hook 'prog-mode-hook 'company-mode-on))
 
-(use-package persistent-scratch :ensure t
+(use-package persistent-scratch
   :config
   (persistent-scratch-setup-default))
 
 (use-package dashboard
-  :ensure t
   :init
   (setq dashboard-projects-backend 'projectile
         dashboard-startup-banner nil
@@ -246,16 +285,16 @@
   :config
   (dashboard-setup-startup-hook))
 
-(use-package idle-highlight-in-visible-buffers-mode :ensure t
+(use-package idle-highlight-in-visible-buffers-mode
   :config
   (add-hook 'prog-mode-hook 'idle-highlight-in-visible-buffers-mode))
 
-(use-package treemacs :ensure t)
+(use-package treemacs)
 
-(use-package easy-kill :ensure t)  ;; mine org-src-copy-block dependency
+(use-package easy-kill)  ;; mine org-src-copy-block dependency
 
 ;; Org ------------------------------------------
-(use-package org :ensure t :after (easy-kill)
+(use-package org :after (easy-kill)
   :init
   (setq org-hide-leading-stars t
         org-startup-truncated nil)
@@ -272,31 +311,32 @@
     (easy-kill 1)
     (org-edit-src-abort)))
 
-(use-package org :ensure org-plus-contrib :after (org)
+(use-package org  ;; :ensure org-plus-contrib
+  :after (org)
   :config
   (require 'ox-extra)
   (ox-extras-activate '(ignore-headlines)))
 
 ;; Languages ------------------------------------
-(use-package lsp-mode :ensure t :defer t
+(use-package lsp-mode :defer t
   :hook ((rust-mode . lsp-deferred)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred))
 
-(use-package lsp-ui :ensure t
+(use-package lsp-ui
   :defer t
   :hook (lsp-mode . lsp-ui-mode))
 
-(use-package lsp-treemacs :ensure t
+(use-package lsp-treemacs
   :commands lsp-treemacs-errors-list
   :config
   (lsp-treemacs-sync-mode 1))
 
-(use-package lsp-ivy :ensure t
+(use-package lsp-ivy
   :commands lsp-ivy-workspace-symbol)
 
 ;;; Python
-(use-package lsp-pyright :ensure t :defer t
+(use-package lsp-pyright :defer t
   :init
   (setq lsp-pyright-disable-language-service nil
         lsp-pyright-disable-organize-imports nil
@@ -304,18 +344,18 @@
         lsp-pyright-use-library-code-for-types t)
   :hook ((python-mode . (lambda () (require 'lsp-pyright) (lsp-deferred)))))
 
-(use-package jinja2-mode :ensure t :defer t)
+(use-package jinja2-mode :defer t)
 
 ;;; YAML/Ansible
-(use-package yaml-mode :ensure t)
+(use-package yaml-mode)
 
-(use-package poly-ansible :ensure t)
+(use-package poly-ansible)
 
 
 ;;; Keybindings ----------------------------------
 (defun k--other-buffer () (interactive) (switch-to-buffer (other-buffer (current-buffer))))
 
-(use-package general :ensure t :config
+(use-package general :config
   (general-define-key
    :states '(normal visual insert motion emacs)
    :keymaps 'override
@@ -378,10 +418,8 @@
    "o" '(:ignore t :wk "org")
    "oo" '(counsel-org-files :wk "open org files")
    "oC" '(counsel-org-capture :wk "capture")
-   "oa" '(:ignore t :wk "agenda")
-   "oaA" '(org-agenda :wk "agenda dashboard")
-   "oaa" '(org-agenda-list :wk "agenda")
-   "oat" '(org-todo-list :wk "agenda")
+   ;; agenda
+   "a" '(org-agenda :wk "agenda")
    ;; org-roam
    "or" '(:ignore t :wk "roam")
    "orb" '(org-roam-buffer-toggle :wk "toggle buffer")
