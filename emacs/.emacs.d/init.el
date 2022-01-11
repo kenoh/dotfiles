@@ -3,7 +3,7 @@
 ;;; Init debug helpers
 ;; (toggle-debug-on-quit)
 (toggle-debug-on-error)
-(setq WITH-INTERNETS t)
+(defvar WITH-INTERNETS t "Whether we should consider ourselves online.")
 
 
 ;;; Built-in options
@@ -12,6 +12,7 @@
 (server-start)
 
 ;; Killing Emacs
+(require 'files)
 (setq confirm-kill-emacs 'y-or-n-p)
 
 ;; Performance
@@ -30,12 +31,17 @@
    (x-get-selection 'PRIMARY)))
 (global-set-key (kbd "S-<insert>") 'paste-primary-selection)
 
+(setq ring-bell-function 'ignore
+      x-gtk-use-system-tooltips nil
+      use-dialog-box nil)
+
 ;; modeline
 (column-number-mode t)
 (size-indication-mode t)
 
 ;; Parens
-(setq show-paren-delay 0)
+(require 'paren)
+(setq show-paren-delay 0.5)
 (show-paren-mode  1)
 
 ;; Navigation
@@ -43,6 +49,13 @@
 
 ;; Editing
 (setq-default indent-tabs-mode nil)
+
+;; VC
+(require 'vc-hooks)
+(setq-default vc-follow-symlinks t)
+
+;; Windows/Frames
+(winner-mode)
 
 
 ;;; Packaging ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -73,6 +86,7 @@
 (dolist (package '(use-package))
    (unless (package-installed-p package)
        (package-install package)))
+(require 'use-package-ensure)
 (setq use-package-always-ensure WITH-INTERNETS)
 
 
@@ -99,6 +113,27 @@
   :config
   (default-text-scale-mode t))
 
+(use-package doom-modeline
+  :init (doom-modeline-mode 1)
+  :config (setq doom-modeline-buffer-file-name-style 'truncate-upto-project
+                doom-modeline-minor-modes t))
+
+(use-package minions
+  :config (minions-mode 1))
+
+(use-package doom-themes
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-one-light t)
+  (doom-themes-visual-bell-config)  ; Enable flashing mode-line on errors
+  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  (doom-themes-org-config)
+  (use-package solaire-mode
+    :config (solaire-global-mode +1)))
+
 (use-package dired :ensure nil
   :init
   (setq dired-dwim-target t))
@@ -117,24 +152,6 @@
   )
   (define-key evil-motion-state-map "j" 'evil-next-visual-line)
   (define-key evil-motion-state-map "k" 'evil-previous-visual-line)
-  (progn "modeline bg color"
-         (let* ((orig "#cccccc")
-                (other `((normal . ,orig)
-                         (insert . "dark sea green")
-                         (emacs . "medium purple")
-                         (visual . "light yellow")
-                         (motion . "sky blue"))))
-           (dolist (it other)
-             (let ((entry-hook (concat "evil-" (symbol-name (car it)) "-state-entry-hook"))
-                   (exit-hook (concat "evil-" (symbol-name (car it)) "-state-exit-hook")))
-               (let ((entry-fn (intern (concat "--k-" entry-hook "-f")))
-                     (exit-fn (intern (concat "--k-" exit-hook "-f"))))
-                 (defalias entry-fn
-                   `(lambda () ,(symbol-name entry-fn) (set-face-attribute 'mode-line nil :background ,(cdr it))))
-                 (defalias exit-fn
-                   `(lambda () ,(symbol-name exit-fn) (set-face-attribute 'mode-line nil :background ,orig)))
-                 (add-hook (intern entry-hook) entry-fn)
-                 (add-hook (intern exit-hook) exit-fn))))))
   (evil-mode 1))
 
 (use-package evil-collection :after (evil)
@@ -426,6 +443,7 @@
    "orf" '(org-roam-node-find :wk "find node")
    "ori" '(org-roam-node-insert :wk "insert node link")
    "oru" '(org-roam-ui :wk "UI")
+   "orr" '(org-roam-refile :wk "refile")
    ;; jump
    "j" '(:ignore t :wk "jump")
    "jo" '(counsel-outline :wk "outline")
