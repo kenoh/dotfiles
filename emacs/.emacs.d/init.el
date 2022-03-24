@@ -2,7 +2,7 @@
 
 ;;; Init debug helpers
 ;; (toggle-debug-on-quit)
-(toggle-debug-on-error)
+;; (toggle-debug-on-error)
 (defvar WITH-INTERNETS t "Whether we should consider ourselves online.")
 
 
@@ -57,6 +57,14 @@
 ;; Windows/Frames
 (winner-mode)
 
+;; recentf
+(recentf-mode 1)
+(setq recentf-max-saved-items 512)
+(run-at-time nil (* 5 60) 'recentf-save-list)
+
+;; Ediff
+(setq ediff-window-setup-function 'ediff-setup-windows-plain
+      ediff-split-window-function 'split-window-horizontally)
 
 ;;; Packaging ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'package)
@@ -78,6 +86,9 @@
 			  ;; ("gnu"   . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/gnu/")
 			  ))
 (package-initialize)
+(if (version< emacs-version "27")
+    ;; we are likely on an old system with outdated TLS
+    (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
 ;; Ensure we have repos downloaded (especially an issue the first time)
 (if WITH-INTERNETS (unless package-archive-contents (package-refresh-contents)))
@@ -292,9 +303,7 @@
   :init
   (setq dashboard-projects-backend 'projectile
         dashboard-startup-banner nil
-        dashboard-items '((projects . 7)
-                          (recents . 12)
-                          (agenda . 5)
+        dashboard-items '((agenda . 5)
                           (bookmarks . 5)
                           (registers . 5)))
   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))  ;; for new frames
@@ -337,8 +346,15 @@
 ;; Languages ------------------------------------
 (use-package lsp-mode :defer t
   :hook ((rust-mode . lsp-deferred)
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands (lsp lsp-deferred))
+         (lsp-mode . lsp-enable-which-key-integration)
+         (python-mode . lsp))
+  :commands (lsp lsp-deferred)
+  :config
+  (lsp-register-custom-settings
+   '(("pyls.plugins.pyls_mypy.enabled" t t)
+     ("pyls.plugins.pyls_mypy.live_mode" nil t)
+     ("pyls.plugins.pyls_black.enabled" t t)
+     ("pyls.plugins.pyls_isort.enabled" t t))))
 
 (use-package lsp-ui
   :defer t
@@ -353,13 +369,15 @@
   :commands lsp-ivy-workspace-symbol)
 
 ;;; Python
-(use-package lsp-pyright :defer t
-  :init
-  (setq lsp-pyright-disable-language-service nil
-        lsp-pyright-disable-organize-imports nil
-        lsp-pyright-auto-import-completions t
-        lsp-pyright-use-library-code-for-types t)
-  :hook ((python-mode . (lambda () (require 'lsp-pyright) (lsp-deferred)))))
+(use-package pyvenv)
+
+;; (use-package lsp-pyright :defer t
+;;   :init
+;;   (setq lsp-pyright-disable-language-service nil
+;;         lsp-pyright-disable-organize-imports nil
+;;         lsp-pyright-auto-import-completions t
+;;         lsp-pyright-use-library-code-for-types t)
+;;   :hook ((python-mode . (lambda () (require 'lsp-pyright) (lsp-deferred)))))
 
 (use-package jinja2-mode :defer t)
 
@@ -372,7 +390,24 @@
 ;;; Keybindings ----------------------------------
 (defun k--other-buffer () (interactive) (switch-to-buffer (other-buffer (current-buffer))))
 
-(use-package general :config
+(use-package hydra :commands defhydra
+  :config
+  (defhydra hydra-smartparens (:foreign-keys run :hint nil)
+    "
+^Slurp^    ^Barf^      ^Other^
+^^^^^^^^^^---------------------------------
+_0_: ->    _)_: ->     _r_aise
+_9_: <-    _(_: <-     _s_plit
+"
+    ("0" sp-forward-slurp-sexp)
+    ("9" sp-backward-slurp-sexp)
+    (")" sp-forward-barf-sexp)
+    ("(" sp-backward-barf-sexp)
+    ("r" sp-raise-sexp)
+    ("s" sp-split-sexp)
+    ("q" nil "quit" :color blue)))
+
+(use-package general :after (hydra) :config
   (general-define-key
    :states '(normal visual insert motion emacs)
    :keymaps 'override
@@ -451,13 +486,7 @@
   (general-define-key
    :states '(normal visual)
    ;; smartparens
-   "," '(:ignore t :wk "smartparens")
-   ",0" '(sp-forward-slurp-sexp :wk "slurp fwd")
-   ",9" '(sp-backward-slurp-sexp :wk "slurp bwd")
-   ",)" '(sp-forward-barf-sexp :wk "barf fwd")
-   ",(" '(sp-backward-barf-sexp :wk "barf bwd")
-   ",r" '(sp-raise-sexp :wk "raise")
-   ",s" '(sp-split-sexp :wk "split")
+   "," '(hydra-smartparens/body :wk "smartparens")
    ;; lsp
    ";" '(:ignore t :wk "LSP fu")
    ";;" '(:package lsp :keymap lsp-mode-map :wk "lsp")
