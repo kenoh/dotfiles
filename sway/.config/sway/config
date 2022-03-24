@@ -124,6 +124,8 @@ set $wsf7 number 17 f七
 set $wsf8 number 18 f八
 set $wsf9 number 19 f九
 
+workspace $ws1
+
 bindsym $mod+0 workspace $wsf0 ; workspace $ws0
 bindsym $mod+1 workspace $wsf1 ; workspace $ws1
 bindsym $mod+2 workspace $wsf2 ; workspace $ws2

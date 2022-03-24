@@ -27,7 +27,8 @@ order += "vpn_status"
 order += "backlight"
 order += "battery_level"
 order += "bluetooth"
-order += "volume_status"
+order += "volume_status mic"
+order += "volume_status out"
 order += "xkb_input"
 order += "tztime date"
 order += "tztime time"
@@ -111,11 +112,21 @@ disk "/" {
 	format = "/:%avail"
 }
 
-volume_status {
+volume_status "mic" {
 	button_mute = 2
 	button_up = 4
 	button_down = 5
-	command = "pactl"
+	is_input = true
+#format_muted = "🔇"
+#	command = "pactl"
+	thresholds = [ (0, 'good'), (40, 'degraded'), (70, 'bad') ]
+}
+volume_status "out" {
+	button_mute = 2
+	button_up = 4
+	button_down = 5
+	format_muted = "🔇"
+#	command = "pactl"
 	thresholds = [ (0, 'good'), (40, 'degraded'), (70, 'bad') ]
 }
 
