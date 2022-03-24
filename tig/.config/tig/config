@@ -1,3 +1,5 @@
 set main-view-id-display = yes
 set main-view-date-display = relative-compact
 set main-view-author-display = abbreviated
+set split-view-width = 62%
+set split-view-height = 62%
