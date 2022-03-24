@@ -12,6 +12,8 @@ autoload -Uz compinit
 autoload -U zargs
 compinit
 # End of lines added by compinstall
+_comp_options+=(globdots) # With hidden files
+zstyle ':completion:alias-expension:*' completer _expand_alias
 
 ########################################################################
 # Oh-My-ZSH
@@ -108,7 +110,7 @@ alias zshrc-reload='. ~/.zshrc'
 
 alias vim=nvim
 
-alias e='emacsclient --no-wait'
+alias e='emacsclient --no-wait -c'
 alias et='emacsclient -t'
 etdiff() { emacsclient -t --eval "(ediff-files \"$1\" \"$2\")"; }
 
@@ -184,6 +186,8 @@ ssh-known-hosts-clean() {
 	echo "Did nothing."
     fi
 }
+
+alias xo=xdg-open
 
 # virtualenvwrapper
 maybe virtualenvwrapper.sh && source virtualenvwrapper.sh
