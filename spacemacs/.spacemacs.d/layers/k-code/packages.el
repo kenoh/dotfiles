@@ -40,9 +40,9 @@
     (setq-default projectile-switch-project-action 'projectile-vc)))
 
 (defun k/term-set-cursor-to-block ()
-  (send-string-to-terminal "\033[0 q"))
+  (ignore-errors (send-string-to-terminal "\033[0 q")))
 (defun k/term-set-cursor-to-bar ()
-  (send-string-to-terminal "\033[5 q"))
+  (ignore-errors (send-string-to-terminal "\033[5 q")))
 (defun k-code/post-init-evil ()
   (progn "Have vertical bar as a cursor in terminal."
          ;; So, there is a package for it, evil-terminal-cursor-changer,
