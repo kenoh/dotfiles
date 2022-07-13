@@ -13,7 +13,7 @@ input * {
 input * tap enabled
 
 # look&feel
-font pango: Sans 7
+font pango: "Liberation Sans Narrow 10"
 
 default_border pixel 3
 default_floating_border pixel
@@ -29,7 +29,7 @@ set $cl_urge #ee2e24
 client.focused          $cl_high $cl_high $cl_back $cl_indi $cl_high
 client.focused_inactive $cl_high $cl_back $cl_fore $cl_back $cl_back
 client.unfocused        $cl_fore $cl_back $cl_fore $cl_back $cl_back
-client.urgent           $cl_urge $cl_urge $cl_fore $cl_urge $cl_urge
+client.urgent           $cl_urge $cl_urge #ffffff  $cl_urge $cl_urge
 
 for_window [class="."] title_format "<b>%class</b> :: %title [%shell]"
 for_window [app_id="(pavucontrol|nm-connection-manager)"] \
@@ -40,11 +40,11 @@ no_focus [title="Firefox – Sharing Indicator"]
 # colors in titles
 ## note: there is a bug in Pango such that setting a size for the very first text in the title_format simply does not work. Preceeding it with a space does the trick. Anyway, enlarging the text substantially enlarges the titlebar itself, so no, thanks.
 for_window [class="Emacs"] \
-           title_format "<span foreground='#a020f0'>𝓔</span> <b>%title</b>"
+           title_format "<span foreground='#a020f0' background='#ffffff'>𝓔</span> <b>%title</b>"
 for_window [app_id="(firefox)"] \
-           title_format "<span foreground='#ffcc00'>🦊</span> <b>%title</b>"
+           title_format "<span foreground='#ffcc00' background='#ffffff'>🦊</span> <b>%title</b>"
 for_window [app_id="(tilix)"] \
-           title_format "<span foreground='#90ff90'>⌨</span> <b>%title</b>"
+           title_format "<span foreground='#90ff90' background='$cl_back'>⌨</span> <b>%title</b>"
 for_window [class="Code"] \
            title_format "<span foreground='#0078d7'>𝘾</span> <b>%title</b>"
 
@@ -192,6 +192,7 @@ bindsym $mod+r mode "resize"
 bar {
 	status_command py3status
 	swaybar_command swaybar
+	tray_output *
 	status_padding 0
 	position bottom
 	strip_workspace_numbers yes
@@ -206,6 +207,7 @@ bar {
 	}
 }
 
+
 set $mymenu <span font_style='normal'>MyMenu ::: <b>B</b>lueman :: <b>E</b>macs :: <b>F</b>irefox :: <b>N</b>mtui :: <b>P</b>ulsemixer :: <b>S</b>ignal :: <b>T</b>hunderbird :</span>
 mode --pango_markup "$mymenu" {
 	bindsym b exec blueman-manager ; mode "default"
@@ -219,6 +221,19 @@ mode --pango_markup "$mymenu" {
 }
 bindsym $mod+x mode "$mymenu"
 
+
+set $grimshot Screenshot |   Selection :: Active win. :: select Win. :: active Output :: Everything
+mode "$grimshot" {
+	bindsym s exec grimshot copy area
+	bindsym a exec grimshot copy active
+	bindsym w exec grimshot copy window
+	bindsym o exec grimshot copy output
+	bindsym e exec grimshot copy screen
+	bindsym Escape mode "default"
+}
+bindsym $mod+Shift+s mode "$grimshot"
+
+
 # don't lock when in fullscreen mode
 for_window [shell=".*"] inhibit_idle fullscreen
 
@@ -226,13 +241,16 @@ set $lock ~/bin/lock
 set $barup && killall -SIGUSR1 py3status
 
 # launchers
-bindsym $mod+d exec PATH="$HOME/bin:$PATH" bemenu-run --fn 'Monospace [13]' -l 15 --scrollbar always -m all
+set $bemenu_params --fn 'Monospace [13]' -l 15 --scrollbar always -m all -i -M 64
+bindsym $mod+d exec j4-dmenu-desktop --dmenu="bemenu $bemenu_params"
+bindsym $mod+shift+d exec PATH="$HOME/bin:$PATH" bemenu-run $bemenu_params
+
 bindsym $mod+Return exec tilix --action=app-new-window
 bindsym $mod+Shift+Return exec xterm
 bindsym $mod+Escape exec $lock
-bindsym XF86AudioLowerVolume exec amixer -q -D pulse sset Master 5%- $barup
-bindsym XF86AudioRaiseVolume exec amixer -q -D pulse sset Master 5%+ $barup
-bindsym XF86AudioMute exec amixer -q -D pulse sset Master toggle $barup
+bindsym XF86AudioLowerVolume exec amixer -q -D default -- sset Master playback 5%- $barup
+bindsym XF86AudioRaiseVolume exec amixer -q -D default -- sset Master playback 5%+ $barup
+bindsym XF86AudioMute exec amixer -q -D default -- sset Master playback toggle $barup
 
 # brightness
 bindsym --locked XF86MonBrightnessUp exec light -A 10 $barup

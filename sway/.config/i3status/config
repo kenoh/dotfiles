@@ -14,6 +14,7 @@ general {
 	markup = "pango"
 }
 
+# order += "sway_idle"
 order += "scratchpad"
 order += "external_script mako"
 order += "external_script systemd"
@@ -29,9 +30,15 @@ order += "battery_level"
 order += "bluetooth"
 order += "volume_status mic"
 order += "volume_status out"
-order += "xkb_input"
+#order += "xkb_input"
+order += "keyboard_layout"
+order += "networkmanager"
 order += "tztime date"
 order += "tztime time"
+
+sway_idle {
+    format = "[\?if=inhibit_idle=True inhibit-idle]|False"
+}
 
 scratchpad {
   ipc = "swaymsg"
@@ -57,7 +64,8 @@ backlight {
 
 battery_level {
 	battery_id = all
-	format = "{icon} {percent}%[ {time_remaining}]"
+        notify_low_level = True
+	format = "<span/>{icon}[ {time_remaining}]"
 	hide_seconds = True
 	threshold_full = 95
 	threshold_degraded = 65
@@ -66,7 +74,7 @@ battery_level {
 }
 
 tztime date {
-	format = "%Y-%m-%d"
+	format = "<span/><sup>%Y</sup> %b <b>%d</b>"
 }
 
 tztime time {
@@ -82,14 +90,21 @@ xkb_input {
   thresholds = [("us", ""), ("sk", "red"), ("cz", "red")]
 }
 
+networkmanager {
+  format_device = "<span/>[\?if=general_connection [\?if=!ap_ssid {general_device}][\?soft ][\?color=ap_signal {ap_ssid} ][\?soft ][\?color=good <sub>{ip4_address1}</sub>]]"
+}
+keyboard_layout {
+    layouts = ['us', 'cz', 'sk']
+}
+
 loadavg {
-  format = "[\?color=1avg {1min}] {5min} {15min}"
+  format = "<span/>[\?color=1avg {1min}] <sub>{5min} {15min}</sub>"
   cache_timeout = 2
   thresholds = [ (0, ""), (25, "degraded"), (50, "bad") ]
 }
 
 sysdata {
-	format = "[\?color=mem {mem_used_percent}%]"
+	format = "<span/>[\?color=mem {mem_used_percent:.0f}<sub>%</sub>]"
 	color_good = ""
 	thresholds = [(0, "good"), (70, "degraded"), (85, "bad")]
 }
@@ -97,19 +112,19 @@ sysdata {
 disk "/home" {
 	low_threshold = "9"
 	threshold_type = gbytes_avail
-	format = "~:%avail"
+	format = "<span/><sup>home</sup>%avail"
 }
 
 disk "/tmp" {
 	low_threshold = "4"
 	threshold_type = gbytes_avail
-	format = "/tmp:%avail"
+	format = "<span/><sup>tmp</sup>%avail"
 }
 
 disk "/" {
 	low_threshold = "2"
 	threshold_type = gbytes_avail
-	format = "/:%avail"
+	format = "<span/><sup>root</sup>%avail"
 }
 
 volume_status "mic" {
@@ -117,16 +132,18 @@ volume_status "mic" {
 	button_up = 4
 	button_down = 5
 	is_input = true
-#format_muted = "🔇"
-#	command = "pactl"
+	format = "<span/><sup>[\?if=is_input in|out]</sup>{percentage}<sub>%</sub>"
+	format_muted = "🔇"
+	command = "amixer"
 	thresholds = [ (0, 'good'), (40, 'degraded'), (70, 'bad') ]
 }
 volume_status "out" {
 	button_mute = 2
 	button_up = 4
 	button_down = 5
+	format = "<span/><sup>[\?if=is_input in|out]</sup>{percentage}<sub>%</sub>"
 	format_muted = "🔇"
-#	command = "pactl"
+	command = "amixer"
 	thresholds = [ (0, 'good'), (40, 'degraded'), (70, 'bad') ]
 }
 
@@ -136,12 +153,12 @@ bluetooth {
 
 selinux {
 	color_good = ""
-	format = "se:{state}"
-	state_enforcing = "enf"
+	format = "<span><sup>se</sup></span>{state}"
+	state_enforcing = "1"
 }
 
 vpn_status {
 	color_good = "#ffffff"
 	color_bad = ""
-	format = "{name}|(no vpn)"
+	format = "<span/>{name}|<sup>(no vpn)</sup>"
 }
