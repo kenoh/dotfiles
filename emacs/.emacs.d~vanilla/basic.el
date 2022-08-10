@@ -1,90 +1,25 @@
 ;;; -*- lexical-binding: t -*-
 
-;;; Init debug helpers
-;; (toggle-debug-on-quit)
-;; (toggle-debug-on-error)
-(defvar WITH-INTERNETS t "Whether we should consider ourselves online.")
-
-
-;;; Built-in options
-
-;; Server
-(server-start)
-
-;; Killing Emacs
-(require 'files)
-(setq confirm-kill-emacs 'y-or-n-p)
-
-;; Performance
-(setq gc-cons-threshold 100000000)  ; lsp
-(setq read-process-output-max (* 1024 1024)) ;; 1mb, also lsp
-
-;; GUI
-(ignore-errors
-  (menu-bar-mode 0)
-  (tool-bar-mode 0)
-  (scroll-bar-mode 0))
-
-(defun paste-primary-selection ()
-  (interactive)
-  (insert
-   (x-get-selection 'PRIMARY)))
-(global-set-key (kbd "S-<insert>") 'paste-primary-selection)
-
-(setq ring-bell-function 'ignore
-      x-gtk-use-system-tooltips nil
-      use-dialog-box nil)
-
-;; modeline
-(column-number-mode t)
-(size-indication-mode t)
-
-;; Parens
-(require 'paren)
-(setq show-paren-delay 0.5)
-(show-paren-mode  1)
-
-;; Navigation
-(setq scroll-preserve-screen-position 'always)
-
-;; Editing
-(setq-default indent-tabs-mode nil)
-
-;; VC
-(require 'vc-hooks)
-(setq-default vc-follow-symlinks t)
-
-;; Windows/Frames
-(winner-mode)
-
-;; recentf
-(recentf-mode 1)
-(setq recentf-max-saved-items 512)
-(run-at-time nil (* 5 60) 'recentf-save-list)
-
-;; Ediff
-(setq ediff-window-setup-function 'ediff-setup-windows-plain
-      ediff-split-window-function 'split-window-horizontally)
-
 ;;; Packaging ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'package)
-(setq package-archives '(
-			  ("gnu" . "https://elpa.gnu.org/packages/")
-
-			  ;;("org" . "http://orgmode.org/elpa/")  ;; deprecated since org 9.5
-			  ("melpa" . "https://melpa.org/packages/")
-			  ("melpa-stable" . "https://stable.melpa.org/packages/")
-
-			  ;; alt github
-			  ;; ("melpa" . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/melpa/")
-			  ;; ("org"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/org/")
-			  ;; ("gnu"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/gnu/")
-
-			  ;; alt gitlab
-			  ;; ("melpa" . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/melpa/")
-			  ;; ("org"   . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/org/")
-			  ;; ("gnu"   . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/gnu/")
-			  ))
+(setq package-archives
+      '(
+	("gnu" . "https://elpa.gnu.org/packages/")
+        
+	;;("org" . "http://orgmode.org/elpa/")  ;; deprecated since org 9.5
+	("melpa" . "https://melpa.org/packages/")
+	("melpa-stable" . "https://stable.melpa.org/packages/")
+        
+	;; alt github
+	;; ("melpa" . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/melpa/")
+	;; ("org"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/org/")
+	;; ("gnu"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/gnu/")
+        
+	;; alt gitlab
+	;; ("melpa" . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/melpa/")
+	;; ("org"   . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/org/")
+	;; ("gnu"   . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/gnu/")
+	))
 (package-initialize)
 (if (version< emacs-version "27")
     ;; we are likely on an old system with outdated TLS
@@ -102,8 +37,10 @@
 
 
 ;;; Packages ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; some stats to gather here:
 ;(setq use-package-compute-statistics t)
+
 
 ;; quelpa allows use-package install from git
 (unless (package-installed-p 'quelpa)
@@ -114,47 +51,21 @@
 
 (use-package quelpa-use-package)
 
-;; delight is for :delight in use-package
-(use-package delight
-  :config
-  (delight '((evil-collection-unimpaired-mode nil evil-collection-unimpaired)
-             (auto-revert-mode " AR" t))))
 
-(use-package default-text-scale
-  :config
-  (default-text-scale-mode t))
+;; delight is for :delight in use-package, aka better diminish.
+;; (use-package delight
+;;   :config
+;;   (delight '((evil-collection-unimpaired-mode nil evil-collection-unimpaired)
+;;              (auto-revert-mode " AR" t))))
 
-(use-package doom-modeline
-  :init (doom-modeline-mode 1)
-  :config (setq doom-modeline-buffer-file-name-style 'truncate-upto-project
-                doom-modeline-minor-modes t))
-
-(use-package minions
-  :config (minions-mode 1))
-
-(use-package doom-themes
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-one-light t)
-  (doom-themes-visual-bell-config)  ; Enable flashing mode-line on errors
-  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
-  (doom-themes-org-config)
-  (use-package solaire-mode
-    :config (solaire-global-mode +1)))
-
-(use-package dired :ensure nil
-  :init
-  (setq dired-dwim-target t))
 
 (use-package evil :after (persistent-scratch)
   :init
-  (setq evil-want-keybinding nil) ;; otherwise we get a warning: https://github.com/emacs-evil/evil-collection/issues/60
-  (setq evil-want-C-i-jump nil) ;; fixing TAB behaviour: https://github.com/Somelauw/evil-org-mode#common-issues
-  (setq evil-respect-visual-line-mode t) ;; so that j/k don't skip multiple lines at once
-  (setq evil-undo-system 'undo-tree)
+  (setq evil-want-keybinding nil ;; otherwise we get a warning: https://github.com/emacs-evil/evil-collection/issues/60
+        evil-want-C-i-jump nil ;; fixing TAB behaviour: https://github.com/Somelauw/evil-org-mode#common-issues
+        evil-respect-visual-line-mode t ;; so that j/k don't skip multiple lines at once
+        evil-undo-system 'undo-tree
+        evil-collection-outline-bind-tab-p t)
   (set-default 'evil-symbol-word-search t)  ;; because words are usually not what we want to match on '*' or '#' search
   :config
   (progn
@@ -299,18 +210,6 @@
   :config
   (persistent-scratch-setup-default))
 
-(use-package dashboard
-  :init
-  (setq dashboard-projects-backend 'projectile
-        dashboard-startup-banner nil
-        dashboard-items '((agenda . 5)
-                          (bookmarks . 5)
-                          (registers . 5)))
-  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))  ;; for new frames
-        inhibit-startup-screen nil)
-  :config
-  (dashboard-setup-startup-hook))
-
 (use-package idle-highlight-in-visible-buffers-mode
   :config
   (add-hook 'prog-mode-hook 'idle-highlight-in-visible-buffers-mode))
@@ -343,48 +242,13 @@
   (require 'ox-extra)
   (ox-extras-activate '(ignore-headlines)))
 
-;; Languages ------------------------------------
-(use-package lsp-mode :defer t
-  :hook ((rust-mode . lsp-deferred)
-         (lsp-mode . lsp-enable-which-key-integration)
-         (python-mode . lsp))
-  :commands (lsp lsp-deferred)
+(use-package org
   :config
-  (lsp-register-custom-settings
-   '(("pyls.plugins.pyls_mypy.enabled" t t)
-     ("pyls.plugins.pyls_mypy.live_mode" nil t)
-     ("pyls.plugins.pyls_black.enabled" t t)
-     ("pyls.plugins.pyls_isort.enabled" t t))))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((dot . t)))
+  (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot))))
 
-(use-package lsp-ui
-  :defer t
-  :hook (lsp-mode . lsp-ui-mode))
-
-(use-package lsp-treemacs
-  :commands lsp-treemacs-errors-list
-  :config
-  (lsp-treemacs-sync-mode 1))
-
-(use-package lsp-ivy
-  :commands lsp-ivy-workspace-symbol)
-
-;;; Python
-(use-package pyvenv)
-
-;; (use-package lsp-pyright :defer t
-;;   :init
-;;   (setq lsp-pyright-disable-language-service nil
-;;         lsp-pyright-disable-organize-imports nil
-;;         lsp-pyright-auto-import-completions t
-;;         lsp-pyright-use-library-code-for-types t)
-;;   :hook ((python-mode . (lambda () (require 'lsp-pyright) (lsp-deferred)))))
-
-(use-package jinja2-mode :defer t)
-
-;;; YAML/Ansible
-(use-package yaml-mode)
-
-(use-package poly-ansible)
 
 
 ;;; Keybindings ----------------------------------
@@ -439,7 +303,8 @@ _9_: <-    _(_: <-     _s_plit
    "fs" '(save-buffer :wk "Save buffer")
    ;; toggle
    "t" '(:ignore t :wk "toggle")
-   "tt" '(toggle-truncate-lines :wk "truncate lines")
+   "tT" '(toggle-truncate-lines :wk "truncate lines")
+   "tt" '(treemacs :wk "treemacs")
    "tw" '(:ignore t :wk "whitespace")
    "tww" '(whitespace-mode :wk "on/off")
    "two" '(whitespace-toggle-options :wk "options")
@@ -499,9 +364,9 @@ _9_: <-    _(_: <-     _s_plit
   )
 
 ;;; Addendum ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Private config
-(load (expand-file-name "~/.emacs.d/private.el") t)
+(when Kprivate
+  (load (expand-file-name "~/.emacs.d/better.el") t))
 
-;; Custom-*
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
+;; Private config
+(when Kprivate
+  (load (expand-file-name "~/.emacs.d/private.el") t))

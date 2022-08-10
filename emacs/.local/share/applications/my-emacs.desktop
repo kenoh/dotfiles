@@ -1,14 +1,11 @@
 [Desktop Entry]
 Categories=Utility;TextEditor;X-Red-Hat-Base;
-Comment[en_GB]=
 Comment=
 Exec=sh -c '$HOME/bin/emacs-desktop.sh %F'
-GenericName[en_GB]=Text Editor
 GenericName=Text Editor
 Icon=emacs
 MimeType=text/x-tex;text/x-pascal;text/x-moc;text/x-makefile;text/x-java;text/x-csrc;text/x-csrc;text/x-chdr;text/x-c++src;text/x-c++hdr;text/tcl;text/plain;application/x-shellscript;
-Name[en_GB]=Emacs Client
-Name=Emacs Client
+Name=Emacs Client (magic script)
 Path=
 StartupNotify=true
 StartupWMClass=Emacs
