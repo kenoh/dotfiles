@@ -9,7 +9,6 @@ bindkey -e
 zstyle :compinstall filename "$HOME/.zshrc"
 
 autoload -Uz compinit
-autoload -U zargs
 compinit
 # End of lines added by compinstall
 _comp_options+=(globdots) # With hidden files
@@ -19,7 +18,7 @@ zstyle ':completion:alias-expension:*' completer _expand_alias
 # Oh-My-ZSH
 ########################################################################
 
-WANNA_PATH="$HOME/Android/Sdk/platform-tools:$HOME/bin:$HOME/.local/bin:/usr/local/bin"
+WANNA_PATH="$HOME/Android/Sdk/platform-tools:$HOME/go/bin:$HOME/bin:$HOME/.local/bin:/usr/local/bin"
 case ":$PATH:" in
     *:"$WANNA_PATH":*)
 	;;
@@ -43,6 +42,7 @@ plugins=(
     fzf
     git
     git-extras
+    # per-directory-history
     vagrant
     z
 )
@@ -97,8 +97,10 @@ down-line-or-local-history() {
 zle -N down-line-or-local-history
 
 
+# zle per-directory-history-toggle-history  # we call this since we want different default
+
 # colors
-export TERM=xterm-256color
+#export TERM=xterm-256color
 
 
 # my editor
@@ -197,12 +199,14 @@ F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [ -f "$F" ] && source "$F"
 
 # kaychain
-maybe keychain && keychain id_rsa id_ed25519
-[ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
-[ -f $HOME/.keychain/$HOSTNAME-sh ] && \
-		. $HOME/.keychain/$HOSTNAME-sh
-[ -f $HOME/.keychain/$HOSTNAME-sh-gpg ] && \
-		. $HOME/.keychain/$HOSTNAME-sh-gpg
+if true && [[ -o interactive ]]; then
+    maybe keychain && keychain --confirm id_rsa id_ed25519
+    [ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
+    [ -f $HOME/.keychain/$HOSTNAME-sh ] && \
+		    . $HOME/.keychain/$HOSTNAME-sh
+    [ -f $HOME/.keychain/$HOSTNAME-sh-gpg ] && \
+		    . $HOME/.keychain/$HOSTNAME-sh-gpg
+fi
 
 # kitty terminal emulator
 if [ "x$TERM" = "xxterm-kitty" ]; then

@@ -5,6 +5,8 @@
 # disabled = true
 
 add_newline = false
+command_timeout = 250
+right_format = ""
 
 [aws]
 disabled = true
@@ -13,7 +15,6 @@ disabled = true
 disabled = true
 
 [cmd_duration]
-min_time = 0
 show_milliseconds = true
 
 [conda]
