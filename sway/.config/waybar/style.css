@@ -1,0 +1,86 @@
+* {
+    border: none;
+    border-radius: 0;
+    font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    min-height: 0;
+    padding: 0 3px 0 3px;
+}
+
+.warning {
+    color: yellow;
+}
+.critical {
+    color: red;
+}
+
+window#waybar {
+    background: #000;
+    color: #aaa;
+}
+
+#window {
+    font-weight: normal;
+    font-family: "Ubuntu";
+}
+
+#language {
+    min-width: 25px;
+}
+
+#workspaces button {
+    border-radius: 5;
+    background: transparent;
+    color: #aaa;
+}
+#workspaces button.focused {
+    background: #ffd898;
+    color: #000;
+}
+
+#mode {
+    border-radius: 5;
+    background: #a3f;
+    color: #fff;
+    border-bottom: 3px solid white;
+}
+
+#clock {
+    font-weight: bold;
+}
+
+#battery {
+}
+
+#battery icon {
+    color: red;
+}
+
+#battery.charging {
+}
+
+@keyframes blink {
+    to {
+        background-color: #ffffff;
+        color: black;
+    }
+}
+
+#battery.warning:not(.charging) {
+    color: white;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#network.disconnected {
+    background: #f53c3c;
+}
+
+#pulseaudio {
+}
+
+#pulseaudio.muted {
+}

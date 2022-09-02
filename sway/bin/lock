@@ -13,13 +13,10 @@ tst() {
 
 tst swaylock
 
-# backup
-trap 'swaylock --ignore-empty-password --show-failed-attempts --color ff0000' ERR
+PREV="$(dunstctl is-paused)"
+dunstctl set-paused true
 
-# fancy default
-tst hostname
-tst md5sum
-tst sed
-tst xargs
-hostname | md5sum | sed 's/\(.\)\(.\)\(.\).*/1\11\21\3/' \
-	| xargs swaylock --ignore-empty-password --show-failed-attempts --image "$HOME/pic" --color
+swaylock
+
+dunstctl set-paused "$PREV"
+killall -SIGUSR1 py3status

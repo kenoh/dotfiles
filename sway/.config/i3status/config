@@ -15,6 +15,7 @@ general {
 }
 
 # order += "sway_idle"
+order += "do_not_disturb"
 order += "scratchpad"
 order += "external_script mako"
 order += "external_script systemd"
@@ -24,20 +25,26 @@ order += "sysdata"
 order += "disk /"
 order += "disk /tmp"
 order += "disk /home"
+order += "bluetooth"
 order += "vpn_status"
+order += "networkmanager"
 order += "backlight"
 order += "battery_level"
-order += "bluetooth"
+order += "xkb_input"
 order += "volume_status mic"
 order += "volume_status out"
-#order += "xkb_input"
-order += "keyboard_layout"
-order += "networkmanager"
+#order += "keyboard_layout"
 order += "tztime date"
 order += "tztime time"
 
 sway_idle {
     format = "[\?if=inhibit_idle=True inhibit-idle]|False"
+}
+
+do_not_disturb {
+    server = "dunst"
+    format = '<span/><sup>dnd</sup>[\?color=state [\?if=state ON|off]]'
+    thresholds = [(0, "darkgray"), (1, "good")]
 }
 
 scratchpad {
@@ -64,7 +71,7 @@ backlight {
 
 battery_level {
 	battery_id = all
-        notify_low_level = True
+        notify_low_level = False
 	format = "<span/>{icon}[ {time_remaining}]"
 	hide_seconds = True
 	threshold_full = 95
@@ -78,20 +85,20 @@ tztime date {
 }
 
 tztime time {
-	format = "%time"
+	format = "<span/><b>%time</b>"
 	format_time = "%H:%M"
 	color = "#ffffff"
 }
 
 xkb_input {
   switcher = "swaymsg"
-  inputs = [{"identifier": "1:1:AT_Translated_Set_2_keyboard"}]
+  inputs = [{"identifier": "*keyboard*"}]
   format_input = "[\?color=s {s}]"
   thresholds = [("us", ""), ("sk", "red"), ("cz", "red")]
 }
 
 networkmanager {
-  format_device = "<span/>[\?if=general_connection [\?if=!ap_ssid {general_device}][\?soft ][\?color=ap_signal {ap_ssid} ][\?soft ][\?color=good <sub>{ip4_address1}</sub>]]"
+  format_device = "<span/>[\?if=general_connection [\?if=!ap_ssid {general_device}][\?if=ap_ssid [\?color=ap_signal {ap_ssid}]]<sub>{ip4_address1}</sub>]"
 }
 keyboard_layout {
     layouts = ['us', 'cz', 'sk']
@@ -134,7 +141,7 @@ volume_status "mic" {
 	is_input = true
 	format = "<span/><sup>[\?if=is_input in|out]</sup>{percentage}<sub>%</sub>"
 	format_muted = "🔇"
-	command = "amixer"
+	command = "pactl"
 	thresholds = [ (0, 'good'), (40, 'degraded'), (70, 'bad') ]
 }
 volume_status "out" {
@@ -143,7 +150,7 @@ volume_status "out" {
 	button_down = 5
 	format = "<span/><sup>[\?if=is_input in|out]</sup>{percentage}<sub>%</sub>"
 	format_muted = "🔇"
-	command = "amixer"
+	command = "pactl"
 	thresholds = [ (0, 'good'), (40, 'degraded'), (70, 'bad') ]
 }
 
