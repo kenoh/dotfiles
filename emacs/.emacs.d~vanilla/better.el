@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Look'n'feel
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -44,6 +46,9 @@
          (lsp-mode . lsp-enable-which-key-integration)
          (python-mode . lsp))
   :commands (lsp lsp-deferred)
+  :init
+  (spc-def ";" nil :wk "LSP fu")
+  (spc-def ";;" 'lsp-mode-map :wk "lsp")
   :config
   (lsp-register-custom-settings
    '(("pyls.plugins.pyls_mypy.enabled" t t)
@@ -51,17 +56,23 @@
      ("pyls.plugins.pyls_black.enabled" t t)
      ("pyls.plugins.pyls_isort.enabled" t t))))
 
+
 (use-package lsp-ui
   :defer t
+  :init
+  (spc-def ";'" 'lsp-ui-mode-map :wk "lsp ui")
   :hook (lsp-mode . lsp-ui-mode))
+
 
 (use-package lsp-treemacs
   :commands lsp-treemacs-errors-list
   :config
   (lsp-treemacs-sync-mode 1))
 
+
 (use-package lsp-ivy
   :commands lsp-ivy-workspace-symbol)
+
 
 ;;; Python
 (use-package pyvenv)
