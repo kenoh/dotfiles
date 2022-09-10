@@ -50,6 +50,8 @@ for_window [class="Emacs"] \
            title_format "<span foreground='#d060ff' size='larger' weight='heavy'>𝓔</span>  <b>%title</b>"
 for_window [app_id="(firefox)"] \
            title_format "🦊 <b>%title</b>"
+for_window [app_id="(thunderbird)"] \
+           title_format "🐦 <b>%title</b>"
 for_window [app_id="(tilix)"] \
            title_format "<span foreground='#90ff90' background='$cl_back'>⌨</span> <b>%title</b>"
 for_window [app_id="(terminator)"] \
