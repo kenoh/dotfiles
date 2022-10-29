@@ -9,6 +9,7 @@ This function should only modify configuration layer settings."
     (load pth t)
     (unless (listp k-layers)
       (error "Loaded layers.el but 'k-layers was not set to a list!")))
+  (load (expand-file-name "~/.spacemacs.d/k-private.el") t)
   (setq-default
    ;; Base distribution to use. This is a layer contained in the directory
    ;; `+distribution'. For now available distributions are `spacemacs-base'
@@ -33,6 +34,19 @@ This function should only modify configuration layer settings."
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
+
+   ;; List of configuration layers to load.
+   dotspacemacs-configuration-layers
+   (append
+    '(better-defaults
+      emacs-lisp
+      git
+      helm
+      shell
+      version-control
+      )
+    k-layers
+    (and (boundp 'k-private-layers) k-private-layers))
 
    ;; List of additional packages that will be installed without being wrapped
    ;; in a layer (generally the packages are installed only and should still be
@@ -157,6 +171,13 @@ It should only modify the values of Spacemacs settings."
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
    dotspacemacs-startup-banner nil
+
+   ;; Scale factor controls the scaling (size) of the startup banner. Default
+   ;; value is `auto' for scaling the logo automatically to fit all buffer
+   ;; contents, to a maximum of the full image height and a minimum of 3 line
+   ;; heights. If set to a number (int or float) it is used as a constant
+   ;; scaling factor for the default logo size.
+   dotspacemacs-startup-banner-scale 'auto
 
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
@@ -449,13 +470,15 @@ It should only modify the values of Spacemacs settings."
    ;; performance issues, instead of calculating the frame title by
    ;; `spacemacs/title-prepare' all the time.
    ;; (default "%I@%S")
-   dotspacemacs-frame-title-format "%I@%S"
+   dotspacemacs-frame-title-format "%I@%S [%t]"
 
    ;; Format specification for setting the icon title format
    ;; (default nil - same as frame-title-format)
    dotspacemacs-icon-title-format nil
 
-   ;; Show trailing whitespace (default t)
+   ;; Color highlight trailing whitespace in all prog-mode and text-mode derived
+   ;; modes such as c++-mode, python-mode, emacs-lisp, html-mode, rst-mode etc.
+   ;; (default t)
    dotspacemacs-show-trailing-whitespace t
 
    ;; Delete whitespace while saving buffer. Possible values are `all'

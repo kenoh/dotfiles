@@ -32,8 +32,7 @@
 
 (use-package expand-region :defer t
   :init
-  (which-key-add-keymap-based-replacements k--leader-map
-    "v" '("expand region" . er/expand-region)))
+  (spc-def "v" 'er/expand-region :wk "expand region"))
 
 
 (use-package undo-tree
@@ -49,14 +48,12 @@
   :config
   (use-package smartparens-config :ensure nil  ;; the package name is 'smartparens' and we install it in the parent use-package
     :init
-    (which-key-add-keymap-based-replacements k--leader-map
-      "v" '("expand region" . er/expand-region)
-      ",0" '("slurp>" . sp-forward-slurp-sexp)
-      ",9" '("slurp<" . sp-backward-slurp-sexp)
-      ",)" '("barf>" . sp-forward-barf-sexp)
-      ",(" '("barf<" . sp-backward-barf-sexp)
-      ",r" '("raise" . sp-raise-sexp)
-      ",s" '("split" . sp-split-sexp))
+    (spc-def ",0" 'sp-forward-slurp-sexp :wk "slurp )")
+    (spc-def ",9" 'sp-backward-slurp-sexp :wk "( slurp")
+    (spc-def ",)" 'sp-forward-barf-sexp :wk "barf )")
+    (spc-def ",(" 'sp-backward-barf-sexp :wk "( barf")
+    (spc-def ",r" 'sp-raise-sexp :wk "raise")
+    (spc-def ",s" 'sp-split-sexp :wk "split")
     :config
     (show-smartparens-global-mode t)
     (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
@@ -133,6 +130,7 @@
   (spc-def "jo" 'counsel-outline :wk "outline")
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "(%d/%d) ")
+  (setq counsel-rg-base-command (append counsel-rg-base-command '("--hidden")))  ;; may need fixing since it adds after the search pattern
   :config
   (define-key ivy-minibuffer-map [escape] 'minibuffer-keyboard-quit)
   (define-key swiper-map [escape] 'minibuffer-keyboard-quit)

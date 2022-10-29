@@ -33,7 +33,7 @@
    (unless (package-installed-p package)
        (package-install package)))
 (require 'use-package-ensure)
-;(setq use-package-always-ensure WITH-INTERNETS)
+(setq use-package-always-ensure WITH-INTERNETS)
 
 
 ;;; Packages ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -82,47 +82,69 @@
   :config
   (evil-collection-init))
 
-(progn
-  (evil-set-leader 'normal (kbd "SPC"))
-  (evil-set-leader 'emacs (kbd "M-SPC"))
+(when t
+  "General setup"
+  (use-package general
+	       :defer nil
+	       :demand t
+    :config
+    (defun spc-def (keys &rest rest)
+      (general-define-key
+        :states '(normal visual insert motion)
+        :keymap 'override
+        :prefix "SPC"
+        :non-normal-prefix "M-SPC"
+        keys rest))
+    (require 'general)
+    (general-override-mode 1)
+    (general-define-key
+     :states '(normal visual insert motion)
+     :keymap 'override
+     :prefix "SPC"
+     :non-normal-prefix "M-SPC"
+     "" '(nil :wk "my lieutanant general prefix")
+  
+    "b" '(nil :wk "buffer")
+    "bb" '(switch-to-buffer :wk "switch")
+    "bd" `(,(lambda () (interactive) (kill-buffer (current-buffer))) :wk "delete")
+    "br" '(revert-buffer :wk "revert")
+    "bs" `(,(lambda () (interactive) (switch-to-buffer "*scratch*")) :wk "scratch")
 
-  (defvar k--leader-map (make-sparse-keymap))
-  (define-key evil-normal-state-map (kbd "SPC") k--leader-map)
-  (defmacro spc-def (keys fun &rest rest)
-    `(which-key-add-keymap-based-replacements k--leader-map
-       ,keys (cons ,(cadr rest) ,(if (null fun) `(make-sparse-keymap) fun)))
+    "f" '(nil :wk "file")
+    "ff" '(find-file :wk "find")
+    "fj" '(dired-jump :wk "jump")
+    "fr" '(recentf-open-files :wk "recent")
+    "fs" '(save-buffer :wk "save")
+
+    "g" '(nil :wk "git")
+    "j" '(nil :wk "jump")
+    "o" '(nil :wk "org")
+    "p" '(nil :wk "project")
+
+    "q" '(nil :wk "quit")
+    "qf" '(delete-frame :wk "frame")
+    "qq" '(save-buffers-kill-emacs :wk "quit")
+
+    "s" '(nil :wk "search")
+
+    "t" '(nil :wk "toggle")
+    "tT" '(toggle-truncate-lines :wk "truncate-lines")
+
+    "tw" '(nil :wk "whitespace")
+    "twi" '(indent-tabs-mode :wk "indent-tabs")
+    "two" '(whitespace-toggle-options :wk "ws options")
+    "tww" '(whitespace-mode :wk "ws mode")
+
+    "w" '(nil :wk "window")
+    "w/" '(split-window-right :wk "vsplit")
+    "w-" '(split-window-below :wk "split")
+    "wd" '(delete-window :wk "delete")
+    "wo" '(delete-other-windows :wk "only this")
+    "TAB" '(k--other-buffer :wk "other buffer")
     )
-
-  (which-key-add-keymap-based-replacements
-    k--leader-map
-    "b" `("buffer" . ,(make-sparse-keymap))
-    "bb" '("switch" . switch-to-buffer)
-    "bd" '("delete" . evil-delete-buffer)
-    "br" '("revert" . revert-buffer)
-    "bs" `("scratch" . ,(lambda () (interactive) (switch-to-buffer "*scratch*")))
-    "f" `("file" . ,(make-sparse-keymap))
-    "ff" '("find" . find-file)
-    "fj" '("jump" . dired-jump)
-    "fr" '("recent" . recentf-open-files)
-    "fs" '("save" . save-buffer)
-    "q" `("quit" . ,(make-sparse-keymap))
-    "qf" '("frame" . delete-frame)
-    "qq" '("quit" . save-buffers-kill-emacs)
-    "t" `("toggle" . ,(make-sparse-keymap))
-    "tT" '("truncate-lines" . toggle-truncate-lines)
-    "tw" `("whitespace" . ,(make-sparse-keymap))
-    "twi" '("indent-tabs" . indent-tabs-mode)
-    "two" '("ws options" . whitespace-toggle-options)
-    "tww" '("ws mode" . whitespace-mode)
-    "w" `("window" . ,(make-sparse-keymap))
-    "w/" '("vsplit" . split-window-right)
-    "w-" '("split" . split-window-below)
-    "wd" '("delete" . delete-window)
-    "wo" '("only this" . delete-other-windows)
-    "TAB" '("other buffer" . k--other-buffer)
-     )
-
-  ;; non-leader
-  (evil-define-key 'normal 'global (kbd "<f2>") 'evil-window-next)
+    (general-define-key
+     :states '(normal visual insert motion)
+     :keymap 'override
+     "<f2>" '(evil-window-next :wk "next window"))
+    )
   )
-
