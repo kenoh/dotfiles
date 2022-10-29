@@ -13,10 +13,13 @@ tst() {
 
 tst swaylock
 
-PREV="$(dunstctl is-paused)"
+export PREV="$(dunstctl is-paused)"
 dunstctl set-paused true
 
-swaylock
+{
+	swaylock
 
-dunstctl set-paused "$PREV"
-killall -SIGUSR1 py3status
+	dunstctl set-paused "$PREV"
+	# killall -SIGUSR1 py3status
+} &
+disown
