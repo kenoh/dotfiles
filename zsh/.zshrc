@@ -199,13 +199,17 @@ F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [ -f "$F" ] && source "$F"
 
 # kaychain
-if true && [[ -o interactive ]]; then
+if false; then
+{
+if [[ -o interactive ]]; then
     maybe keychain && keychain --confirm id_rsa id_ed25519
     [ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
     [ -f $HOME/.keychain/$HOSTNAME-sh ] && \
 		    . $HOME/.keychain/$HOSTNAME-sh
     [ -f $HOME/.keychain/$HOSTNAME-sh-gpg ] && \
 		    . $HOME/.keychain/$HOSTNAME-sh-gpg
+fi
+} &
 fi
 
 # kitty terminal emulator
