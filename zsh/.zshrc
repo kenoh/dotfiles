@@ -70,6 +70,12 @@ unsetopt beep notify incappendhistory sharehistory
 setopt appendhistory autocd extendedglob nomatch
 
 
+# title
+DISABLE_AUTO_TITLE="true"
+function precmd () {
+  print -P "\033]0;%~\007"
+}
+
 # history magic
 setopt incappendhistory sharehistory
 

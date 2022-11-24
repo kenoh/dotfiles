@@ -17,7 +17,9 @@ symbol = "aws "
 disabled = true
 
 [cmd_duration]
-show_milliseconds = true
+#show_milliseconds = true
+#show_notifications = true
+format = 'took [$duration]($style) '
 
 [conda]
 disabled = true
