@@ -130,13 +130,14 @@
   (spc-def "jo" 'counsel-outline :wk "outline")
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "(%d/%d) ")
-  (setq counsel-rg-base-command (append counsel-rg-base-command '("--hidden")))  ;; may need fixing since it adds after the search pattern
   :config
+  (setq counsel-rg-base-command (append counsel-rg-base-command '("--hidden")))  ;; may need fixing since it adds after the search pattern
   (define-key ivy-minibuffer-map [escape] 'minibuffer-keyboard-quit)
   (define-key swiper-map [escape] 'minibuffer-keyboard-quit)
   (ivy-mode 1)
   (counsel-mode 1))
 
+(use-package consult)
 
 ;; ivy-prescient does frequency history prioritisation
 (use-package ivy-prescient
@@ -199,6 +200,7 @@
   (setq org-hide-leading-stars t
         org-startup-truncated nil
         org-export-initial-scope 'subtree)
+  (set-face-attribute 'link nil :weight 'normal)
   :config
   (add-hook 'org-mode-hook (lambda () (org-indent-mode 1)))
   (let ((f 'k-private-org))

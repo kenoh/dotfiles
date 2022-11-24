@@ -55,7 +55,8 @@
 (use-package company
   :config
   (setq-default company-backends (cl-remove 'company-dabbrev company-backends)
-                company-global-modes '(prog-mode org-mode))
+                company-global-modes '(prog-mode org-mode)
+                completion-ignore-case t)
   (global-company-mode 1))
 
 

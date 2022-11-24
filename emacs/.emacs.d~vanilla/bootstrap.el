@@ -79,6 +79,8 @@
   (evil-mode 1))
 
 (use-package evil-collection
+  :init
+  (setq evil-collection-outline-bind-tab-p nil)
   :config
   (evil-collection-init))
 

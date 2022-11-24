@@ -12,8 +12,11 @@
 (setq confirm-kill-emacs 'y-or-n-p)
 
 ;; Performance
-(setq gc-cons-threshold 100000000)  ; lsp
+(setq gc-cons-threshold (* 100 1000 1000))  ; lsp
 (setq read-process-output-max (* 1024 1024)) ;; 1mb, also lsp
+
+;; Backups
+(setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
 
 ;; GUI
 (ignore-errors
