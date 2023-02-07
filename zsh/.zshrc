@@ -222,6 +222,7 @@ fi
 if [ "x$TERM" = "xxterm-kitty" ]; then
     kitty + complete setup zsh | source /dev/stdin
     alias d="kitty +kitten diff"
+    alias ssh="TERM=xterm-256color ssh"
 fi
 
 test -f ~/.gita-completion.zsh && source ~/.gita-completion.zsh
