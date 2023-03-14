@@ -1,4 +1,10 @@
 # -*- mode: sh; -*-
+
+
+# DEBUG: profile (also uncomment the zprof at the bottom).
+# zmodload zsh/zprof
+
+
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
 HISTSIZE=99999
@@ -11,81 +17,36 @@ zstyle :compinstall filename "$HOME/.zshrc"
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
-_comp_options+=(globdots) # With hidden files
+
+
+_comp_options+=(globdots) # Complete also hidden files
 zstyle ':completion:alias-expension:*' completer _expand_alias
 
-########################################################################
-# Oh-My-ZSH
-########################################################################
 
-WANNA_PATH="$HOME/Android/Sdk/platform-tools:$HOME/go/bin:$HOME/bin:$HOME/.local/bin:/usr/local/bin"
-case ":$PATH:" in
-    *:"$WANNA_PATH":*)
-	;;
-    *)
-	export PATH="$WANNA_PATH:$PATH"
-esac
-export ZSH=$HOME/.oh-my-zsh
-export LS_COLORS="$(echo "$LS_COLORS" | sed -E 's/:mi=[0-9;]+/:mi=01;37/')"
-ZSH_THEME=""
-COMPLETION_WAITING_DOTS="true"
-CASE_SENSITIVE="false"
-HIST_STAMPS="yyyy-mm-dd"
-plugins=(
-    colorize
-    colored-man-pages
-    dnf
-    docker
-    docker-compose
-    fancy-ctrl-z
-    fasd
-    fzf
-    git
-    git-extras
-    # per-directory-history
-    vagrant
-    z
-)
-source $ZSH/oh-my-zsh.sh
-
-########################################################################
-
-maybe() {
-    which "$1" 1>/dev/null 2>&1
-}
-
-# extend loadpath
-fpath=( ~/.zsh.d "${fpath[@]}" )
-
-# this for https://github.com/sindresorhus/pure
-# fpath+=( "$HOME/.zsh.d/pure" )
-# autoload -U promptinit; promptinit; prompt pure
-
-F=~/.zprofile
-[ -f "$F" ] && source "$F"
-
-unset command_not_found_handler
-
-unsetopt beep notify incappendhistory sharehistory
-setopt appendhistory autocd extendedglob nomatch
+unsetopt beep notify
+setopt incappendhistory appendhistory sharehistory \
+	autocd extendedglob nomatch 
 
 
-# title
-DISABLE_AUTO_TITLE="true"
-function precmd () {
-  print -P "\033]0;%~\007"
-}
+command_not_found_handle() { echo "I don't know what '$1' is." >&2; return 1; }
 
-# history magic
-setopt incappendhistory sharehistory
 
-# local and global history at fingertips
-## local
+export EDITOR=vim
+
+
+## Fix home/end keys
+bindkey '\e[H' beginning-of-line
+bindkey '\e[F' end-of-line 
+bindkey  "^[[3~"  delete-char
+
+
+## local and global history at fingertips
+# local
 bindkey "^[OA" up-line-or-local-history
 bindkey "^P" up-line-or-local-history
 bindkey "^[OB" down-line-or-local-history
 bindkey "^N" down-line-or-local-history
-## global
+# global
 bindkey "^[[1;5A" up-line-or-search
 bindkey "^[[1;5B" down-line-or-search
 
@@ -103,41 +64,53 @@ down-line-or-local-history() {
 zle -N down-line-or-local-history
 
 
-# zle per-directory-history-toggle-history  # we call this since we want different default
+### Aliases
+has() { which "$1" 1>/dev/null 2>&1; }
 
-# colors
-#export TERM=xterm-256color
+## ls
+alias ll='ls -l'
+alias la='ls -la'
+alias lt='ls -ltr'
 
-
-# my editor
-export EDITOR=vim
-
-
-# aliases
-alias zshrc-reload='. ~/.zshrc'
-
-alias vim=nvim
-
-alias e='emacsclient --no-wait -c'
-alias et='emacsclient -t'
-etdiff() { emacsclient -t --eval "(ediff-files \"$1\" \"$2\")"; }
-
+## grep
 alias al='alias | grep'
 alias g='grep'
 alias gi='grep -i'
+
+## diff
+has colordiff \
+    && alias d='colordiff -u' \
+    || alias d='diff -u'
+douts() { # usage: douts BEFORE FST SND [DIFF-OPTS [AFTER]]
+	eval "${DIFFTOOL:-d} $4 <($1 $2 $5) <($1 $3 $5)"; }
+
+## git
+alias ga='git add'
+alias gau='git add -u'
+alias gbvv='git -P branch -vv'
+alias gc='git commit -v'
+alias gc!='git commit --amend -v'
+alias gco='git checkout'
+alias gd='git diff'
+alias gdca='git diff --cached'
+alias gdt='git difftool'
+alias glg='git log'
+alias glgp='git log -p'
+alias gm='git merge'
+alias grb='git rebase'
+alias grv='git remote -v'
+alias gst='git status'
+alias gss='git status -s'
+alias tiga='tig --all'
+gdcommits() {
+	d <(git show "$1") <(git show "$2")
+}
 cdg() {
 	local maybe_path="$(git rev-parse --show-toplevel)"
 	[ $? -eq 0 ] && cd "$maybe_path"
 }
-alias la='ll -a'
-alias lt='ll -tr'
-which colordiff 1>/dev/null 2>&1 \
-    && alias d='colordiff -u' \
-    || alias d='diff -u'
-douts() {
-    eval "${DIFFTOOL:-d} $4 <($1 $2 $5) <($1 $3 $5)"
-}
 
+## systemd
 alias sctl='systemctl --user'
 alias jctl='journalctl --user'
 
@@ -160,71 +133,70 @@ dinspect() {
 }
 alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 alias dip,="docker inspect --format '{{ .NetworkSettings.IPAddress }}' $(dlastid)"
-
-# git
-alias gbvv='git -P branch -vv'
-alias tiga='tig --all'
-gdcommits() {
-	d <(git show "$1") <(git show "$2")
+difname() { docker exec -i "$1" cat /sys/class/net/eth0/ifname; }  # gives id to better identify iface in Wireshark
+,dcrmi() {  # remove image behind a docker compose container
+	docker stop "${1}_1"
+	docker rm "${1}_1"
+	docker rmi "${1}"
 }
 
+## emacs
+alias e='emacsclient --no-wait -c'
+alias et='emacsclient -t'
+etdiff() { emacsclient -t --eval "(ediff-files \"$1\" \"$2\")"; }
 
-# vagrant
-alias vs='vagrant ssh'
-alias vst='vagrant status'
-alias vgs='vagrant global-status --prune'
-alias vup='vagrant up'
-alias vpa='vagrant provision --provision-with=ansible'
 
-alias openssl-cert-print-ascii='openssl x509 -text -noout -in'
 
-ssh-known-hosts-clean() {
-    HOST="$1"
-    test -n "$HOST" || { echo "Provide a hostname as an argument!" ; return 1; }
-    FN=~/.ssh/known_hosts
-    test -f "$FN" || { echo "File $FN not found!" ; return 1; }
-    RE="/^$HOST /d"
-    diff -u <(cat "$FN") <(sed "$RE" "$FN")
-    if read -q "?Remove the above lines from $FN? (y/[n])"; then
-	echo
-	sed -i "$RE" "$FN"
-	echo "Removed."
-    else
-	echo
-	echo "Did nothing."
-    fi
-}
 
+###############################################################################
+# feature rich bariere
+[[ "$(hostname)" = "quincampoix" ]] || return 0
+###############################################################################
+
+
+local WANTED_PATH="$HOME/Android/Sdk/platform-tools:$HOME/go/bin:$HOME/bin:$HOME/.local/bin:/usr/local/bin"
+[[ ":$PATH:" = *:$WANTED_PATH:* ]] || export PATH="$WANTED_PATH:$PATH"
+
+
+## aliases
+alias vim=nvim
 alias xo=xdg-open
 
-# virtualenvwrapper
-maybe virtualenvwrapper.sh && source virtualenvwrapper.sh
-
-# source zsh-syntax-highlighter must be the last line:
-F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-[ -f "$F" ] && source "$F"
-
-# kaychain
-if false; then
-{
-if [[ -o interactive ]]; then
-    maybe keychain && keychain --confirm id_rsa id_ed25519
-    [ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
-    [ -f $HOME/.keychain/$HOSTNAME-sh ] && \
-		    . $HOME/.keychain/$HOSTNAME-sh
-    [ -f $HOME/.keychain/$HOSTNAME-sh-gpg ] && \
-		    . $HOME/.keychain/$HOSTNAME-sh-gpg
-fi
-} &
-fi
 
 # kitty terminal emulator
 if [ "x$TERM" = "xxterm-kitty" ]; then
     kitty + complete setup zsh | source /dev/stdin
-    alias d="kitty +kitten diff"
+    #alias d="kitty +kitten diff"
     alias ssh="TERM=xterm-256color ssh"
 fi
 
-test -f ~/.gita-completion.zsh && source ~/.gita-completion.zsh
 
-eval "$(starship init zsh)"
+## virtualenvwrapper
+has virtualenvwrapper_lazy.sh && source virtualenvwrapper_lazy.sh
+
+
+## nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use # This loads nvm, --no-use to make it more lazy-loaded.
+
+alias node='unalias node ; unalias npm ; nvm use default ; node $@'
+alias npm='unalias node ; unalias npm ; nvm use default ; npm $@'
+
+
+## antidote
+test -d ${ZDOTDIR:-~}/.antidote || git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
+source ${ZDOTDIR:-~}/.antidote/antidote.zsh
+antidote load
+
+
+## zsh-syntax-highlighter (must be basically the last in zshrc)
+F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+[ -f "$F" ] && source "$F"
+
+
+# DEBUG: profile (also enable the modload at the top).
+# zprof
+
+
+## starship
+eval $(starship init zsh)
