@@ -20,8 +20,7 @@ compinit
 
 
 _comp_options+=(globdots) # Complete also hidden files
-zstyle ':completion:alias-expension:*' completer _expand_alias
-
+zstyle ':completion:alias-expansion:*' completer _expand_alias
 
 unsetopt beep notify
 setopt incappendhistory appendhistory sharehistory \
@@ -67,10 +66,18 @@ zle -N down-line-or-local-history
 ### Aliases
 has() { which "$1" 1>/dev/null 2>&1; }
 
+## cd
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+
 ## ls
+alias l='ls'
 alias ll='ls -l'
 alias la='ls -la'
-alias lt='ls -ltr'
+alias lt='ls -latr'
 
 ## grep
 alias al='alias | grep'
@@ -87,6 +94,7 @@ douts() { # usage: douts BEFORE FST SND [DIFF-OPTS [AFTER]]
 ## git
 alias ga='git add'
 alias gau='git add -u'
+alias gb='git branch'
 alias gbvv='git -P branch -vv'
 alias gc='git commit -v'
 alias gc!='git commit --amend -v'
@@ -94,13 +102,23 @@ alias gco='git checkout'
 alias gd='git diff'
 alias gdca='git diff --cached'
 alias gdt='git difftool'
+alias gf='git fetch'
+alias gfa='git fetch --all'
+alias gl='git pull'
 alias glg='git log'
 alias glgp='git log -p'
 alias gm='git merge'
+alias gp='git push'
+alias gpf='git push --force-with-lease'
 alias grb='git rebase'
+alias gr='git remote'
 alias grv='git remote -v'
+alias gsh='git show'
 alias gst='git status'
 alias gss='git status -s'
+alias gsta='git stash'
+alias gstl='git stash list'
+alias gstp='git stash pop'
 alias tiga='tig --all'
 gdcommits() {
 	d <(git show "$1") <(git show "$2")
@@ -133,12 +151,26 @@ dinspect() {
 }
 alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 alias dip,="docker inspect --format '{{ .NetworkSettings.IPAddress }}' $(dlastid)"
-difname() { docker exec -i "$1" cat /sys/class/net/eth0/ifname; }  # gives id to better identify iface in Wireshark
+difname() {  # gives iface
+    ip a | grep "^$(docker exec -i $1 cat /sys/class/net/eth0/iflink)";
+}
+dips() {  # list containers with their IPs
+    docker ps \
+	| awk 'NR>1{ print $1 }' \
+	| xargs docker inspect \
+	  -f '{{$.Name}}{{"\t"}}{{range $i, $e := .NetworkSettings.Networks}}{{print $i ": " $e.IPAddress ", "}}{{end}}' \
+	| column --table -s $'\t' \
+	| sort
+}
+
+## docker compose
 ,dcrmi() {  # remove image behind a docker compose container
 	docker stop "${1}_1"
 	docker rm "${1}_1"
 	docker rmi "${1}"
 }
+alias dc='docker compose'
+
 
 ## emacs
 alias e='emacsclient --no-wait -c'
