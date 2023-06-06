@@ -1,0 +1,2 @@
+unixorn/fzf-zsh-plugin
+#marlonrichert/zsh-autocomplete

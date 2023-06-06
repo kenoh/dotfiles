@@ -17,10 +17,18 @@ set runtimepath+=~/.vim/repos/github.com/Shougo/dein.vim/
 call dein#begin(expand('~/.vim'))
 call dein#add('Shougo/dein.vim')
 call dein#add('tpope/vim-fugitive')
+" ^^^ vim-fugitive:
+" :G<something>
 call dein#add('tpope/vim-commentary')
+" ^^^ vim-commentary:
+" `gc` or `gcc`
 call dein#add('tpope/vim-sleuth')  " automatic buffer variables (indent,...)
 call dein#add('ctrlpvim/ctrlp.vim')
 call dein#add('airblade/vim-gitgutter')
+" ^^^ vim-gitgutter:
+" - jump to hunks: `]c` or `[c` for next or previous
+" - operate by `<Leader>h` and `p`review or `s`tage or `u`ndo
+" - as text object: `ic` or `ac` (so e.g. `yic` to yank the hunk)
 call dein#add('liuchengxu/vim-which-key')
 call dein#add('igankevich/mesonic')  " meson support
 if dein#check_install()

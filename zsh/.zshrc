@@ -33,6 +33,61 @@ command_not_found_handle() { echo "I don't know what '$1' is." >&2; return 1; }
 export EDITOR=vim
 
 
+
+# {{
+# adopted from: https://unix.stackexchange.com/questions/572439/make-ctrl-w-and-ctrl-alt-h-in-zsh-behave-the-same-as-in-bash#594305
+
+# Configures bindings for jumping/deleting full and sub-words, similar to
+# the keybindings in bash.
+
+# Jumping:
+# Alt + B                Backward sub-word
+# Ctrl + Alt + B         Backward full-word
+# Alt + F                Forward sub-word
+# Ctrl + Alt + F         Forward full-word
+
+# Deleting:
+# Ctrl + W               Backward delete full-word
+# Ctrl + Alt + H         Backward delete sub-word
+# Alt + D                Forward delete sub-word
+# Ctrl + Alt + D         Forward delete full-word
+
+# Which characters, besides letters and numbers, that are jumped over by a
+# full-word jump:
+FULLWORDCHARS="*?_-.,[]~=/&:;!#$%^(){}<>'\""
+
+backward-full-word() { WORDCHARS=$FULLWORDCHARS zle .backward-word ; }
+backward-sub-word() { WORDCHARS="" zle .backward-word ; }
+forward-full-word() { WORDCHARS=$FULLWORDCHARS zle .forward-word ; }
+forward-sub-word() { WORDCHARS="" zle .forward-word ; }
+backward-kill-full-word() { WORDCHARS=$FULLWORDCHARS zle .backward-kill-word ; }
+backward-kill-sub-word() { WORDCHARS="" zle .backward-kill-word ; }
+forward-kill-full-word() { WORDCHARS=$FULLWORDCHARS zle .kill-word ; }
+forward-kill-sub-word() { WORDCHARS="" zle .kill-word ; }
+
+zle -N backward-full-word
+zle -N backward-sub-word
+zle -N forward-full-word
+zle -N forward-sub-word
+zle -N backward-kill-full-word
+zle -N backward-kill-sub-word
+zle -N forward-kill-full-word
+zle -N forward-kill-sub-word
+
+# below, ^[ is M-, ^x is C-x, hence ^[^x is C-M-x.
+bindkey "^[b" backward-sub-word
+bindkey "^[^b" backward-full-word
+bindkey "^[f" forward-sub-word
+bindkey "^[^f" forward-full-word
+bindkey "^[^h" backward-kill-sub-word
+bindkey "^w" backward-kill-full-word
+bindkey "^[d" forward-kill-sub-word
+bindkey "^[^d" forward-kill-full-word
+
+# }}
+
+
+
 ## Fix home/end keys
 bindkey '\e[H' beginning-of-line
 bindkey '\e[F' end-of-line 
@@ -88,8 +143,10 @@ alias gi='grep -i'
 has colordiff \
     && alias d='colordiff -u' \
     || alias d='diff -u'
-douts() { # usage: douts BEFORE FST SND [DIFF-OPTS [AFTER]]
-	eval "${DIFFTOOL:-d} $4 <($1 $2 $5) <($1 $3 $5)"; }
+douts() {
+    [ "$#" -lt 3 ] && echo 'usage: douts BEFORE FST SND [DIFF-OPTS [AFTER]]' && return
+    eval "${DIFFTOOL:-d} $4 <($1 $2 $5) <($1 $3 $5)"; 
+}
 
 ## git
 alias ga='git add'
@@ -113,6 +170,7 @@ alias gpf='git push --force-with-lease'
 alias grb='git rebase'
 alias gr='git remote'
 alias grv='git remote -v'
+alias grhh='git reset --hard'
 alias gsh='git show'
 alias gst='git status'
 alias gss='git status -s'
@@ -121,6 +179,7 @@ alias gstl='git stash list'
 alias gstp='git stash pop'
 alias tiga='tig --all'
 gdcommits() {
+	[ "$#" -lt 2 ] && echo 'usage: gdcommits FST SND' && return
 	d <(git show "$1") <(git show "$2")
 }
 cdg() {
@@ -220,6 +279,7 @@ test -d ${ZDOTDIR:-~}/.antidote || git clone --depth=1 https://github.com/mattmc
 source ${ZDOTDIR:-~}/.antidote/antidote.zsh
 antidote load
 
+FZF_ALT_C_COMMAND="fd --type d --strip-cwd-prefix --hidden --exclude .git --exclude node_modules --exclude '.*'"
 
 ## zsh-syntax-highlighter (must be basically the last in zshrc)
 F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -231,4 +291,8 @@ F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 
 ## starship
+function set_win_title(){
+    echo -ne "\033]0; @$(basename "$PWD") \007"
+}
+precmd_functions+=(set_win_title)
 eval $(starship init zsh)

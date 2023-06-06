@@ -117,6 +117,7 @@ symbol = "nodejs "
 
 [memory_usage]
 symbol = "memory "
+disabled = false
 
 [meson]
 symbol = "meson "
