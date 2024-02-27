@@ -5,6 +5,7 @@
 .local
 .local/share
 .local/share/applications
+.emacs.d~vanilla
 .spacemacs.d
 .spacemacs.d/layers
 bin

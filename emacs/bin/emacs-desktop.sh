@@ -10,14 +10,18 @@ msg() {
 }
 
 ec() {
-	/usr/bin/emacsclient -c -n -a "" -F "'(fullscreen . maximize)" $1
+	emacsclient -c -n -a "emacs --daemon --debug-init" -F "'(fullscreen . maximize)" "$@" || msg "Failed to start emacs via $0" && false
 }
 
-ec "$1" || {
-	{
-		emacs --daemon || msg "Could not run emacs daemon" && false
-	} && {
-		ec "$1" || msg "Started an emacs daemon but connecting to it failed" && false
-	}
-}
+ec "$@"
+
+# NOTE: removing the following since the -a param for emacsclient should do the job.
+# ec "$1" || {
+# 	{
+# 		emacs --daemon --debug-init || msg "Could not run emacs daemon" && false
+# 		ec "$1" || msg "Started an emacs daemon but connecting to it failed" && false
+# 	} && {
+# 		ec "$1" || msg "Started an emacs daemon but connecting to it failed" && false
+# 	}
+# }
 
