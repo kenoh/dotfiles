@@ -12,6 +12,7 @@ tst() {
 }
 
 tst swaylock
+tst dunstctl
 
 export PREV="$(dunstctl is-paused)"
 dunstctl set-paused true

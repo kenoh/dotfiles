@@ -7,18 +7,14 @@ bindswitch --locked lid:on output $laptop disable
 
 input * {
   xkb_options "ctrl:nocaps,grp:ctrls_toggle"
-  xkb_layout "us,sk,cz"
-  xkb_variant ",qwerty,qwerty"
+  xkb_layout "us,sk,cz,ru"
+  xkb_variant ",qwerty,qwerty,phonetic_mac"
 }
 input * tap enabled
 
 # look&feel
-font pango: "Liberation Sans Narrow 10"
-
-default_border pixel 3
-default_floating_border pixel
-titlebar_border_thickness 1
-titlebar_padding 3 1
+#font pango: Liberation Sans Narrow, CommitMono Nerd Font 10
+font pango: CommitMono Nerd Font 10
 
 set $cl_high #ffd898
 set $cl_indi #ffd8d8
@@ -26,79 +22,111 @@ set $cl_back #231f20
 set $cl_fore #d9d8d8
 set $cl_urge #ee2e24
 
+set $cl_high #0827f5
+set $cl_indi #ff0081
+set $cl_back #818181
+set $cl_fore #fdffff
+set $cl_urge #ee2e24
+
 # Colors                border   bg       text     indi     childborder
-client.focused          $cl_high $cl_high $cl_back $cl_indi $cl_high
-client.focused_inactive $cl_high $cl_back $cl_fore $cl_back $cl_back
-client.unfocused        $cl_fore $cl_back $cl_fore $cl_back $cl_back
+client.focused          $cl_high $cl_high $cl_fore $cl_indi $cl_high
+client.focused_inactive #008080 #008080 $cl_fore  $cl_back $cl_back
+client.unfocused        #c3c3c3  #818181 #000000 $cl_back $cl_back
 client.urgent           $cl_urge $cl_urge #ffffff  $cl_urge $cl_urge
+
+# border
+default_border pixel 3
+default_floating_border pixel
+titlebar_border_thickness 3
+#titlebar_padding 3 1
+
+# swayfx
+default_dim_inactive 0.3
+# shadows enable
+# shadow_color $cl_highff
+# shadow_blur_radius 6
+titlebar_separator disable
+corner_radius 3
+# layer_effects "panel" "blur enable"
+
+
+# vanilla sway
+hide_edge_borders smart
+gaps outer -3
+gaps inner -3
+smart_gaps on
 
 
 # general
 #set $term tilix --action=app-new-window -e
-set $term terminator
-set $termx foot
+set $term kitty -1
+set $termx kitty
 
 # windows
-for_window [class="."] title_format "<b>%class</b> :: %title [%shell]"
-for_window [app_id="(pavucontrol|nm-connection-manager)"] floating enable
+for_window [class="."] title_format "<b>%class</b> :: %title"
+# for_window [app_id="(pavucontrol|nm-connection-manager)"] floating enable
 for_window [title="Firefox – Sharing Indicator"] floating enable; move scratchpad
 no_focus [title="Firefox – Sharing Indicator"]
 
 # colors in titles
 ## note: there is a bug in Pango such that setting a size for the very first text in the title_format simply does not work. Preceeding it with a space does the trick. Anyway, enlarging the text substantially enlarges the titlebar itself, so no, thanks.
-for_window [class="Emacs"] \
-           title_format "<span foreground='#d060ff' size='larger' weight='heavy'>𝓔</span>  <b>%title</b>"
-for_window [app_id="(firefox)"] \
-           title_format "🦊 <b>%title</b>"
-for_window [app_id="(thunderbird)"] \
-           title_format "🐦 <b>%title</b>"
-for_window [app_id="(tilix)"] \
-           title_format "<span foreground='#90ff90' background='$cl_back'>⌨</span> <b>%title</b>"
-for_window [app_id="(terminator)"] \
-           title_format "💀 <b>%title</b>"
-for_window [class="Code"] \
-           title_format "<span foreground='#0078d7'>𝘾</span> <b>%title</b>"
+set $emacsTitle title_format "<span foreground='#6730f2' size='larger' weight='heavy'></span>  <b>%title</b>"
+for_window [class="Emacs"] $emacsTitle
+for_window [app_id="emacs"] $emacsTitle
+#for_window [app_id="(firefox)"] title_format "🦊 <b>%title</b>"
+for_window [app_id="(firefox)"] title_format "<span color='#99302C'></span> <b>%title</b>"
+#for_window [app_id="(thunderbird)"] title_format "🐦 <b>%title</b>"
+for_window [app_id="(thunderbird)"] title_format "<span color='#2573ae'></span> <b>%title</b>"
+#for_window [app_id="(tilix|terminator|kitty)"] title_format "💀 <b>%title</b>"
+for_window [app_id="(tilix|terminator|kitty)"] title_format " <b>%title</b>"
+for_window [class="Code"] title_format "<span foreground='#0078d7'>𝘾</span> <b>%title</b>"
+
+for_window [class="."] title_format "%title [%shell]"
 
 # containers
 for_window [floating] border csd
+for_window [app_id="yad"] floating enable;
 
 # general
 floating_modifier $mod
 workspace_layout tabbed
-hide_edge_borders smart
-gaps inner 3
-gaps outer -3
 # do not go outside of a container when changing focus (thus, one needs to use focus child/parent)
 # ... in effect won't wrap between screens :)
 focus_wrapping yes
 focus_on_window_activation focus
 
 # mouse
-#bindsym --border button2 kill
 bindsym --border button1 nop "I simply cannot strafe the Firefox tabs properly..."
 
 # BUG: these two lines, otherwise Shift+C would be interpreted literally (https://github.com/swaywm/sway/issues/4975)
 bindsym $mod+Shift+c nop
 bindsym --release $mod+Shift+c reload
 
-bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec " -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # containers
 bindsym $mod+Shift+q kill
 
 bindsym $mod+h focus left
+bindsym $mod+left focus left
 bindsym $mod+j focus down
+bindsym $mod+down focus down
 bindsym $mod+k focus up
+bindsym $mod+up focus up
 bindsym $mod+l focus right
+bindsym $mod+right focus right
 
 bindsym $mod+q focus parent
 bindsym $mod+a focus child
 
 bindsym $mod+Shift+h move left
+bindsym $mod+Shift+left move left
 bindsym $mod+Shift+j move down
+bindsym $mod+Shift+down move down
 bindsym $mod+Shift+k move up
+bindsym $mod+Shift+up move up
 bindsym $mod+Shift+l move right
+bindsym $mod+Shift+right move right
 
 bindsym $mod+v split toggle
 
@@ -111,54 +139,34 @@ bindsym $mod+e layout toggle split
 bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
-bindsym $mod+Shift+Up sticky toggle
+bindsym $mod+Shift+Prior sticky toggle
 
 # scratchpad
 bindsym $mod+grave scratchpad show
 bindsym $mod+Shift+grave move scratchpad
 
-set $ws0 number 0 0:〇
-set $ws1 number 1 1:一
-set $ws2 number 2 2:二
-set $ws3 number 3 3:三
-set $ws4 number 4 4:四
-set $ws5 number 5 5:五
-set $ws6 number 6 6:六
-set $ws7 number 7 7:七
-set $ws8 number 8 8:八
-set $ws9 number 9 9:九
-set $wsf0 number 10 10:°〇
-set $wsf1 number 11 11:°一
-set $wsf2 number 12 12:°二
-set $wsf3 number 13 13:°三
-set $wsf4 number 14 14:°四
-set $wsf5 number 15 15:°五
-set $wsf6 number 16 16:°六
-set $wsf7 number 17 17:°七
-set $wsf8 number 18 18:°八
-set $wsf9 number 19 19:°九
+set $ws0 number 0
+set $ws1 number 1
+set $ws2 number 2
+set $ws3 number 3
+set $ws4 number 4
+set $ws5 number 5
+set $ws6 number 6
+set $ws7 number 7
+set $ws8 number 8
+set $ws9 number 9
 
 
-bindsym $mod+0 workspace $wsf0 ; workspace $ws0
-bindsym $mod+1 workspace $wsf1 ; workspace $ws1
-bindsym $mod+2 workspace $wsf2 ; workspace $ws2
-bindsym $mod+3 workspace $wsf3 ; workspace $ws3
-bindsym $mod+4 workspace $wsf4 ; workspace $ws4
-bindsym $mod+5 workspace $wsf5 ; workspace $ws5
-bindsym $mod+6 workspace $wsf6 ; workspace $ws6
-bindsym $mod+7 workspace $wsf7 ; workspace $ws7
-bindsym $mod+8 workspace $wsf8 ; workspace $ws8
-bindsym $mod+9 workspace $wsf9 ; workspace $ws9
-bindsym $mod+F10 workspace $ws0 ; workspace $wsf0
-bindsym $mod+F1 workspace $ws1 ; workspace $wsf1
-bindsym $mod+F2 workspace $ws2 ; workspace $wsf2
-bindsym $mod+F3 workspace $ws3 ; workspace $wsf3
-bindsym $mod+F4 workspace $ws4 ; workspace $wsf4
-bindsym $mod+F5 workspace $ws5 ; workspace $wsf5
-bindsym $mod+F6 workspace $ws6 ; workspace $wsf6
-bindsym $mod+F7 workspace $ws7 ; workspace $wsf7
-bindsym $mod+F8 workspace $ws8 ; workspace $wsf8
-bindsym $mod+F9 workspace $ws9 ; workspace $wsf9
+bindsym $mod+0 workspace $ws0
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
 
 # we switch to these so on Sway's startup we get reasonable workspaces
 workspace $ws4
@@ -180,16 +188,6 @@ bindsym $mod+Shift+6 move container to workspace $ws6
 bindsym $mod+Shift+7 move container to workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
-bindsym $mod+Shift+F10 move container to workspace $wsf0
-bindsym $mod+Shift+F1 move container to workspace $wsf1
-bindsym $mod+Shift+F2 move container to workspace $wsf2
-bindsym $mod+Shift+F3 move container to workspace $wsf3
-bindsym $mod+Shift+F4 move container to workspace $wsf4
-bindsym $mod+Shift+F5 move container to workspace $wsf5
-bindsym $mod+Shift+F6 move container to workspace $wsf6
-bindsym $mod+Shift+F7 move container to workspace $wsf7
-bindsym $mod+Shift+F8 move container to workspace $wsf8
-bindsym $mod+Shift+F9 move container to workspace $wsf9
 
 # screens
 bindsym $mod+Shift+Control+h move workspace to output left
@@ -210,38 +208,62 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
+set $mode_mouse "On titlebar w/ mouse: L:cancel M:kill R:cancel"
+mode $mode_mouse {
+     bindsym --border button1 mode "default"
+     bindsym --border button2 kill , mode "default"
+     bindsym --border button3 mode "default"
+     bindsym q mode "default"
+}
+bindsym --border button2 mode $mode_mouse
+
 bar {
+  # status_command i3status-rs ~/.config/i3status-rust.config.toml
   swaybar_command waybar
+  # color {
+  #   background #000000AA
+  #   }
 }
 
-set $mymenu <span font_style='normal'><b>B</b>lueman . . <b>E</b>macs . . <b>F</b>irefox . . <b>N</b>mtui . . <b>P</b>aVuControl . . <b>T</b>hunderbird</span>
+set $mymenu <span font_style='normal'><u>b</u>lueman,  <u>e</u>macs,  <u>f</u>irefox,  <u>n</u>mtui,  <u>p</u>avucontrol,  t<u>h</u>unar,  <u>t</u>hunderbird</span>
 mode --pango_markup "$mymenu" {
-	bindsym b exec blueman-manager ; mode "default"
-	bindsym e exec emacsclient --no-wait -c || notify-send 'emacsclient' 'problem running it' ; mode "default"
-	bindsym f exec firefox ; mode "default"
-	bindsym Shift+f exec firefox -P testing ; mode "default"
-	bindsym n exec $termx sh -c 'sleep 0.1 && nmtui' ; mode "default"
-	bindsym p exec $termx sh -c 'pavucontrol' ; mode "default"
-	bindsym t exec thunderbird-wayland ; mode "default"
-	bindsym Escape mode "default"
+    bindsym b exec blueman-manager ; mode "default"
+    bindsym e exec emacsclient --no-wait -c || notify-send 'emacsclient' 'problem running it' ; mode "default"
+    bindsym f exec firefox ; mode "default"
+    bindsym Shift+f exec firefox -P testing ; mode "default"
+    bindsym k exec kanshictl reload ; mode "default"
+    bindsym n exec $termx sh -c 'sleep 0.1 && nmtui' ; mode "default"
+    bindsym p exec $termx sh -c 'pavucontrol' ; mode "default"
+    bindsym h exec thunar ; mode "default"
+    bindsym t exec thunderbird-wayland ; mode "default"
+    bindsym Escape mode "default"
+    bindsym q mode "default"
 }
 bindsym $mod+x mode "$mymenu"
 
 
-set $grimshot <span font_style='normal'><b>Screenshot</b> . . <b>S</b>election . . <b>A</b>ctive win. . . select <b>W</b>in. . . active <b>O</b>utput . . <b>E</b>verything</span>
+set $grimshot <span font_style='normal'><u>Screenshot</u>:  <u>s</u>election,  <u>a</u>ctive win,  select <u>w</u>in,  active <u>o</u>utput,  <u>e</u>verything   |   <u>c</u>olor picker</span>
 mode --pango_markup "$grimshot" {
-	bindsym s exec grimshot copy area ; mode "default"
-	bindsym a exec grimshot copy active ; mode "default"
-	bindsym w exec grimshot copy window ; mode "default"
-	bindsym o exec grimshot copy output ; mode "default"
-	bindsym e exec grimshot copy screen ; mode "default"
-	bindsym Escape mode "default"
+    bindsym s exec grimshot copy area ; mode "default"
+    bindsym a exec grimshot copy active ; mode "default"
+    bindsym w exec grimshot copy window ; mode "default"
+    bindsym o exec grimshot copy output ; mode "default"
+    bindsym e exec grimshot copy screen ; mode "default"
+    bindsym c exec grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | yad --text-info --width 480 ; mode "default"
+    bindsym Escape mode "default"
+    bindsym q mode "default"
 }
 bindsym $mod+Shift+s mode "$grimshot"
 
 
 # don't lock when in fullscreen mode
 for_window [shell=".*"] inhibit_idle fullscreen
+
+
+# bg
+# swaybg_command swaybg -m fill -i /usr/share/wallpapers/Next/contents/images_dark/3840x2160.png
+swaybg_command swaybg -m fill -i ~/Pictures/wallpapers/karsten-wurth-inf1783-127612-unsplash.jpg
+
 
 set $lock ~/bin/lock
 set $barup && killall -SIGUSR1 py3status
@@ -254,13 +276,17 @@ bindsym $mod+shift+d exec PATH="$HOME/bin:$PATH" bemenu-run $bemenu_params
 bindsym $mod+Return exec $term
 bindsym $mod+Shift+Return exec gnome-terminal || alacrity || kitty || urxvt || xterm
 bindsym $mod+Escape exec $lock
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume "$(pactl get-default-sink)" -5% $barup
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume "$(pactl get-default-sink)" +5% $barup
+bindsym $mod+Control+Escape exec systemctl suspend
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume "$(pactl get-default-sink)" -6dB $barup
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume "$(pactl get-default-sink)" +6dB $barup
 bindsym XF86AudioMute exec pactl set-sink-mute "$(pactl get-default-sink)" toggle $barup
+bindsym $mod+XF86AudioMute exec pactl set-source-mute "$(pactl get-default-source)" toggle $barup
 
 # brightness
 bindsym --locked XF86MonBrightnessUp exec light -A 10 $barup
 bindsym --locked XF86MonBrightnessDown exec light -U 10 && light -A 1 $barup
+
+bindsym --locked $mod+Shift+Control+k exec kanshictl reload
 
 # playerctl
 bindsym XF86AudioPlay exec playerctl -p spotify play-pause $barup
@@ -277,21 +303,28 @@ bindsym $mod+F11 focus output left
 bindsym $mod+F12 focus output right
 
 # fullscreen in a window
-bindsym $mod+y fullscreen disable; floating enable; resize set 600 400; sticky enable
+# bindsym $mod+y fullscreen disable; floating enable; resize set 600 400; sticky enable
+
 
 exec $recur swayidle -w \
-          timeout 300 '$lock' \
-          timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-          before-sleep '$lock' \
-	  lock '$lock'
+    timeout 300 '$lock' \
+    timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+    before-sleep '$lock' \
+    lock '$lock'
 
 set $wrap ~/bin/sway-exec-wrapper.sh
 set $recur ~/bin/recur.sh
 # startup
-exec_always systemctl --user import-environment WAYLAND_DISPLAY SWAYSOCK # for mako, kanshi
-exec_always stat $wrap || swaynag -m '$wrap does not exist! Check your config and binaries.'
-exec $wrap emacs --daemon
-exec $recur kanshi
-exec_always pkill kanshi
-exec $recur gammastep -l 49:16 -t 6500:2600
+# Below:
+#   XDG_CURRENT_DESKTOP for xdg-desktop-portal to run the correct -wlr variant.
+exec systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots
+exec systemctl --user restart xdg-desktop-portal
+exec systemctl --user import-environment WAYLAND_DISPLAY SWAYSOCK
+exec emacs --daemon
+exec kanshi
+exec_always kanshictl reload
+exec gammastep -l 49:16 -t 6500:2600
+exec dunst
+exec workstyle
+exec nm-applet
 exec ~/bin/startup.sh

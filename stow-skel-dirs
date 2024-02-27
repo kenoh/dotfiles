@@ -5,6 +5,8 @@
 .local
 .local/share
 .local/share/applications
+.local/share/bash-completion
+.local/share/bash-completion/completions
 .emacs.d~vanilla
 .spacemacs.d
 .spacemacs.d/layers

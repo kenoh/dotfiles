@@ -1,0 +1,24 @@
+log() {
+		echo "$@" >> /tmp/lll
+}
+_kanshictl()
+{
+    local prev=${COMP_WORDS[COMP_CWORD-1]}
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    # echo "">/tmp/lll
+    # log "words: ${COMP_WORDS[@]}"
+    # log "cword: ${COMP_CWORD}"
+    # log "prev: $prev"
+    # log "cur: $cur"
+	case "$prev" in
+        kanshictl)
+            COMPREPLY=( $(compgen -W "reload switch" -- $cur) )
+            ;;
+        switch)
+            local opts=$(sed -nE 's/^\s*profile\s+(\w+).*/\1/p' ~/.config/kanshi/config)
+            COMPREPLY=( $(compgen -W "$opts" -- $cur) )
+            ;;
+    esac
+}
+
+complete -F _kanshictl kanshictl

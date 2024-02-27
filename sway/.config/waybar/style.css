@@ -1,10 +1,39 @@
+@define-color module rgba(0,0,0,0.7);
+@define-color cl_high #0827f5;
+
+
 * {
     border: none;
-    border-radius: 0;
-    font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    font-family: CommitMono, Terminus, CommitMono Nerd Font, FontAwesome, sans-serif;
     font-size: 12px;
     min-height: 0;
-    padding: 0 3px 0 3px;
+    background: rgba(0,0,0,0.0);
+}
+
+tooltip {
+    background: rgba(0,0,0,1.0);
+}
+window {
+    color: #aaa;
+}
+
+/* We provide spacing (as usually provided by waybar's config option) manually/fake it. */
+/* This is since we want to have some widget close together, however we cannot pick a particular one */
+/* just by a selector in CSS (and I won't be using :nth selector!). */
+/* To set explicit "merging" we set margin to zero where necessary. */
+widget {
+    background: rgba(0,0,0,0.0);
+}
+label, widget > box {
+    border-radius: 2px 2px;
+    background: @module;
+    padding: 0px 5px 0px 5px;  /* inside spacing */
+    margin: 1px 2px 0px 1px;  /* "widget" spacing */
+}
+
+
+sup, sub {
+    font-size: 200%;
 }
 
 .warning {
@@ -14,73 +43,77 @@
     color: red;
 }
 
-window#waybar {
-    background: #000;
-    color: #aaa;
-}
-
-#window {
-    font-weight: normal;
-    font-family: "Ubuntu";
-}
-
 #language {
-    min-width: 25px;
+    min-width: 20px;
 }
 
-#workspaces button {
-    border-radius: 5;
+
+box#workspaces {
+    background: @module;
+}
+#workspaces label {
     background: transparent;
-    color: #aaa;
 }
-#workspaces button.focused {
-    background: #ffd898;
-    color: #000;
+#workspaces button {
+    color: #aaa;
+    text-shadow: #333 0px 0px 2px;
+}
+#workspaces button.visible {
+    background: #008080;
+    color: #fdffff;
+}
+#workspaces button.focused, #workspaces button.active {
+    background: @cl_high;
+    /* background: linear-gradient(90deg, @cl_high 24px, #ccc 32px); /\* cause we have some icons on the right *\/ */
+    color: #fdffff;
+    text-shadow: #fff 0px 0px 2px;
 }
 
-#mode {
-    border-radius: 5;
+
+#mode, #submap {
     background: #a3f;
     color: #fff;
-    border-bottom: 3px solid white;
+    border-bottom: 2px solid white;
+}
+
+
+#cpu {
+    margin-right: 0;
+}
+#memory {
+    margin-left: 0;
+}
+
+
+#disk.root {
+    margin-right: 0;
+}
+#disk.tmp {
+    margin-left: 0;
+    margin-right: 0;
+}
+#disk.home {
+    margin-left: 0;
 }
 
 #clock {
     font-weight: bold;
-}
-
-#battery {
-}
-
-#battery icon {
-    color: red;
-}
-
-#battery.charging {
-}
-
-@keyframes blink {
-    to {
-        background-color: #ffffff;
-        color: black;
-    }
+    color: white;
 }
 
 #battery.warning:not(.charging) {
-    color: white;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
+    background: red;
 }
 
 #network.disconnected {
     background: #f53c3c;
 }
 
-#pulseaudio {
-}
 
-#pulseaudio.muted {
+#tray menu {
+    background: #c3c3c3;
+    color: #000;
+}
+#tray menuitem label {
+    background: inherit;
 }
