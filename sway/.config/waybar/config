@@ -200,7 +200,7 @@
 
     "custom/gammastep": {
         "format": "gs",
-        "on-click": "yad --button=\"cold: 6500\" --button=\"hot: 2600\" --button=\"dim: 0.6\" --button=\"undim: 1.0\" --use-interp='sh -c \"redshift-ctl.sh%s\"' --button=\"kill \\$YAD_PID\" --use-interp='sh -c \"%s\"'"
+        "on-click": "redshift-ctl-yad.sh"
     },
     "group/gammastep": {
         "modules": [
