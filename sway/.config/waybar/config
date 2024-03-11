@@ -98,7 +98,8 @@
             "format": {
                 "today": "<span bgcolor='white' color='black'><b><u>{}</u></b></span>"
             }
-        }
+        }// ,
+        ,"format": "{:<sup>%b %e</sup> %H:%M}"
         // "format-alt": "{:%Y-%m-%d}"
     },
     "cpu": {
@@ -121,7 +122,7 @@
     },
     "disk#root": {
         "path": "/",
-        "format": "<sup>/</sup>{free}",
+        "format": "<sup>/</sup><sub>{free}</sub>",
         "states": {
             "warning": 80,
             "critical": 90
@@ -129,7 +130,7 @@
     },
     "disk#tmp": {
         "path": "/tmp",
-        "format": "<sup>tmp</sup>{free}",
+        "format": "<sup>tmp</sup><sub>{free}</sub>",
         "states": {
             "warning": 40,
             "critical": 60
@@ -137,7 +138,7 @@
     },
     "disk#home": {
         "path": "/home",
-        "format": "<sup>~</sup>{free}",
+        "format": "<sup>~</sup><sub>{free}</sub>",
         "states": {
             "warning": 90,
             "critical": 95

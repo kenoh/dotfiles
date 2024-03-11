@@ -48,26 +48,53 @@ sup, sub {
 }
 
 
+@define-color w1 #9f5f5f;
+@define-color w1v #bf3f3f;
+@define-color w1vf #df1f1f;
+@define-color w2 #9f7f5f;
+@define-color w2v #bf7f3f;
+@define-color w2vf #df7f1f;
+@define-color w3 #5f9f5f;
+@define-color w3v #3fbf3f;
+@define-color w3vf #1fdf1f;
+@define-color w4 #5f9f9f;
+@define-color w4v #3fbfbf;
+@define-color w4vf #1fdfdf;
 box#workspaces {
-    background: @module;
+    /* background: @module; */
+    background: none;
 }
 #workspaces label {
     background: transparent;
 }
 #workspaces button {
-    color: #aaa;
-    text-shadow: #333 0px 0px 2px;
+    color: #ccc;
+    text-shadow: #000 0px 0px 2px;
+	box-shadow: rgba(0,0,0,1) 0px 0px 3px inset;
 }
 #workspaces button.visible {
     background: #008080;
-    color: #fdffff;
+    color: #fff;
+	box-shadow: rgba(0,0,0,1) 0px 0px 2px inset;
 }
 #workspaces button.focused, #workspaces button.active {
     background: @cl_high;
     /* background: linear-gradient(90deg, @cl_high 24px, #ccc 32px); /\* cause we have some icons on the right *\/ */
-    color: #fdffff;
-    text-shadow: #fff 0px 0px 2px;
+    color: #fff;
+    text-shadow: #000 0px 0px 2px;
 }
+box#workspaces > button#sway-workspace-1 { background-color: @w1;}
+box#workspaces > button#sway-workspace-1.visible { background-color: @w1v;}
+box#workspaces > button#sway-workspace-1.visible.focused { background-color: @w1vf;}
+box#workspaces > button#sway-workspace-2 { background-color: @w2;}
+box#workspaces > button#sway-workspace-2.visible { background-color: @w2v;}
+box#workspaces > button#sway-workspace-2.visible.focused { background-color: @w2vf;}
+box#workspaces > button#sway-workspace-3 { background-color: @w3;}
+box#workspaces > button#sway-workspace-3.visible { background-color: @w3v;}
+box#workspaces > button#sway-workspace-3.visible.focused { background-color: @w3vf;}
+box#workspaces > button#sway-workspace-4 { background-color: @w4;}
+box#workspaces > button#sway-workspace-4.visible { background-color: @w4v;}
+box#workspaces > button#sway-workspace-4.visible.focused { background-color: @w4vf;}
 
 
 #mode, #submap {
