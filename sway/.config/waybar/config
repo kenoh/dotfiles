@@ -15,7 +15,7 @@
         "custom/media"
     ],
     "modules-center": [
-        "sway/window"
+        //"sway/window"
         // "hyprland/window"
     ],
     "modules-right": [
