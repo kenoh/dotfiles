@@ -99,7 +99,7 @@
                 "today": "<span bgcolor='white' color='black'><b><u>{}</u></b></span>"
             }
         }// ,
-        ,"format": "{:<sup>%b %e</sup> %H:%M}"
+        ,"format": "<sup>{:%b %e</sup> %H:%M}"
         // "format-alt": "{:%Y-%m-%d}"
     },
     "cpu": {
