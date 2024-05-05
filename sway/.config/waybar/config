@@ -109,7 +109,8 @@
 		"critical": 85
 	},
         "tooltip": true,
-        "on-click": "kitty htop -s PERCENT_CPU"
+        "on-click": "kitty htop -s PERCENT_CPU",
+        "interval": 2
     },
     "memory": {
         "format": "<markup><sup>m</sup>{}<sup>%</sup></markup>",
@@ -118,7 +119,8 @@
             "critical": 85
     	},
         "tooltip": true,
-        "on-click": "kitty htop -s PERCENT_MEM"
+        "on-click": "kitty htop -s PERCENT_MEM",
+        "interval": 2
     },
     "disk#root": {
         "path": "/",
