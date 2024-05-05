@@ -80,8 +80,8 @@
     "idle_inhibitor": {
         "format": "{icon} ",
         "format-icons": {
-            "activated": "<span foreground='red'></span>",
-            "deactivated": ""
+            "activated": "<span foreground='red'>KEPT AWAKE</span>",
+            "deactivated": "ss"
         }
     },
     "tray": {
@@ -179,19 +179,10 @@
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
     "pulseaudio": {
-        "format": "{icon} <span color='white'><b>{volume}</b></span>% / {format_source}",
-        "format-muted": "<span color='yellow'>󰝟</span> / {format_source}",
-        "format-source": "<span color='red'> {volume}%</span>",
-        "format-source-muted": "",
-        "format-icons": {
-            "headphone": "\uf025",
-            "hands-free": "\uf590",
-            "headset": "\uf590",
-            "phone": "\uf095",
-            "portable": "\uf095",
-            "car": "\uf1b9",
-            "default": ["\uf027", "\uf028"]
-        },
+        "format": "&lt;- <span color='white'><b>{volume}</b></span>% / {format_source}",
+        "format-muted": "<span color='yellow'>&lt;-X</span> / {format_source}",
+        "format-source": "<span color='red'>-gt; {volume}%</span>",
+        "format-source-muted": "-&gt;X",
         "scroll-step": 1,
         "on-click": "pavucontrol",
         "on-click-middle": "pactl set-sink-mute \"$(pactl get-default-sink)\" toggle",
