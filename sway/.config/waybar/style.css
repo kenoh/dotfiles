@@ -1,20 +1,31 @@
 @define-color module rgba(0,0,0,0.7);
+@define-color modulefg #aaa;
 @define-color cl_high #0827f5;
 
 
 * {
     border: none;
-    font-family: CommitMono, Terminus, CommitMono Nerd Font, FontAwesome, sans-serif;
-    font-size: 12px;
+    font-family: Terminus, CommitMono Nerd Font, FontAwesome, sans-serif;
+    font-size: 14px;
     min-height: 0;
     background: rgba(0,0,0,0.0);
+}
+
+.bottom {
+    background: black;
+	box-shadow: @modulefg 0px 0px 0px 0px inset;
+    padding: 1px;
+    margin: 1px;
 }
 
 tooltip {
     background: rgba(0,0,0,1.0);
 }
+tooltip label {
+    color: #ccc;
+}
 window {
-    color: #aaa;
+    color: @modulefg;
 }
 
 /* We provide spacing (as usually provided by waybar's config option) manually/fake it. */
@@ -25,16 +36,16 @@ widget {
     background: rgba(0,0,0,0.0);
 }
 label, widget > box {
-    border-radius: 2px 2px;
-    background: @module;
-    padding: 0px 5px 0px 5px;  /* inside spacing */
-    margin: 1px 2px 0px 1px;  /* "widget" spacing */
+    /* border-radius: 2px 2px; */
+    /* background: @module; */
+    /* padding: 0px 5px 0px 5px;  /\* inside spacing *\/ */
+    /* margin: 1px 2px 0px 1px;  /\* "widget" spacing *\/ */
+}
+label, box, widget, button {
+    margin: 0px 3px 0px 3px;
+    padding: 0px 2px 0px 2px;
 }
 
-
-sup, sub {
-    font-size: 200%;
-}
 
 .warning {
     color: yellow;
@@ -44,7 +55,11 @@ sup, sub {
 }
 
 #language {
-    min-width: 20px;
+    min-width: 2em;
+}
+#language:not(.us) {
+    background: aqua;
+    color: black;
 }
 
 
@@ -62,39 +77,51 @@ sup, sub {
 @define-color w4vf #1fdfdf;
 box#workspaces {
     /* background: @module; */
-    background: none;
+    /* background: none; */
 }
 #workspaces label {
-    background: transparent;
+    /* background: transparent; */
+}
+#workspaces button.urgent {
+    background: red;
+    color: white;
 }
 #workspaces button {
     color: #ccc;
-    text-shadow: #000 0px 0px 2px;
-	box-shadow: rgba(0,0,0,1) 0px 0px 3px inset;
+    background: #555;
+    border-color: white black black white ;
+    border-width: 2px;
+    border-style: ridge;
+    border-radius: 0px;
+    /* border: 1px 2px 3px 4px inset; */
+    /* text-shadow: #000 0px 0px 2px; */
+	/* box-shadow: rgba(0,0,0,1) 0px 0px 3px inset; */
+    /* margin-right: 2px; */
 }
 #workspaces button.visible {
     background: #008080;
-    color: #fff;
-	box-shadow: rgba(0,0,0,1) 0px 0px 2px inset;
+    /* color: #fff; */
+	/* box-shadow: rgba(0,0,0,1) 0px 0px 2px inset; */
 }
 #workspaces button.focused, #workspaces button.active {
     background: @cl_high;
-    /* background: linear-gradient(90deg, @cl_high 24px, #ccc 32px); /\* cause we have some icons on the right *\/ */
     color: #fff;
-    text-shadow: #000 0px 0px 2px;
+    /* /\* background: linear-gradient(90deg, @cl_high 24px, #ccc 32px); /\\* cause we have some icons on the right *\\/ *\/ */
+    /* color: #fff; */
+    /* text-shadow: #000 0px 0px 2px; */
 }
-box#workspaces > button#sway-workspace-1 { background-color: @w1;}
-box#workspaces > button#sway-workspace-1.visible { background-color: @w1v;}
-box#workspaces > button#sway-workspace-1.visible.focused { background-color: @w1vf;}
-box#workspaces > button#sway-workspace-2 { background-color: @w2;}
-box#workspaces > button#sway-workspace-2.visible { background-color: @w2v;}
-box#workspaces > button#sway-workspace-2.visible.focused { background-color: @w2vf;}
-box#workspaces > button#sway-workspace-3 { background-color: @w3;}
-box#workspaces > button#sway-workspace-3.visible { background-color: @w3v;}
-box#workspaces > button#sway-workspace-3.visible.focused { background-color: @w3vf;}
-box#workspaces > button#sway-workspace-4 { background-color: @w4;}
-box#workspaces > button#sway-workspace-4.visible { background-color: @w4v;}
-box#workspaces > button#sway-workspace-4.visible.focused { background-color: @w4vf;}
+/* box#workspaces > button#sway-workspace-1 { background-color: @w1;} */
+/* box#workspaces > button#sway-workspace-1.visible { background-color: @w1v;} */
+/* box#workspaces > button#sway-workspace-1.visible.focused { background-color: @w1vf;} */
+/* box#workspaces > button#sway-workspace-2 { background-color: @w2;} */
+/* box#workspaces > button#sway-workspace-2.visible { background-color: @w2v;} */
+/* box#workspaces > button#sway-workspace-2.visible.focused { background-color: @w2vf;} */
+/* box#workspaces > button#sway-workspace-3 { background-color: @w3;} */
+/* box#workspaces > button#sway-workspace-3.visible { background-color: @w3v;} */
+/* box#workspaces > button#sway-workspace-3.visible.focused { background-color: @w3vf;} */
+/* box#workspaces > button#sway-workspace-4 { background-color: @w4;} */
+/* box#workspaces > button#sway-workspace-4.visible { background-color: @w4v;} */
+/* box#workspaces > button#sway-workspace-4.visible.focused { background-color: @w4vf;} */
 
 
 #mode, #submap {
@@ -124,18 +151,37 @@ box#workspaces > button#sway-workspace-4.visible.focused { background-color: @w4
 }
 
 #clock {
-    font-weight: bold;
+    /* font-weight: bold; */
     color: white;
 }
 
-#battery.warning:not(.charging) {
+ #battery.not-charging{
+    background: blue;
+    color: white;
+}
+#battery.charging {
+    color: orange;
+}
+#battery.discharging {
+    background: orange;
+    color: black;
+}
+#battery.critical {
     background: red;
+    color: white;
 }
 
 #network.disconnected {
-    background: #f53c3c;
+    color: pink;
+}
+#network.linked {
+    color: red;
 }
 
+
+#tray image {
+    -gtk-icon-shadow: 1px 1px white;
+}
 
 #tray menu {
     background: #c3c3c3;

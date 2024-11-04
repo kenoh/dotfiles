@@ -9,21 +9,25 @@
     "reload_style_on_change": true,
     "modules-left": [
         "sway/workspaces",
-        // "hyprland/workspaces",
+        "sway/scratchpad",
         "sway/mode",
+        // "hyprland/workspaces",
         // "hyprland/submap",
         "custom/media"
     ],
     "modules-center": [
         //"sway/window"
         // "hyprland/window"
+        "custom/cava"
     ],
     "modules-right": [
         "systemd-failed-units",
+        "privacy",
         "idle_inhibitor",
         "pulseaudio",
         "wireplumber",
-        "network",
+        "network#eth0",
+        "network#wlan0",
         "cpu",
         "memory",
         "disk#root",
@@ -33,9 +37,10 @@
         "sway/language",
         // "hyprland/language",
         // "group/gammastep",
-        "custom/gammastep",
-        "battery",
-        // "battery#bat2",
+        "custom/wlsunset",
+        "battery#bat0",
+        "battery#bat1",
+        "clock#date",
         "clock",
         "tray"
     ],
@@ -44,39 +49,20 @@
     },
     "sway/language": {
         "format": "{short}",
+        "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
         "states": {
             "warning": "us"
         }
     },
     "sway/workspaces": {
-        // "smooth-scrolling-threshold": <double>,
         "format": "{icon}",
-        "enable-bar-scroll": false
+        "enable-bar-scroll": true
     },
+
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>"
     },
-    "hyprland/workspaces": {
-        "format": "{icon} {windows}",
-        "format-window-separator": " ",
-        "window-rewrite": {
-            "class<firefox>": "<span color='#FF9500'></span>",
-            "class<firefox-wayland>": "<span color='#FF9500'></span>",
-            "class<kitty>": "",
-            "class<thunderbird>": "<span color='#2573ae'></span>",
-            "class<thunderbird-wayland>": "<span color='#2573ae'></span>",
-            "class<Emacs>": "<span color='#6730f2'></span>",
-        },
-        "on-scroll-up": "hyprctl dispatch workspace e-1",
-        "on-scroll-down": "hyprctl dispatch workspace e+1",
-        "show-special": true
-    },
-    "hyprland/language": {
-        "format-en": "en",
-        "format-cs": "<span bgcolor='red' color='white'>CZ</span>",
-        "format-sk": "<span bgcolor='red' color='white'>SK</span>",
-    },
-    
+
     "idle_inhibitor": {
         "format": "{icon} ",
         "format-icons": {
@@ -84,10 +70,12 @@
             "deactivated": "ss"
         }
     },
+
     "tray": {
         // "icon-size": 21,
         "spacing": 3
     },
+
     "clock": {
         // "timezone": "America/New_York",
         "tooltip-format": "<tt>{calendar}</tt>",
@@ -99,21 +87,26 @@
                 "today": "<span bgcolor='white' color='black'><b><u>{}</u></b></span>"
             }
         }// ,
-        ,"format": "<sup>{:%b %e</sup> %H:%M}"
+        ,"format": "<b>{:%H:%M}</b>"
         // "format-alt": "{:%Y-%m-%d}"
     },
+    "clock#date": {
+        "format": "<span font_scale='small-caps'>{:%b</span>\n<span font_scale='small-caps'><b>%d</b></span>}"
+    },
     "cpu": {
-        "format": "<markup><sup>c</sup>{load}</markup>",
-	"states": {
-		"warning": 50,
-		"critical": 85
-	},
+        // "format": "<markup><sup>c</sup>{load:0.1f}</markup>",
+        "format": "{icon0}{icon1}{icon2}{icon3}{load:0.1f}",
+        "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+        "states": {
+            "warning": 50,
+            "critical": 85
+        },
         "tooltip": true,
         "on-click": "kitty htop -s PERCENT_CPU",
         "interval": 2
     },
     "memory": {
-        "format": "<markup><sup>m</sup>{}<sup>%</sup></markup>",
+        "format": "<markup><sup>m</sup>{}</markup>",
         "states": {
             "warning": 70,
             "critical": 85
@@ -124,7 +117,8 @@
     },
     "disk#root": {
         "path": "/",
-        "format": "<sup>/</sup><sub>{free}</sub>",
+        "format": "<sup>/</sup>{specific_free:0.0f}",
+        "unit": "GiB",
         "states": {
             "warning": 80,
             "critical": 90
@@ -132,7 +126,8 @@
     },
     "disk#tmp": {
         "path": "/tmp",
-        "format": "<sup>tmp</sup><sub>{free}</sub>",
+        "format": "<sup>t</sup>{specific_free:0.0f}",
+        "unit": "GiB",
         "states": {
             "warning": 40,
             "critical": 60
@@ -140,7 +135,8 @@
     },
     "disk#home": {
         "path": "/home",
-        "format": "<sup>~</sup><sub>{free}</sub>",
+        "format": "<sup>~</sup>{specific_free:0.0f}",
+        "unit": "GiB",
         "states": {
             "warning": 90,
             "critical": 95
@@ -148,47 +144,79 @@
     },
     "backlight": {
         // "device": "acpi_video1",
-        "format": "<sup>bri</sup>{percent}<sub>%</sub>"
+        "format": "<sup>bri</sup>{percent}"
     },
-    "battery": {
-        // "bat": "BAT0",
+    "battery#bat0": {
+        "bat": "BAT0",
+        "interval": 2,
         "states": {
             "good": 100,
             "warning": 70,
             "critical": 25
         },
-        "format": "{time}, {capacity}%",
         "format-time": "{H}:{m}",
-        "format-good": "",
-        "weighted-average": true,
+        "format": "{time} {capacity}%",
+        "format-plugged-good": "",
+        // "weighted-average": true,
     },
-    "battery#bat2": {
+    "battery#bat1": {
         "bat": "BAT1",
+        "interval": 2,
         "states": {
             "good": 100,
             "warning": 70,
             "critical": 25
         },
-        "format-good": ""
+        "format-time": "{H}:{m}",
+        "format": "{time} {capacity}%",
+        "format-plugged-good": "",
     },
-    "network": {
-        // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": "W:{essid} ({signalStrength}%)",
-        "format-ethernet": "{ifname}",
+    // "network": {
+    //     "interval": 2,
+    //     // "interface": "wlp2*", // (Optional) To force the use of this interface
+    //     "format-wifi": "<span font_scale='small-caps'>{bandwidthUpBits:>} {ifname} @ {signaldBm}</span>\n<span font_scale='small-caps'>{bandwidthDownBits:>} {essid}</span>",
+    //     "format-ethernet": "<span font_scale='small-caps'>{bandwidthUpBits:>} {ifname}</span>\n<span font_scale='small-caps'>{bandwidthDownBits:>}</span>",
+    //     "tooltip-format": "{ifname} w/ {ipaddr}/{cidr} via {gwaddr}({bssid})",
+    //     "format-linked": "{ifname} (No IP)",
+    //     "format-disconnected": "<span color='red'>Disconnected</span>",
+    //     "format-alt": "{ifname}: {ipaddr}/{cidr}"
+    // },
+
+    "network#eth0": {
+        "interval": 2,
+        "interface": "eth0",
+        "format-ethernet": "<span font_scale='small-caps'>{bandwidthUpBits:>} {ifname}</span>\n<span font_scale='small-caps'>{bandwidthDownBits:>}</span>",
         "tooltip-format": "{ifname} w/ {ipaddr}/{cidr} via {gwaddr}",
         "format-linked": "{ifname} (No IP)",
-        "format-disconnected": "<span color='red'>Disconnected</span>",
+        "format-disconnected": "<span font_scale='small-caps'>{ifname}</span>\n<span font_scale='small-caps'>down</span>",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+    },
+    "network#wlan0": {
+        "interval": 2,
+        "interface": "wlan0",
+        "format-wifi": "<span font_scale='small-caps'>{bandwidthUpBits:>} {ifname} @ {signaldBm}</span>\n<span font_scale='small-caps'>{bandwidthDownBits:>} {essid}</span>",
+        "format-ethernet": "<span font_scale='small-caps'>{bandwidthUpBits:>} {ifname}</span>\n<span font_scale='small-caps'>{bandwidthDownBits:>}</span>",
+        "tooltip-format": "{ifname} w/ {ipaddr}/{cidr} via {gwaddr}({bssid})",
+        "format-linked": "{ifname} (No IP)",
+        "format-disconnected": "<span font_scale='small-caps'>{ifname}</span>\n<span font_scale='small-caps'>down</span>",
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
     "pulseaudio": {
-        "format": "&lt;- <span color='white'><b>{volume}</b></span>% / {format_source}",
-        "format-muted": "<span color='yellow'>&lt;-X</span> / {format_source}",
-        "format-source": "<span color='red'>-gt; {volume}%</span>",
-        "format-source-muted": "-&gt;X",
+        "format": "<span font_scale='small-caps'>out</span><span color='white'><b>{volume}</b></span> {format_source}",
+        "format-muted": "<span color='yellow'><span font_scale='small-caps'>out</span>X</span> {format_source}",
+        "format-source": "<span color='red'><span font_scale='small-caps'>in</span>{volume}</span>",
+        "format-source-muted": "<span font_scale='small-caps'>in</span>X",
         "scroll-step": 1,
         "on-click": "pavucontrol",
         "on-click-middle": "pactl set-sink-mute \"$(pactl get-default-sink)\" toggle",
-        "on-click-right": "pactl set-source-mute \"$(pactl get-default-source)\" toggle"
+        "on-click-right": "pactl set-source-mute \"$(pactl get-default-source)\" toggle",
+        "ignored-sinks": ["Easy Effects Sink"]
+    },
+
+    "custom/wlsunset": {
+        "format": "T",
+        "tooltip-format": "high -> low -> auto",
+        "on-click": "pkill -USR1 wlsunset"
     },
 
     "custom/gammastep": {
@@ -227,7 +255,14 @@
         "format": "undim",
         "on-click": "redshift-ctl.sh 1.0"
     },
-    "systemd-failed-units": {}
+    "systemd-failed-units": {
+        "hide-on-ok": true,
+        "format": "systemd-failed-units: {nr_failed_system}/{nr_failed_user}",
+        "on-click": "kitty sh -x -c 'systemctl --failed | less'",
+        "on-click-right": "kitty sh -x -c 'systemctl --user --failed | less'",
+        "on-click-middle": "kitty sh -x -c 'systemctl --user reset-failed; sudo systemctl reset-failed; read;'"
+        
+    }
 
 }
 
