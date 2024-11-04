@@ -1,12 +1,11 @@
 [Unit]
 Description=Display outputs manager
 Documentation=man:kanshi(1)
-PartOf=graphical-session.target
-After=graphical-session.target
 
 [Service]
-ExecCondition=/usr/bin/swaymsg -t get_outputs
+ExecStartPre=test -n "$SWAYSOCK"
+ExecStartPre=sleep 5
 ExecStart=/usr/bin/kanshi
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=sway-session.target

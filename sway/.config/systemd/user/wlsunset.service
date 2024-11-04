@@ -1,0 +1,9 @@
+[Unit]
+Description=Display gamma daemon
+
+[Service]
+ExecStartPre=test -n "$SWAYSOCK"
+ExecStart=wlsunset -l 49 -L 16 -t 2600
+
+[Install]
+WantedBy=sway-session.target

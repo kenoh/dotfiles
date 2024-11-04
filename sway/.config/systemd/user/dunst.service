@@ -1,0 +1,9 @@
+[Unit]
+Description=Dunst notification daemon
+
+[Service]
+ExecStartPre=test -n "$SWAYSOCK"
+ExecStart=dunst
+
+[Install]
+WantedBy=sway-session.target

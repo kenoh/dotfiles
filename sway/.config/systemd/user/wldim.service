@@ -1,0 +1,12 @@
+[Unit]
+Description=Idle screen dimmer
+StartLimitIntervalSec=60
+StartLimitBurst=15
+
+[Service]
+RestartSec=3
+ExecStartPre=test -n "$SWAYSOCK"
+ExecStart=%h/bin/wldim dim 285000 3000 0.75
+
+[Install]
+WantedBy=sway-session.target

@@ -331,26 +331,15 @@ bindsym --no-repeat --release Super_L [con_mark="prev"] focus
 # bindsym $mod+y fullscreen disable; floating enable; resize set 600 400; sticky enable
 
 
-exec $recur swayidle -w \
-    timeout 300 '$lock' \
-    timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-    before-sleep '$lock' \
-    lock '$lock'
-
-set $wrap ~/bin/sway-exec-wrapper.sh
-set $recur ~/bin/recur.sh
-
 # startup
+
+# NOTE: We use facility of sway-session.target (of sway-systemd package in Fedora) to run additional binaries.
+# FIXME: Maybe we need to run systemctl start sway-session.target? Find out next time we reboot...
+
 # Below:
 #   XDG_CURRENT_DESKTOP for xdg-desktop-portal to run the correct -wlr variant.
 exec systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots
 exec systemctl --user restart xdg-desktop-portal
 exec systemctl --user import-environment WAYLAND_DISPLAY SWAYSOCK
-exec emacs --daemon
-exec kanshi
 exec_always kanshictl reload
-exec gammastep -l 49:16 -t 6500:2600
-exec dunst
-exec workstyle
-exec nm-applet
 exec ~/bin/startup.sh

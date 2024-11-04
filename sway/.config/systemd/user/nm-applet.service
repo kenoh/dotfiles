@@ -1,0 +1,9 @@
+[Unit]
+Description=Run nm-applet (systray)
+
+[Service]
+ExecStartPre=test -n "$SWAYSOCK"
+ExecStart=nm-applet
+
+[Install]
+WantedBy=sway-session.target

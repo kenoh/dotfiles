@@ -1,0 +1,11 @@
+[Unit]
+Description=Emacs daemon
+
+[Service]
+Type=forking
+ExecStartPre=test -n "$SWAYSOCK"
+ExecStart=emacs --daemon
+ExecStop=emacsclient --eval '(kill-emacs)'
+
+[Install]
+WantedBy=sway-session.target
