@@ -1,5 +1,7 @@
 set $mod Mod4
 
+xwayland force
+
 # automagic for outputs (bindswitch is available since sway-1.1)
 set $laptop eDP-1
 bindswitch --locked lid:off output $laptop enable
@@ -36,7 +38,7 @@ client.urgent           $cl_urge $cl_urge #ffffff  $cl_urge $cl_urge
 
 # border
 default_border pixel 3
-default_floating_border pixel
+default_floating_border normal
 titlebar_border_thickness 3
 #titlebar_padding 3 1
 
@@ -70,21 +72,30 @@ no_focus [title="Firefox – Sharing Indicator"]
 
 # colors in titles
 ## note: there is a bug in Pango such that setting a size for the very first text in the title_format simply does not work. Preceeding it with a space does the trick. Anyway, enlarging the text substantially enlarges the titlebar itself, so no, thanks.
-set $emacsTitle title_format "<span foreground='#6730f2' size='larger' weight='heavy'></span>  <b>%title</b>"
+
+for_window [class="."] title_format "X) %title"
+
+set $hairspace " "
+set $thinspace " "
+set $enspace " "
+set $emspace " "
+set $pre "<span size='larger' weight='heavy' bgcolor='white'>"
+set $suf "</span> <b>%title</b>"
+# 🦊🐦💀𝘾
+set $emacsTitle title_format $pre"<span color='#6730f2'>"$thinspace" </span>"$suf
 for_window [class="Emacs"] $emacsTitle
 for_window [app_id="emacs"] $emacsTitle
-#for_window [app_id="(firefox)"] title_format "🦊 <b>%title</b>"
-for_window [app_id="(firefox)"] title_format "<span color='#99302C'></span> <b>%title</b>"
-#for_window [app_id="(thunderbird)"] title_format "🐦 <b>%title</b>"
-for_window [app_id="(thunderbird)"] title_format "<span color='#2573ae'></span> <b>%title</b>"
-#for_window [app_id="(tilix|terminator|kitty)"] title_format "💀 <b>%title</b>"
-for_window [app_id="(tilix|terminator|kitty)"] title_format " <b>%title</b>"
-for_window [class="Code"] title_format "<span foreground='#0078d7'>𝘾</span> <b>%title</b>"
-
-for_window [class="."] title_format "%title [%shell]"
+for_window [app_id="(firefox)"] title_format $pre"<span color='#e66000' size='xx-large'>"$thinspace" </span>"$suf
+for_window [app_id="(qutebrowser)"] title_format $pre"<span color='#2573ae' size='xx-large'>"$thinspace"qb"$thinspace"</span>"$suf
+for_window [app_id="(thunderbird)"] title_format $pre"<span color='#2573ae'>"$thinspace" </span>"$suf
+for_window [app_id="(tilix|terminator|kitty)"] title_format $pre"<span color='black'>"$thinspace" </span>"$suf
+set $_pdf title_format $pre"<span color='red'>"$thinspace" </span>"$suf
+for_window [app_id="org.kde.okular|qpdfview.local.qpdfview-qt6"] $_pdf
+for_window [class="okular|qpdfview"] $_pdf
+for_window [class="Code"] title_format $pre"<span foreground='#0078d7'>𝘾</span>"$suf
 
 # containers
-for_window [floating] border csd
+for_window [floating] border normal
 for_window [app_id="yad"] floating enable;
 
 # general
@@ -92,7 +103,7 @@ floating_modifier $mod
 workspace_layout tabbed
 # do not go outside of a container when changing focus (thus, one needs to use focus child/parent)
 # ... in effect won't wrap between screens :)
-focus_wrapping yes
+focus_wrapping no
 focus_on_window_activation focus
 
 # mouse
@@ -115,6 +126,9 @@ bindsym $mod+k focus up
 bindsym $mod+up focus up
 bindsym $mod+l focus right
 bindsym $mod+right focus right
+
+bindsym f11 focus left
+bindsym f12 focus right
 
 bindsym $mod+q focus parent
 bindsym $mod+a focus child
@@ -194,7 +208,13 @@ bindsym $mod+Shift+Control+h move workspace to output left
 bindsym $mod+Shift+Control+j move workspace to output down
 bindsym $mod+Shift+Control+k move workspace to output up
 bindsym $mod+Shift+Control+l move workspace to output right
+bindsym $mod+Shift+Control+left move workspace to output left
+bindsym $mod+Shift+Control+down move workspace to output down
+bindsym $mod+Shift+Control+up move workspace to output up
+bindsym $mod+Shift+Control+right move workspace to output right
 
+# outputs
+bindsym $mod+F12 focus output right
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -231,11 +251,12 @@ mode --pango_markup "$mymenu" {
     bindsym e exec emacsclient --no-wait -c || notify-send 'emacsclient' 'problem running it' ; mode "default"
     bindsym f exec firefox ; mode "default"
     bindsym Shift+f exec firefox -P testing ; mode "default"
-    bindsym k exec kanshictl reload ; mode "default"
+    # bindsym k exec kanshictl reload ; mode "default"
+    bindsym k exec bash ~/bin/kanshi-menu.sh $bemenu_params ; mode "default"
     bindsym n exec $termx sh -c 'sleep 0.1 && nmtui' ; mode "default"
     bindsym p exec $termx sh -c 'pavucontrol' ; mode "default"
     bindsym h exec thunar ; mode "default"
-    bindsym t exec thunderbird-wayland ; mode "default"
+    bindsym t exec thunderbird ; mode "default"
     bindsym Escape mode "default"
     bindsym q mode "default"
 }
@@ -244,11 +265,11 @@ bindsym $mod+x mode "$mymenu"
 
 set $grimshot <span font_style='normal'><u>Screenshot</u>:  <u>s</u>election,  <u>a</u>ctive win,  select <u>w</u>in,  active <u>o</u>utput,  <u>e</u>verything   |   <u>c</u>olor picker</span>
 mode --pango_markup "$grimshot" {
-    bindsym s exec grimshot copy area ; mode "default"
-    bindsym a exec grimshot copy active ; mode "default"
-    bindsym w exec grimshot copy window ; mode "default"
-    bindsym o exec grimshot copy output ; mode "default"
-    bindsym e exec grimshot copy screen ; mode "default"
+    bindsym s exec grimshot savecopy area ; mode "default"
+    bindsym a exec grimshot savecopy active ; mode "default"
+    bindsym w exec grimshot savecopy window ; mode "default"
+    bindsym o exec grimshot savecopy output ; mode "default"
+    bindsym e exec grimshot savecopy screen ; mode "default"
     bindsym c exec grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | yad --text-info --width 480 ; mode "default"
     bindsym Escape mode "default"
     bindsym q mode "default"
@@ -277,16 +298,22 @@ bindsym $mod+Return exec $term
 bindsym $mod+Shift+Return exec gnome-terminal || alacrity || kitty || urxvt || xterm
 bindsym $mod+Escape exec $lock
 bindsym $mod+Control+Escape exec systemctl suspend
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume "$(pactl get-default-sink)" -6dB $barup
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume "$(pactl get-default-sink)" +6dB $barup
-bindsym XF86AudioMute exec pactl set-sink-mute "$(pactl get-default-sink)" toggle $barup
-bindsym $mod+XF86AudioMute exec pactl set-source-mute "$(pactl get-default-source)" toggle $barup
+
+bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume "$(pactl get-default-sink)" -6dB $barup
+bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume "$(pactl get-default-sink)" +6dB $barup
+bindsym --locked XF86AudioMute        exec pactl set-sink-mute "$(pactl get-default-sink)" toggle $barup
+bindsym --locked $mod+XF86AudioMute   exec pactl set-source-mute "$(pactl get-default-source)" toggle $barup
+bindsym --locked XF86AudioMicMute     exec pactl set-source-mute "$(pactl get-default-source)" toggle $barup
 
 # brightness
-bindsym --locked XF86MonBrightnessUp exec light -A 10 $barup
-bindsym --locked XF86MonBrightnessDown exec light -U 10 && light -A 1 $barup
+#bindsym --locked XF86MonBrightnessUp exec light -A 10 $barup
+#bindsym --locked XF86MonBrightnessDown exec light -U 10 && light -A 1 $barup
+bindsym --locked XF86MonBrightnessUp exec brightnessctl set +10% $barup
+bindsym --locked XF86MonBrightnessDown exec brightnessctl --min-value=1 set 10%- $barup
 
 bindsym --locked $mod+Shift+Control+k exec kanshictl reload
+
+bindsym $mod+t exec pkill -USR1 wlsunset
 
 # playerctl
 bindsym XF86AudioPlay exec playerctl -p spotify play-pause $barup
@@ -297,10 +324,8 @@ bindsym XF86AudioNext exec playerctl -p spotify next $barup
 bindsym $mod+Backspace exec dunstctl close
 bindsym $mod+Shift+Backspace exec dunstctl history-pop
 
-# sugar
-bindsym F12 focus right
-bindsym $mod+F11 focus output left
-bindsym $mod+F12 focus output right
+# prev: back-and-forth for windows; requires the ~/bin/sway-sidekick-deamon.py running
+bindsym --no-repeat --release Super_L [con_mark="prev"] focus
 
 # fullscreen in a window
 # bindsym $mod+y fullscreen disable; floating enable; resize set 600 400; sticky enable
@@ -314,6 +339,7 @@ exec $recur swayidle -w \
 
 set $wrap ~/bin/sway-exec-wrapper.sh
 set $recur ~/bin/recur.sh
+
 # startup
 # Below:
 #   XDG_CURRENT_DESKTOP for xdg-desktop-portal to run the correct -wlr variant.
