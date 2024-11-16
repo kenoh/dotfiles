@@ -1,133 +1,78 @@
-@define-color module rgba(0,0,0,0.7);
-@define-color modulefg #aaa;
-@define-color cl_high #0827f5;
-
+@define-color barbg #ccc;
+@define-color selbg #eee;
+@define-color text #000;
+@define-color warn #e80;
 
 * {
-    border: none;
     font-family: Terminus, CommitMono Nerd Font, FontAwesome, sans-serif;
     font-size: 14px;
     min-height: 0;
-    background: rgba(0,0,0,0.0);
+    color: @text;
 }
 
-.bottom {
-    background: black;
-	box-shadow: @modulefg 0px 0px 0px 0px inset;
-    padding: 1px;
-    margin: 1px;
-}
-
-tooltip {
-    background: rgba(0,0,0,1.0);
-}
-tooltip label {
-    color: #ccc;
-}
 window {
-    color: @modulefg;
+    background: @barbg;
 }
 
-/* We provide spacing (as usually provided by waybar's config option) manually/fake it. */
-/* This is since we want to have some widget close together, however we cannot pick a particular one */
-/* just by a selector in CSS (and I won't be using :nth selector!). */
-/* To set explicit "merging" we set margin to zero where necessary. */
-widget {
-    background: rgba(0,0,0,0.0);
+box > box {
+    padding: 2px;
 }
-label, widget > box {
-    /* border-radius: 2px 2px; */
-    /* background: @module; */
-    /* padding: 0px 5px 0px 5px;  /\* inside spacing *\/ */
-    /* margin: 1px 2px 0px 1px;  /\* "widget" spacing *\/ */
+
+box.modules-right widget {
+    border-color: grey white white grey ;
+    border-width: 1px;
+    border-style: ridge;
+    border-radius: 0px;
 }
-label, box, widget, button {
-    margin: 0px 3px 0px 3px;
-    padding: 0px 2px 0px 2px;
+label {
+    padding: 0px 3px 0px 3px;
 }
 
 
 .warning {
-    color: yellow;
+    background: #ff0;
 }
 .critical {
-    color: red;
+    background: red;
 }
+
 
 #language {
     min-width: 2em;
 }
 #language:not(.us) {
     background: aqua;
-    color: black;
 }
 
+#window {
+    padding-left: 8px;
+}
 
-@define-color w1 #9f5f5f;
-@define-color w1v #bf3f3f;
-@define-color w1vf #df1f1f;
-@define-color w2 #9f7f5f;
-@define-color w2v #bf7f3f;
-@define-color w2vf #df7f1f;
-@define-color w3 #5f9f5f;
-@define-color w3v #3fbf3f;
-@define-color w3vf #1fdf1f;
-@define-color w4 #5f9f9f;
-@define-color w4v #3fbfbf;
-@define-color w4vf #1fdfdf;
-box#workspaces {
-    /* background: @module; */
-    /* background: none; */
-}
-#workspaces label {
-    /* background: transparent; */
-}
 #workspaces button.urgent {
     background: red;
     color: white;
 }
 #workspaces button {
     color: #ccc;
-    background: #555;
     border-color: white black black white ;
-    border-width: 2px;
+    border-width: 1px;
     border-style: ridge;
     border-radius: 0px;
-    /* border: 1px 2px 3px 4px inset; */
-    /* text-shadow: #000 0px 0px 2px; */
-	/* box-shadow: rgba(0,0,0,1) 0px 0px 3px inset; */
-    /* margin-right: 2px; */
+    padding: 0px;  /* fixes possibly default taking too much space */
+    margin-right: 2px;
 }
 #workspaces button.visible {
-    background: #008080;
-    /* color: #fff; */
-	/* box-shadow: rgba(0,0,0,1) 0px 0px 2px inset; */
+    border-color: black white white black;
 }
 #workspaces button.focused, #workspaces button.active {
-    background: @cl_high;
-    color: #fff;
-    /* /\* background: linear-gradient(90deg, @cl_high 24px, #ccc 32px); /\\* cause we have some icons on the right *\\/ *\/ */
-    /* color: #fff; */
-    /* text-shadow: #000 0px 0px 2px; */
+    background: @selbg;
 }
-/* box#workspaces > button#sway-workspace-1 { background-color: @w1;} */
-/* box#workspaces > button#sway-workspace-1.visible { background-color: @w1v;} */
-/* box#workspaces > button#sway-workspace-1.visible.focused { background-color: @w1vf;} */
-/* box#workspaces > button#sway-workspace-2 { background-color: @w2;} */
-/* box#workspaces > button#sway-workspace-2.visible { background-color: @w2v;} */
-/* box#workspaces > button#sway-workspace-2.visible.focused { background-color: @w2vf;} */
-/* box#workspaces > button#sway-workspace-3 { background-color: @w3;} */
-/* box#workspaces > button#sway-workspace-3.visible { background-color: @w3v;} */
-/* box#workspaces > button#sway-workspace-3.visible.focused { background-color: @w3vf;} */
-/* box#workspaces > button#sway-workspace-4 { background-color: @w4;} */
-/* box#workspaces > button#sway-workspace-4.visible { background-color: @w4v;} */
-/* box#workspaces > button#sway-workspace-4.visible.focused { background-color: @w4vf;} */
 
 
 #mode, #submap {
-    background: #a3f;
+    background: blue;
     color: #fff;
-    border-bottom: 2px solid white;
+    border-bottom: 0px solid white;
 }
 
 
@@ -150,12 +95,7 @@ box#workspaces {
     margin-left: 0;
 }
 
-#clock {
-    /* font-weight: bold; */
-    color: white;
-}
-
- #battery.not-charging{
+#battery.not-charging{
     background: blue;
     color: white;
 }
@@ -172,7 +112,7 @@ box#workspaces {
 }
 
 #network.disconnected {
-    color: pink;
+    color: #666;
 }
 #network.linked {
     color: red;
@@ -180,11 +120,10 @@ box#workspaces {
 
 
 #tray image {
-    -gtk-icon-shadow: 1px 1px white;
+    -gtk-icon-shadow: 1px 1px grey;
 }
 
 #tray menu {
-    background: #c3c3c3;
     color: #000;
 }
 #tray menuitem label {

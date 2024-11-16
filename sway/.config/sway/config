@@ -16,7 +16,7 @@ input * tap enabled
 
 # look&feel
 #font pango: Liberation Sans Narrow, CommitMono Nerd Font 10
-font pango: CommitMono Nerd Font 10
+font pango: CommitMono Nerd Font 1
 
 set $cl_high #ffd898
 set $cl_indi #ffd8d8
@@ -47,8 +47,8 @@ default_dim_inactive 0.3
 # shadows enable
 # shadow_color $cl_highff
 # shadow_blur_radius 6
-titlebar_separator disable
-corner_radius 3
+# titlebar_separator disable
+#corner_radius 3
 # layer_effects "panel" "blur enable"
 
 
@@ -73,30 +73,32 @@ no_focus [title="Firefox – Sharing Indicator"]
 # colors in titles
 ## note: there is a bug in Pango such that setting a size for the very first text in the title_format simply does not work. Preceeding it with a space does the trick. Anyway, enlarging the text substantially enlarges the titlebar itself, so no, thanks.
 
-for_window [class="."] title_format "X) %title"
+# for_window [class="."] title_format "X) %title"
 
-set $hairspace " "
-set $thinspace " "
-set $enspace " "
-set $emspace " "
-set $pre "<span size='larger' weight='heavy' bgcolor='white'>"
-set $suf "</span> <b>%title</b>"
-# 🦊🐦💀𝘾
-set $emacsTitle title_format $pre"<span color='#6730f2'>"$thinspace" </span>"$suf
-for_window [class="Emacs"] $emacsTitle
-for_window [app_id="emacs"] $emacsTitle
-for_window [app_id="(firefox)"] title_format $pre"<span color='#e66000' size='xx-large'>"$thinspace" </span>"$suf
-for_window [app_id="(qutebrowser)"] title_format $pre"<span color='#2573ae' size='xx-large'>"$thinspace"qb"$thinspace"</span>"$suf
-for_window [app_id="(thunderbird)"] title_format $pre"<span color='#2573ae'>"$thinspace" </span>"$suf
-for_window [app_id="(tilix|terminator|kitty)"] title_format $pre"<span color='black'>"$thinspace" </span>"$suf
-set $_pdf title_format $pre"<span color='red'>"$thinspace" </span>"$suf
-for_window [app_id="org.kde.okular|qpdfview.local.qpdfview-qt6"] $_pdf
-for_window [class="okular|qpdfview"] $_pdf
-for_window [class="Code"] title_format $pre"<span foreground='#0078d7'>𝘾</span>"$suf
+# set $hairspace " "
+# set $thinspace " "
+# set $enspace " "
+# set $emspace " "
+# set $pre "<span size='larger' weight='heavy' bgcolor='white'>"
+# set $suf "</span> <b>%title</b>"
+# # 🦊🐦💀𝘾
+# set $emacsTitle title_format $pre"<span color='#6730f2'>"$thinspace" </span>"$suf
+# for_window [class="Emacs"] $emacsTitle
+# for_window [app_id="emacs"] $emacsTitle
+# for_window [app_id="(firefox)"] title_format $pre"<span color='#e66000' size='xx-large'>"$thinspace" </span>"$suf
+# for_window [app_id="(qutebrowser)"] title_format $pre"<span color='#2573ae' size='xx-large'>"$thinspace"qb"$thinspace"</span>"$suf
+# for_window [app_id="(thunderbird)"] title_format $pre"<span color='#2573ae'>"$thinspace" </span>"$suf
+# for_window [app_id="(tilix|terminator|kitty)"] title_format $pre"<span color='black'>"$thinspace" </span>"$suf
+# set $_pdf title_format $pre"<span color='red'>"$thinspace" </span>"$suf
+# for_window [app_id="org.kde.okular|qpdfview.local.qpdfview-qt6"] $_pdf
+# for_window [class="okular|qpdfview"] $_pdf
+# for_window [class="Code"] title_format $pre"<span foreground='#0078d7'>𝘾</span>"$suf
 
 # containers
 for_window [floating] border normal
 for_window [app_id="yad"] floating enable;
+for_window [title="Picture-in-Picture"] floating enable, opacity set 0.5, border none;
+for_window [title="Picture-in-Picture" app_id="__focused__"] floating enable, opacity set 1, border none;
 
 # general
 floating_modifier $mod
@@ -333,13 +335,13 @@ bindsym --no-repeat --release Super_L [con_mark="prev"] focus
 
 # startup
 
-# NOTE: We use facility of sway-session.target (of sway-systemd package in Fedora) to run additional binaries.
-# FIXME: Maybe we need to run systemctl start sway-session.target? Find out next time we reboot...
-
 # Below:
 #   XDG_CURRENT_DESKTOP for xdg-desktop-portal to run the correct -wlr variant.
 exec systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots
 exec systemctl --user restart xdg-desktop-portal
 exec systemctl --user import-environment WAYLAND_DISPLAY SWAYSOCK
 exec_always kanshictl reload
+
+# We use facility of sway-session.target (of sway-systemd package in Fedora) to run additional binaries.
+exec_always systemctl --user start sway-session.target
 exec ~/bin/startup.sh

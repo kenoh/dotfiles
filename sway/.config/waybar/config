@@ -1,24 +1,19 @@
 // -*- mode: js; -*-
 // vi: ft=jsonc
 {
-    "layer": "top",
+    "layer": "bottom",
     "position": "bottom",
     "margin": 0,
-    "height": 20,
+    "height": 16,
     "spacing": 0,
     "reload_style_on_change": true,
     "modules-left": [
         "sway/workspaces",
         "sway/scratchpad",
         "sway/mode",
-        // "hyprland/workspaces",
-        // "hyprland/submap",
-        "custom/media"
+        "sway/window"
     ],
     "modules-center": [
-        //"sway/window"
-        // "hyprland/window"
-        "custom/cava"
     ],
     "modules-right": [
         "systemd-failed-units",
@@ -35,8 +30,6 @@
         "disk#home",
         "backlight",
         "sway/language",
-        // "hyprland/language",
-        // "group/gammastep",
         "custom/wlsunset",
         "battery#bat0",
         "battery#bat1",
@@ -44,6 +37,10 @@
         "clock",
         "tray"
     ],
+    "sway/window": {
+        "icon": true,
+        "icon-size": 16
+    },
     "wireplumber": {
         "on-click": "helvum"
     },
@@ -56,7 +53,18 @@
     },
     "sway/workspaces": {
         "format": "{icon}",
-        "enable-bar-scroll": true
+        // "enable-bar-scroll": true,
+        "format-icons": {
+            "1": "I",
+            "2": "II",
+            "3": "III",
+            "4": "IV",
+            "5": "V",
+            "6": "VI",
+            "7": "VII",
+            "8": "VIII",
+            "9": "IX",
+        }
     },
 
     "sway/mode": {
@@ -72,7 +80,7 @@
     },
 
     "tray": {
-        // "icon-size": 21,
+        "icon-size": 16,
         "spacing": 3
     },
 
@@ -91,10 +99,9 @@
         // "format-alt": "{:%Y-%m-%d}"
     },
     "clock#date": {
-        "format": "<span font_scale='small-caps'>{:%b</span>\n<span font_scale='small-caps'><b>%d</b></span>}"
+        "format": "{:%b<b>%d</b>}"
     },
     "cpu": {
-        // "format": "<markup><sup>c</sup>{load:0.1f}</markup>",
         "format": "{icon0}{icon1}{icon2}{icon3}{load:0.1f}",
         "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
         "states": {
@@ -106,7 +113,7 @@
         "interval": 2
     },
     "memory": {
-        "format": "<markup><sup>m</sup>{}</markup>",
+        "format": "m{}",
         "states": {
             "warning": 70,
             "critical": 85
@@ -117,7 +124,7 @@
     },
     "disk#root": {
         "path": "/",
-        "format": "<sup>/</sup>{specific_free:0.0f}",
+        "format": "/:{specific_free:0.0f}",
         "unit": "GiB",
         "states": {
             "warning": 80,
@@ -126,7 +133,7 @@
     },
     "disk#tmp": {
         "path": "/tmp",
-        "format": "<sup>t</sup>{specific_free:0.0f}",
+        "format": "t:{specific_free:0.0f}",
         "unit": "GiB",
         "states": {
             "warning": 40,
@@ -135,7 +142,7 @@
     },
     "disk#home": {
         "path": "/home",
-        "format": "<sup>~</sup>{specific_free:0.0f}",
+        "format": "~:{specific_free:0.0f}",
         "unit": "GiB",
         "states": {
             "warning": 90,
@@ -144,7 +151,7 @@
     },
     "backlight": {
         // "device": "acpi_video1",
-        "format": "<sup>bri</sup>{percent}"
+        "format": "bri:{percent}"
     },
     "battery#bat0": {
         "bat": "BAT0",
@@ -171,41 +178,27 @@
         "format": "{time} {capacity}%",
         "format-plugged-good": "",
     },
-    // "network": {
-    //     "interval": 2,
-    //     // "interface": "wlp2*", // (Optional) To force the use of this interface
-    //     "format-wifi": "<span font_scale='small-caps'>{bandwidthUpBits:>} {ifname} @ {signaldBm}</span>\n<span font_scale='small-caps'>{bandwidthDownBits:>} {essid}</span>",
-    //     "format-ethernet": "<span font_scale='small-caps'>{bandwidthUpBits:>} {ifname}</span>\n<span font_scale='small-caps'>{bandwidthDownBits:>}</span>",
-    //     "tooltip-format": "{ifname} w/ {ipaddr}/{cidr} via {gwaddr}({bssid})",
-    //     "format-linked": "{ifname} (No IP)",
-    //     "format-disconnected": "<span color='red'>Disconnected</span>",
-    //     "format-alt": "{ifname}: {ipaddr}/{cidr}"
-    // },
-
     "network#eth0": {
         "interval": 2,
         "interface": "eth0",
-        "format-ethernet": "<span font_scale='small-caps'>{bandwidthUpBits:>} {ifname}</span>\n<span font_scale='small-caps'>{bandwidthDownBits:>}</span>",
+        "format-ethernet": "E u:{bandwidthUpBits:>} d:{bandwidthDownBits:>}",
+        "format-linked": "E (No IP)",
+        "format-disconnected": "E down",
         "tooltip-format": "{ifname} w/ {ipaddr}/{cidr} via {gwaddr}",
-        "format-linked": "{ifname} (No IP)",
-        "format-disconnected": "<span font_scale='small-caps'>{ifname}</span>\n<span font_scale='small-caps'>down</span>",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
     "network#wlan0": {
         "interval": 2,
         "interface": "wlan0",
-        "format-wifi": "<span font_scale='small-caps'>{bandwidthUpBits:>} {ifname} @ {signaldBm}</span>\n<span font_scale='small-caps'>{bandwidthDownBits:>} {essid}</span>",
-        "format-ethernet": "<span font_scale='small-caps'>{bandwidthUpBits:>} {ifname}</span>\n<span font_scale='small-caps'>{bandwidthDownBits:>}</span>",
-        "tooltip-format": "{ifname} w/ {ipaddr}/{cidr} via {gwaddr}({bssid})",
-        "format-linked": "{ifname} (No IP)",
-        "format-disconnected": "<span font_scale='small-caps'>{ifname}</span>\n<span font_scale='small-caps'>down</span>",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        "format-wifi": "W u:{bandwidthUpBits:>} d:{bandwidthDownBits:>}",
+        "format-linked": "W (No IP)",
+        "format-disconnected": "W down",
+        "tooltip-format": "{ifname} w/ {ipaddr}/{cidr} via {gwaddr} @ {essid}({bssid}) @ {signaldBm} dBm",
     },
     "pulseaudio": {
-        "format": "<span font_scale='small-caps'>out</span><span color='white'><b>{volume}</b></span> {format_source}",
-        "format-muted": "<span color='yellow'><span font_scale='small-caps'>out</span>X</span> {format_source}",
-        "format-source": "<span color='red'><span font_scale='small-caps'>in</span>{volume}</span>",
-        "format-source-muted": "<span font_scale='small-caps'>in</span>X",
+        "format": "o:<b>{volume}</b> {format_source}",
+        "format-muted": "<span bgcolor='yellow'>o:M</span> {format_source}",
+        "format-source": "<span bgcolor='red'>i:{volume}</span>",
+        "format-source-muted": "i:M",
         "scroll-step": 1,
         "on-click": "pavucontrol",
         "on-click-middle": "pactl set-sink-mute \"$(pactl get-default-sink)\" toggle",
@@ -219,47 +212,11 @@
         "on-click": "pkill -USR1 wlsunset"
     },
 
-    "custom/gammastep": {
-        "format": "gs",
-        "on-click": "redshift-ctl-yad.sh"
-    },
-    "group/gammastep": {
-        "modules": [
-            "custom/gammastep-leader",
-            "custom/gammastep-6500",
-            "custom/gammastep-2600",
-            "custom/gammastep-dim",
-            "custom/gammastep-undim"
-        ],
-        "drawer": {
-            "transition-duration": 500
-        },
-        "orientation": "inherit"
-    },
-    "custom/gammastep-leader": {
-        "format": ""
-    },
-    "custom/gammastep-6500": {
-        "format": "6500",
-        "on-click": "redshift-ctl.sh 6500"
-    },
-    "custom/gammastep-2600": {
-        "format": "2600",
-        "on-click": "redshift-ctl.sh 2600"
-    },
-    "custom/gammastep-dim": {
-        "format": "dim",
-        "on-click": "redshift-ctl.sh 0.6"
-    },
-    "custom/gammastep-undim": {
-        "format": "undim",
-        "on-click": "redshift-ctl.sh 1.0"
-    },
     "systemd-failed-units": {
         "hide-on-ok": true,
         "format": "systemd-failed-units: {nr_failed_system}/{nr_failed_user}",
-        "on-click": "kitty sh -x -c 'systemctl --failed | less'",
-        "on-click-right": "kitty sh -x -c 'systemctl --user --failed | less'",
+        "on-click": "kitty sh -x -c 'systemctl status --failed | less'",
+        "on-click-right": "kitty sh -x -c 'systemctl status --user --failed | less'",
         "on-click-middle": "kitty sh -x -c 'systemctl --user reset-failed; sudo systemctl reset-failed; read;'"
         
     }
