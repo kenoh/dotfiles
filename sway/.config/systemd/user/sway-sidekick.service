@@ -1,9 +1,0 @@
-[Unit]
-Description=Custom SwayWM functionality daemon
-
-[Service]
-ExecStartPre=test -n "$SWAYSOCK"
-ExecStart=python3 %h/bin/sway-sidekick-daemon.py
-
-[Install]
-WantedBy=sway-session.target

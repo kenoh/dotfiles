@@ -128,16 +128,16 @@ bindsym $mod+Shift+e exec "swaynag -t warning -m 'You pressed the exit shortcut.
 bindsym $mod+Shift+q kill
 
 bindsym $mod+h focus left
-bindsym $mod+left focus left
 bindsym $mod+j focus down
-bindsym $mod+down focus down
 bindsym $mod+k focus up
-bindsym $mod+up focus up
 bindsym $mod+l focus right
+bindsym $mod+left focus left
+bindsym $mod+down focus down
+bindsym $mod+up focus up
 bindsym $mod+right focus right
 
-bindsym f11 focus left
-bindsym f12 focus right
+bindsym f11 exec swayr prev-tabbed-or-stacked-window current-workspace
+bindsym f12 exec swayr next-tabbed-or-stacked-window current-workspace
 
 bindsym $mod+q focus parent
 bindsym $mod+a focus child
@@ -289,8 +289,10 @@ mode --pango_markup "$mymenu" {
     bindsym k exec bash ~/bin/kanshi-menu.sh $bemenu_params ; $MDEF
     bindsym n exec $termx sh -c 'sleep 0.1 && nmtui' ; $MDEF
     bindsym p exec $termx sh -c 'pavucontrol' ; $MDEF
+    bindsym r exec swayr execute-swayr-command ; $MDEF
     bindsym s $MDEF ; mode $grimshot
     bindsym t exec thunderbird ; $MDEF
+    bindsym w exec swayr switch-window ; $MDEF
     bindsym Escape $MDEF
     bindsym q $MDEF
 }
@@ -341,9 +343,7 @@ bindsym XF86AudioNext exec playerctl -p spotify next $barup
 bindsym $mod+Backspace exec dunstctl close
 bindsym $mod+Shift+Backspace exec dunstctl history-pop
 
-# prev: back-and-forth for windows; requires the ~/bin/sway-sidekick-deamon.py running
-bindsym --no-repeat --release Super_L [con_mark="prev"] focus
-
+bindsym --no-repeat --release Super_L exec swayr switch-to-urgent-or-lru-window
 
 
 # startup

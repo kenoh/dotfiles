@@ -1,0 +1,10 @@
+[Unit]
+Description=Swayr daemon
+
+[Service]
+ExecStartPre=test -n "$SWAYSOCK"
+#Environment=RUST_LOG=debug
+ExecStart=%h/.cargo/bin/swayrd
+
+[Install]
+WantedBy=sway-session.target
