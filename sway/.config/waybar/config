@@ -68,7 +68,7 @@
     },
 
     "sway/mode": {
-        "format": "<span style=\"italic\">{}</span>"
+        "format": "{}"
     },
 
     "idle_inhibitor": {
