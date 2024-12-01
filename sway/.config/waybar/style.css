@@ -1,7 +1,36 @@
+/* light */
 @define-color barbg #ccc;
 @define-color selbg #eee;
 @define-color text #000;
-@define-color warn #e80;
+@define-color textDim #888;
+@define-color warn yellow;
+@define-color warn2 black;
+@define-color crit red;
+@define-color crit2 white;
+
+@define-color sunkD grey;
+@define-color sunkL white;
+
+@define-color butD black;
+@define-color butL white;
+ 
+/* darker */
+@define-color barbg #666;
+@define-color selbg #ccc;
+@define-color text #000;
+@define-color textDim #aaa;
+@define-color warn yellow;
+@define-color warn2 black;
+@define-color crit red;
+@define-color crit2 white;
+
+@define-color sunkD #333;
+@define-color sunkL #aaa;
+
+@define-color butD black;
+@define-color butL white;
+
+
 
 * {
     font-family: Terminus, CommitMono Nerd Font, FontAwesome, sans-serif;
@@ -19,21 +48,22 @@ box > box {
 }
 
 box.modules-right widget {
-    border-color: grey white white grey ;
+    border-color: @sunkD @sunkL @sunkL @sunkD ;
     border-width: 1px;
     border-style: ridge;
     border-radius: 0px;
 }
 label {
     padding: 0px 3px 0px 3px;
+    margin: 1px;
 }
 
 
 .warning {
-    background: #ff0;
+    background: @warn;
 }
 .critical {
-    background: red;
+    background: @crit;
 }
 
 
@@ -49,12 +79,11 @@ label {
 }
 
 #workspaces button.urgent {
-    background: red;
-    color: white;
+    background: @crit;
+    color: @crit2;
 }
 #workspaces button {
-    color: #ccc;
-    border-color: white black black white ;
+    border-color: @butL @butD @butD @butL ;
     border-width: 1px;
     border-style: ridge;
     border-radius: 0px;
@@ -62,7 +91,7 @@ label {
     margin-right: 2px;
 }
 #workspaces button.visible {
-    border-color: black white white black;
+    border-color: @butD @butL @butL @butD;
 }
 #workspaces button.focused, #workspaces button.active {
     background: @selbg;
@@ -95,27 +124,27 @@ label {
     margin-left: 0;
 }
 
-#battery.not-charging{
+#battery.not-charging  {
     background: blue;
     color: white;
 }
 #battery.charging {
-    color: orange;
+    color: @warn;
 }
 #battery.discharging {
-    background: orange;
-    color: black;
+    background: @warn;
+    color: @warn2;
 }
 #battery.critical {
-    background: red;
-    color: white;
+    background: @crit;
+    color: @crit2;
 }
 
 #network.disconnected {
-    color: #666;
+    color: @textDim;
 }
 #network.linked {
-    color: red;
+    color: @crit;
 }
 
 
@@ -124,7 +153,7 @@ label {
 }
 
 #tray menu {
-    color: #000;
+    color: @text;
 }
 #tray menuitem label {
     background: inherit;

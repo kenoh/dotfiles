@@ -16,7 +16,8 @@ input * tap enabled
 
 # look&feel
 #font pango: Liberation Sans Narrow, CommitMono Nerd Font 10
-font pango: CommitMono Nerd Font 1
+#font pango: CommitMono Nerd Font 1
+font pango: Terminus (TTF) 9
 
 set $cl_high #ffd898
 set $cl_indi #ffd8d8
@@ -37,9 +38,9 @@ client.unfocused        #c3c3c3  #818181 #000000 $cl_back $cl_back
 client.urgent           $cl_urge $cl_urge #ffffff  $cl_urge $cl_urge
 
 # border
-default_border pixel 3
+default_border pixel 5
 default_floating_border normal
-titlebar_border_thickness 3
+titlebar_border_thickness 4
 #titlebar_padding 3 1
 
 # swayfx
@@ -48,7 +49,7 @@ default_dim_inactive 0.3
 # shadow_color $cl_highff
 # shadow_blur_radius 6
 # titlebar_separator disable
-#corner_radius 3
+# corner_radius 3
 # layer_effects "panel" "blur enable"
 
 
@@ -97,8 +98,7 @@ no_focus [title="Firefox – Sharing Indicator"]
 # containers
 for_window [floating] border normal
 for_window [app_id="yad"] floating enable;
-for_window [title="Picture-in-Picture"] floating enable, opacity set 0.5, border none;
-for_window [title="Picture-in-Picture" app_id="__focused__"] floating enable, opacity set 1, border none;
+for_window [title="Picture-in-Picture"] floating enable, dim_inactive 0.0, border none;
 
 # don't lock when in fullscreen mode
 for_window [shell=".*"] inhibit_idle fullscreen
