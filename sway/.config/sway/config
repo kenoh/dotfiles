@@ -286,13 +286,15 @@ mode --pango_markup "$mymenu" {
     bindsym f exec firefox ; $MDEF
     bindsym Shift+f exec firefox -P testing ; $MDEF
     bindsym h exec thunar ; $MDEF
-    bindsym k exec bash ~/bin/kanshi-menu.sh $bemenu_params ; $MDEF
+    bindsym k exec bash ~/bin/kanshi-menu.sh $dmenu ; $MDEF
     bindsym n exec $termx sh -c 'sleep 0.1 && nmtui' ; $MDEF
     bindsym p exec $termx sh -c 'pavucontrol' ; $MDEF
     bindsym r exec swayr execute-swayr-command ; $MDEF
     bindsym s $MDEF ; mode $grimshot
     bindsym t exec thunderbird ; $MDEF
     bindsym w exec swayr switch-window ; $MDEF
+
+    bindsym $mod+x $MDEF ; exec sed -n '/^mode.*mymenu/,/^bindsym.*mode.*mymenu/p' ~/.config/sway/config | $dmenu -l 30 -w 70
     bindsym Escape $MDEF
     bindsym q $MDEF
 }
@@ -308,36 +310,37 @@ bindsym $mod+x mode "$mymenu"
 swaybg_command swaybg -m fill -i ~/Pictures/wallpapers/karsten-wurth-inf1783-127612-unsplash.jpg
 
 set $lock ~/bin/lock
-set $barup && killall -SIGUSR1 py3status
+
+set $dmenu_run fuzzel
+set $dmenu fuzzel --dmenu
 
 # launchers
-set $bemenu_params --fn 'Monospace [13]' -l 15 --scrollbar always -m all -n -i -M 64
-bindsym $mod+d exec j4-dmenu-desktop --no-generic --display-binary --dmenu="bemenu $bemenu_params"
-bindsym $mod+shift+d exec PATH="$HOME/bin:$PATH" bemenu-run $bemenu_params
+bindsym $mod+d exec $dmenu_run
+bindsym $mod+shift+d exec PATH="$HOME/bin:$PATH" $dmenu_run --list-executables-in-path
 
 bindsym $mod+Return exec $term
 bindsym $mod+Shift+Return exec gnome-terminal || alacrity || kitty || urxvt || xterm
 bindsym $mod+Escape exec $lock
 bindsym $mod+Control+Escape exec systemctl suspend
 
-bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume "$(pactl get-default-sink)" -6dB $barup
-bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume "$(pactl get-default-sink)" +6dB $barup
-bindsym --locked XF86AudioMute        exec pactl set-sink-mute "$(pactl get-default-sink)" toggle $barup
-bindsym --locked $mod+XF86AudioMute   exec pactl set-source-mute "$(pactl get-default-source)" toggle $barup
-bindsym --locked XF86AudioMicMute     exec pactl set-source-mute "$(pactl get-default-source)" toggle $barup
+bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume "$(pactl get-default-sink)" -6dB
+bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume "$(pactl get-default-sink)" +6dB
+bindsym --locked XF86AudioMute        exec pactl set-sink-mute "$(pactl get-default-sink)" toggle
+bindsym --locked $mod+XF86AudioMute   exec pactl set-source-mute "$(pactl get-default-source)" toggle
+bindsym --locked XF86AudioMicMute     exec pactl set-source-mute "$(pactl get-default-source)" toggle
 
 # brightness
-bindsym --locked XF86MonBrightnessUp exec brightnessctl set +10% $barup
-bindsym --locked XF86MonBrightnessDown exec brightnessctl --min-value=1 set 10%- $barup
+bindsym --locked XF86MonBrightnessUp exec brightnessctl set +10%
+bindsym --locked XF86MonBrightnessDown exec brightnessctl --min-value=1 set 10%-
 
 bindsym --locked $mod+Shift+Control+k exec kanshictl reload
 
 bindsym $mod+t exec pkill -USR1 wlsunset
 
 # playerctl
-bindsym XF86AudioPlay exec playerctl -p spotify play-pause $barup
-bindsym XF86AudioPrev exec playerctl -p spotify previous $barup
-bindsym XF86AudioNext exec playerctl -p spotify next $barup
+bindsym XF86AudioPlay exec playerctl -p spotify play-pause
+bindsym XF86AudioPrev exec playerctl -p spotify previous
+bindsym XF86AudioNext exec playerctl -p spotify next
 
 # Notifications
 bindsym $mod+Backspace exec dunstctl close

@@ -41,10 +41,12 @@
 
 window {
     background: @barbg;
+    border-top: 1px solid @sunkL;
 }
 
 box > box {
-    padding: 2px;
+    padding: 0px;  /* allows to place mouse cursor to very corner and scroll the workspaces */
+    padding-top: 2px;
 }
 
 box.modules-right widget {
