@@ -274,7 +274,7 @@ mode --pango_markup $grimshot {
     bindsym w exec grimshot savecopy window ; $MDEF
     bindsym o exec grimshot savecopy output ; $MDEF
     bindsym l exec grimshot savecopy screen ; $MDEF
-    bindsym c exec grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | yad --text-info --width 480 ; $MDEF
+    bindsym c exec grim-pick.sh ; $MDEF
     bindsym Escape $MDEF
     bindsym q $MDEF
 }
