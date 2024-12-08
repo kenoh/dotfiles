@@ -279,9 +279,15 @@ mode --pango_markup $grimshot {
     bindsym q $MDEF
 }
 
+set $dumbmode "dumb mode"
+mode $dumbmode {
+    bindsym Escape $MDEF
+    bindsym q $MDEF
+}
 
 set $mymenu mymenu
 mode --pango_markup "$mymenu" {
+    bindsym ctrl+v mode $dumbmode
     bindsym e exec emacsclient --no-wait -c || notify-send 'emacsclient' 'problem running it' ; $MDEF
     bindsym f exec firefox ; $MDEF
     bindsym Shift+f exec firefox -P testing ; $MDEF
