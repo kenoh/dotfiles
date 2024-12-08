@@ -1,0 +1,12 @@
+[Unit]
+Description=Sets SwayWM tab title icons
+StartLimitIntervalSec=60
+StartLimitBurst=15
+
+[Service]
+RestartSec=3
+ExecStartPre=test -n "$SWAYSOCK"
+ExecStart=%h/.cargo/bin/swaycons
+
+[Install]
+WantedBy=sway-session.target

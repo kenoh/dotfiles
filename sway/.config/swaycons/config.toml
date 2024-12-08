@@ -1,0 +1,22 @@
+[global]
+color = "#FFFFFF"
+focused_color = "#FFFFFF"
+icon = ""
+size = "9pt"
+separator = " "
+
+[app_id]
+"org.mozilla.firefox" = { icon = "", color = "#ff8817" }
+"org.mozilla.thunderbird" = { icon = "󱗆", color = "#16cce0" }
+Emacs = { icon = "", color = "#c62bf1" }
+Signal = { icon = "󰭹", color = "#3777f0" }
+Spotify = { icon = "󰓇", color = "#1ed760" }
+chromium = { icon = "", color = "#a1c2fa" }
+firefox = { icon = "", color = "#ff8817" }
+kitty = { icon = "󰄛", color = "#51320a" }
+libreoffice-writer = { icon = "", color = "#00A500" }
+libreoffice-calc = { icon = "󰱿", color = "#00A500" }
+thunderbird = { icon = "󱗆", color = "#16cce0" }
+xarchiver = { icon = "", color = "#c4b22d" }
+
+[title]
