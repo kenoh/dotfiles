@@ -99,6 +99,14 @@ label {
     background: @selbg;
 }
 
+#workspaces label { text-shadow: 1px 0px #333;}
+#sway-workspace-1 label { color: #f00; }
+#sway-workspace-2 label { color: #ff0; }
+#sway-workspace-3 label { color: #0f0; }
+#sway-workspace-4 label { color: #0ff; }
+#sway-workspace-5 label { color: #00f; }
+#sway-workspace-6 label { color: #f0f; }
+
 
 #mode, #submap {
     background: blue;

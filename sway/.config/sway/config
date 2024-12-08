@@ -40,7 +40,7 @@ client.urgent           $cl_urge $cl_urge #ffffff  $cl_urge $cl_urge
 # border
 default_border pixel 5
 default_floating_border normal
-titlebar_border_thickness 4
+titlebar_border_thickness 1
 #titlebar_padding 3 1
 
 # swayfx
@@ -260,14 +260,7 @@ mode $mode_mouse {
 bindsym --border button2 mode $mode_mouse
 
 
-set $grimshot "\
-<b>Shot</b>:\
- a<b>r</b>ea\
- <b>a</b>ctive\
- <b>w</b>in\
- <b>o</b>utput\
- a<b>l</b>l\
- <b>c</b>olor pick"
+set $grimshot "<span size='small'>shot: aRea Active Win Output alL Color</span>"
 mode --pango_markup $grimshot {
     bindsym r exec grimshot savecopy area ; $MDEF
     bindsym a exec grimshot savecopy active ; $MDEF
