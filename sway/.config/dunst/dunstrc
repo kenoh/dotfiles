@@ -1,0 +1,29 @@
+[global]
+follow = mouse
+ignore_dbusclose = true
+corner_radius = 5
+font = "Terminus (TTF) 15"
+markup = full
+format = "<span size='x-small' style='italic'>%a\n</span><b>%s</b>\n%b\n%p"
+width = (300, 800)
+icon_path = "/usr/share/icons/Adwaita"
+enable_recursive_icon_lookup = true
+
+[urgency_low]
+timeout = 0
+fullscreen = delay
+background = "#999"
+foreground = "#000"
+frame_color = "#C07C40"
+
+[urgency_normal]
+timeout = 0
+fullscreen = delay
+background = "#c6c3bc"
+foreground = "#000"
+frame_color = "#C07C40"
+
+[urgency_critical]
+timeout = 0
+
+# vim: ft=cfg
