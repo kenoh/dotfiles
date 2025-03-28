@@ -4,6 +4,7 @@ xwayland force
 
 # automagic for outputs (bindswitch is available since sway-1.1)
 set $laptop eDP-1
+# TODO: try to implement lid debounce below for my buggy lid switch
 bindswitch --locked lid:off output $laptop enable
 bindswitch --locked lid:on output $laptop disable
 
@@ -14,91 +15,76 @@ input * {
 }
 input * tap enabled
 
+
 # look&feel
 #font pango: Liberation Sans Narrow, CommitMono Nerd Font 10
-#font pango: CommitMono Nerd Font 1
-font pango: Terminus (TTF) 9
+font pango: CommitMono Nerd Font 9
+#font pango: Terminus (TTF) 9
+#font pango: Iosevka Fixed 10
 
-set $cl_high #ffd898
-set $cl_indi #ffd8d8
-set $cl_back #231f20
-set $cl_fore #d9d8d8
-set $cl_urge #ee2e24
-
-set $cl_high #0827f5
-set $cl_indi #ff0081
-set $cl_back #818181
-set $cl_fore #fdffff
-set $cl_urge #ee2e24
 
 # Colors                border   bg       text     indi     childborder
-client.focused          $cl_high $cl_high $cl_fore $cl_indi $cl_high
-client.focused_inactive #008080 #008080 $cl_fore  $cl_back $cl_back
-client.unfocused        #c3c3c3  #818181 #000000 $cl_back $cl_back
-client.urgent           $cl_urge $cl_urge #ffffff  $cl_urge $cl_urge
+set $c1 #0f9fcf
+set $c1f #ffffff
+set $c2 #5f8faf
+set $c2f #ffffff
+set $c3 #C6C3BC
+set $c3f #000000
+
+set $cind #f5bd02
+
+client.focused          $c1f     $c1      $c1f     $cind    $c1
+client.focused_inactive $c2f     $c2      $c2f     $c2      $c2
+client.unfocused        $c2      $c3      $c3f     $c3      $c3
+client.urgent           #ff0000  #ff0000  #ffffff  #ff0000  #ff0000
+
 
 # border
 default_border pixel 5
 default_floating_border normal
+# A trade-off below (or why we gave up titlebar borders): I want the
+# `bindsym button1 nop` to work but using `--border` makes the
+# smart/hidden borders ghosts - although not visible, the content in
+# that area is unclickable (which is likely a bug => TODO: file a
+# bug).
 titlebar_border_thickness 1
 #titlebar_padding 3 1
+hide_edge_borders none
+smart_borders on
+gaps outer 0
+gaps inner 0
+smart_gaps off
 
 # swayfx
 default_dim_inactive 0.3
-# shadows enable
-# shadow_color $cl_highff
-# shadow_blur_radius 6
+shadows enable
+shadow_color $c1f
+shadow_inactive_color #0000007f
+shadow_blur_radius 20
 # titlebar_separator disable
-# corner_radius 3
+corner_radius 3
 # layer_effects "panel" "blur enable"
 
 
-# vanilla sway
-hide_edge_borders smart
-gaps outer -3
-gaps inner -3
-smart_gaps on
 
+
+# disallow left-clicking titlebar (avoids mis-changing active window
+# when e.g. changing firefox tab)
+bindsym button1 nop
+bindsym --release button1 nop
 
 # general
-#set $term tilix --action=app-new-window -e
 set $term kitty -1
 set $termx kitty
 
 # windows
 for_window [class="."] title_format "<b>%class</b> :: %title"
-# for_window [app_id="(pavucontrol|nm-connection-manager)"] floating enable
 for_window [title="Firefox – Sharing Indicator"] floating enable; move scratchpad
 no_focus [title="Firefox – Sharing Indicator"]
 
-# colors in titles
-## note: there is a bug in Pango such that setting a size for the very first text in the title_format simply does not work. Preceeding it with a space does the trick. Anyway, enlarging the text substantially enlarges the titlebar itself, so no, thanks.
-
-# for_window [class="."] title_format "X) %title"
-
-# set $hairspace " "
-# set $thinspace " "
-# set $enspace " "
-# set $emspace " "
-# set $pre "<span size='larger' weight='heavy' bgcolor='white'>"
-# set $suf "</span> <b>%title</b>"
-# # 🦊🐦💀𝘾
-# set $emacsTitle title_format $pre"<span color='#6730f2'>"$thinspace" </span>"$suf
-# for_window [class="Emacs"] $emacsTitle
-# for_window [app_id="emacs"] $emacsTitle
-# for_window [app_id="(firefox)"] title_format $pre"<span color='#e66000' size='xx-large'>"$thinspace" </span>"$suf
-# for_window [app_id="(qutebrowser)"] title_format $pre"<span color='#2573ae' size='xx-large'>"$thinspace"qb"$thinspace"</span>"$suf
-# for_window [app_id="(thunderbird)"] title_format $pre"<span color='#2573ae'>"$thinspace" </span>"$suf
-# for_window [app_id="(tilix|terminator|kitty)"] title_format $pre"<span color='black'>"$thinspace" </span>"$suf
-# set $_pdf title_format $pre"<span color='red'>"$thinspace" </span>"$suf
-# for_window [app_id="org.kde.okular|qpdfview.local.qpdfview-qt6"] $_pdf
-# for_window [class="okular|qpdfview"] $_pdf
-# for_window [class="Code"] title_format $pre"<span foreground='#0078d7'>𝘾</span>"$suf
-
 # containers
 for_window [floating] border normal
-for_window [app_id="yad"] floating enable;
-for_window [title="Picture-in-Picture"] floating enable, dim_inactive 0.0, border none;
+#for_window [title="Picture-in-Picture"] floating enable, dim_inactive 0.0, border none; #FIXME
 
 # don't lock when in fullscreen mode
 for_window [shell=".*"] inhibit_idle fullscreen
@@ -115,10 +101,10 @@ focus_on_window_activation focus
 # bindsym $mod+y fullscreen disable; floating enable; resize set 600 400; sticky enable
 
 
-# mouse
-bindsym --border button1 nop "I simply cannot strafe the Firefox tabs properly..."
+bindsym $mod+o output eDP-1 power toggle
 
-# BUG: these two lines, otherwise Shift+C would be interpreted literally (https://github.com/swaywm/sway/issues/4975)
+# BUG: these two lines, otherwise Shift+C would be interpreted
+# literally (https://github.com/swaywm/sway/issues/4975)
 bindsym $mod+Shift+c nop
 bindsym --release $mod+Shift+c reload
 
@@ -136,8 +122,8 @@ bindsym $mod+down focus down
 bindsym $mod+up focus up
 bindsym $mod+right focus right
 
-bindsym f11 exec swayr prev-tabbed-or-stacked-window current-workspace
-bindsym f12 exec swayr next-tabbed-or-stacked-window current-workspace
+bindsym f11 focus left
+bindsym f12 focus right
 
 bindsym $mod+q focus parent
 bindsym $mod+a focus child
@@ -165,8 +151,8 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+Shift+Prior sticky toggle
 
 # scratchpad
-bindsym $mod+grave scratchpad show
-bindsym $mod+Shift+grave move scratchpad
+bindsym --to-code $mod+grave scratchpad show, resize set 95 ppt 95 ppt, move position center
+bindsym --to-code $mod+Shift+grave move scratchpad
 
 set $ws0 number 0
 set $ws1 number 1
@@ -180,16 +166,16 @@ set $ws8 number 8
 set $ws9 number 9
 
 
-bindsym $mod+0 workspace $ws0
-bindsym $mod+1 workspace $ws1
-bindsym $mod+2 workspace $ws2
-bindsym $mod+3 workspace $ws3
-bindsym $mod+4 workspace $ws4
-bindsym $mod+5 workspace $ws5
-bindsym $mod+6 workspace $ws6
-bindsym $mod+7 workspace $ws7
-bindsym $mod+8 workspace $ws8
-bindsym $mod+9 workspace $ws9
+bindsym --to-code $mod+0 workspace $ws0
+bindsym --to-code $mod+1 workspace $ws1
+bindsym --to-code $mod+2 workspace $ws2
+bindsym --to-code $mod+3 workspace $ws3
+bindsym --to-code $mod+4 workspace $ws4
+bindsym --to-code $mod+5 workspace $ws5
+bindsym --to-code $mod+6 workspace $ws6
+bindsym --to-code $mod+7 workspace $ws7
+bindsym --to-code $mod+8 workspace $ws8
+bindsym --to-code $mod+9 workspace $ws9
 
 # we switch to these so on Sway's startup we get reasonable workspaces
 workspace $ws4
@@ -201,16 +187,16 @@ bindsym $mod+z workspace back_and_forth
 bindsym Print workspace back_and_forth
 bindsym Menu workspace back_and_forth
 
-bindsym $mod+Shift+0 move container to workspace $ws0
-bindsym $mod+Shift+1 move container to workspace $ws1
-bindsym $mod+Shift+2 move container to workspace $ws2
-bindsym $mod+Shift+3 move container to workspace $ws3
-bindsym $mod+Shift+4 move container to workspace $ws4
-bindsym $mod+Shift+5 move container to workspace $ws5
-bindsym $mod+Shift+6 move container to workspace $ws6
-bindsym $mod+Shift+7 move container to workspace $ws7
-bindsym $mod+Shift+8 move container to workspace $ws8
-bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym --to-code $mod+Shift+0 move container to workspace $ws0
+bindsym --to-code $mod+Shift+1 move container to workspace $ws1
+bindsym --to-code $mod+Shift+2 move container to workspace $ws2
+bindsym --to-code $mod+Shift+3 move container to workspace $ws3
+bindsym --to-code $mod+Shift+4 move container to workspace $ws4
+bindsym --to-code $mod+Shift+5 move container to workspace $ws5
+bindsym --to-code $mod+Shift+6 move container to workspace $ws6
+bindsym --to-code $mod+Shift+7 move container to workspace $ws7
+bindsym --to-code $mod+Shift+8 move container to workspace $ws8
+bindsym --to-code $mod+Shift+9 move container to workspace $ws9
 
 # screens
 bindsym $mod+Shift+Control+h move workspace to output left
@@ -224,7 +210,6 @@ bindsym $mod+Shift+Control+right move workspace to output right
 
 # outputs
 bindsym $mod+F12 focus output right
-
 
 bar {
   swaybar_command waybar
@@ -277,13 +262,13 @@ mode $dumbmode {
     bindsym Escape $MDEF
     bindsym q $MDEF
 }
-
 set $mymenu mymenu
 mode --pango_markup "$mymenu" {
+    bindsym b exec PATH="$HOME/bin" ls ~/bin | grep '^,qb' | $dmenu ; $MDEF
     bindsym ctrl+v mode $dumbmode
     bindsym e exec emacsclient --no-wait -c || notify-send 'emacsclient' 'problem running it' ; $MDEF
     bindsym f exec firefox ; $MDEF
-    bindsym Shift+f exec firefox -P testing ; $MDEF
+    bindsym Shift+f exec sed -n 's/Name=\(.*\)$/\1/ p'  ~/.mozilla/firefox/profiles.ini | $dmenu | xargs -r firefox -P ; $MDEF
     bindsym h exec thunar ; $MDEF
     bindsym k exec bash ~/bin/kanshi-menu.sh $dmenu ; $MDEF
     bindsym n exec $termx sh -c 'sleep 0.1 && nmtui' ; $MDEF
@@ -291,7 +276,7 @@ mode --pango_markup "$mymenu" {
     bindsym r exec swayr execute-swayr-command ; $MDEF
     bindsym s $MDEF ; mode $grimshot
     bindsym t exec thunderbird ; $MDEF
-    bindsym w exec swayr switch-window ; $MDEF
+    bindsym w exec swayr switch-workspace-or-window ; $MDEF
 
     bindsym $mod+x $MDEF ; exec sed -n '/^mode.*mymenu/,/^bindsym.*mode.*mymenu/p' ~/.config/sway/config | $dmenu -l 30 -w 70
     bindsym Escape $MDEF
@@ -305,8 +290,9 @@ bindsym $mod+x mode "$mymenu"
 ### Externals
 ###############################################################################
 
-# swaybg_command swaybg -m fill -i /usr/share/wallpapers/Next/contents/images_dark/3840x2160.png
-swaybg_command swaybg -m fill -i ~/Pictures/wallpapers/karsten-wurth-inf1783-127612-unsplash.jpg
+swaybg_command swaybg
+output * bg ~/Pictures/wallpapers/430099-japanese-zen-painting-wallpaper-top-free-japanese-zen-painting.jpg fill
+output * bg ~/Pictures/tux.png center
 
 set $lock ~/bin/lock
 
@@ -319,33 +305,32 @@ bindsym $mod+shift+d exec PATH="$HOME/bin:$PATH" $dmenu_run --list-executables-i
 
 bindsym $mod+Return exec $term
 bindsym $mod+Shift+Return exec gnome-terminal || alacrity || kitty || urxvt || xterm
+
+# lock/suspend
 bindsym $mod+Escape exec $lock
 bindsym $mod+Control+Escape exec systemctl suspend
 
-bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume "$(pactl get-default-sink)" -6dB
-bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume "$(pactl get-default-sink)" +6dB
-bindsym --locked XF86AudioMute        exec pactl set-sink-mute "$(pactl get-default-sink)" toggle
-bindsym --locked $mod+XF86AudioMute   exec pactl set-source-mute "$(pactl get-default-source)" toggle
-bindsym --locked XF86AudioMicMute     exec pactl set-source-mute "$(pactl get-default-source)" toggle
+# audio
+set $showSink notify-send -p -t 2000 -r 80085 Volume "$(pactl get-sink-volume @DEFAULT_SINK@ | awk '{ print $5, $6, $7, $8 }') $(pactl get-sink-mute @DEFAULT_SINK@)"
+bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -6dB && $showSink
+bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +6dB && $showSink
+bindsym --locked XF86AudioMute        exec pactl set-sink-mute @DEFAULT_SINK@ toggle && $showSink
+bindsym --locked $mod+XF86AudioMute   exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym --locked XF86AudioMicMute     exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
 # brightness
 bindsym --locked XF86MonBrightnessUp exec brightnessctl set +10%
 bindsym --locked XF86MonBrightnessDown exec brightnessctl --min-value=1 set 10%-
 
-bindsym --locked $mod+Shift+Control+k exec kanshictl reload
-
-bindsym $mod+t exec pkill -USR1 wlsunset
-
-# playerctl
-bindsym XF86AudioPlay exec playerctl -p spotify play-pause
-bindsym XF86AudioPrev exec playerctl -p spotify previous
-bindsym XF86AudioNext exec playerctl -p spotify next
-
 # Notifications
 bindsym $mod+Backspace exec dunstctl close
 bindsym $mod+Shift+Backspace exec dunstctl history-pop
 
-bindsym --no-repeat --release Super_L exec swayr switch-to-urgent-or-lru-window
+# Random
+#bindsym --no-repeat --release Super_L exec swayr switch-to-urgent-or-lru-window
+bindsym --locked $mod+Shift+Control+k exec kanshictl reload
+bindsym $mod+t exec pkill -USR1 --exact wlsunset
+
 
 
 # startup
@@ -355,8 +340,24 @@ bindsym --no-repeat --release Super_L exec swayr switch-to-urgent-or-lru-window
 exec systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots
 exec systemctl --user restart xdg-desktop-portal
 exec systemctl --user import-environment WAYLAND_DISPLAY SWAYSOCK
+
 exec_always kanshictl reload
+
+# default Fedora swaywm startup includes running ssh-agent; but it is
+# fcked up exhibiting after trying to use already added key, like so:
+# > sign_and_send_pubkey: signing failed for RSA "/home/kenoh/.ssh/id_rsa" from agent: agent refused operation
+# Thus I kill it and subsequently some keychain takes care of it.
+exec pkill ssh-agent
 
 # We use facility of sway-session.target (of sway-systemd package in Fedora) to run additional binaries.
 exec_always systemctl --user start sway-session.target
 exec ~/bin/startup.sh
+
+# GTK
+# set $gnome-schema org.gnome.desktop.interface
+# exec_always {
+#     # gsettings set $gnome-schema gtk-theme HighContrast
+#     gsettings set $gnome-schema icon-theme HighContrast:dark
+#     # gsettings set $gnome-schema cursor-theme 'Your cursor Theme'
+#     # gsettings set $gnome-schema font-name 'Your font name'
+# }

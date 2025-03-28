@@ -1,22 +1,25 @@
 [global]
-color = "#FFFFFF"
+color = "#000000"
 focused_color = "#FFFFFF"
-icon = ""
-size = "9pt"
+icon = ""
+size = "12pt"
 separator = " "
 
 [app_id]
 "org.mozilla.firefox" = { icon = "", color = "#ff8817" }
-"org.mozilla.thunderbird" = { icon = "󱗆", color = "#16cce0" }
+# thunderbird (alt icons: 󱗆)
+"org.mozilla.thunderbird" = { icon = "", color = "#16cce0" }
+"net.thunderbird.Thunderbird" = { icon = "", color = "#166cf0" }
+thunderbird = { icon = "", color = "#16cce0" }
 Emacs = { icon = "", color = "#c62bf1" }
 Signal = { icon = "󰭹", color = "#3777f0" }
 Spotify = { icon = "󰓇", color = "#1ed760" }
 chromium = { icon = "", color = "#a1c2fa" }
 firefox = { icon = "", color = "#ff8817" }
-kitty = { icon = "󰄛", color = "#51320a" }
+kitty = { icon = "", color = "#000000" } # alt: 󰄛
 libreoffice-writer = { icon = "", color = "#00A500" }
 libreoffice-calc = { icon = "󰱿", color = "#00A500" }
-thunderbird = { icon = "󱗆", color = "#16cce0" }
 xarchiver = { icon = "", color = "#c4b22d" }
+qpdfview = { icon = "", color = "#ff0000" }
 
 [title]

@@ -10,8 +10,8 @@
     "modules-left": [
         "sway/workspaces",
         "sway/scratchpad",
-        "sway/mode",
-        "sway/window"
+        "sway/mode"
+        // "sway/window"
     ],
     "modules-center": [
     ],
@@ -37,6 +37,9 @@
         "clock",
         "tray"
     ],
+    "sway/scratchpad": {
+        "format": "{count}"
+    },
     "sway/window": {
         "icon": true,
         "icon-size": 16
@@ -52,8 +55,17 @@
         }
     },
     "sway/workspaces": {
-        "format": "{icon}",
-        // "enable-bar-scroll": true,
+        "format": "{icon}<span size='smaller' rise='3pt'> {windows}</span>",
+        "format-window-separator": "",
+        "window-format": "{name}",
+        "window-rewrite-default": ".",
+        "window-rewrite": {
+            "class<org.mozilla.firefox>": "<span color='#ff8800'>F</span>",
+            "class<net.thunderbird.Thunderbird>": "<span color='#00aaff'>T</span>",
+            "class<kitty>": "<span color='#ffffff'>#</span>",
+            "class<Emacs>": "<span color='#ff00ff'>e</span>",
+            "class<qpdfview>": "<span color='red'>p</span>"
+        }
     },
 
     "sway/mode": {
@@ -84,7 +96,7 @@
                 "today": "<span bgcolor='white' color='black'><b><u>{}</u></b></span>"
             }
         }// ,
-        ,"format": "<b>{:%H:%M}</b>"
+        ,"format": "<span color='white'><b>{:%H:%M}</b></span>"
         // "format-alt": "{:%Y-%m-%d}"
     },
     "clock#date": {
@@ -102,7 +114,7 @@
         "interval": 2
     },
     "memory": {
-        "format": "m{}",
+        "format": "<i>m</i>{}",
         "states": {
             "warning": 70,
             "critical": 85
@@ -113,7 +125,7 @@
     },
     "disk#root": {
         "path": "/",
-        "format": "/:{specific_free:0.0f}",
+        "format": "<i>/</i>{specific_free:0.0f}",
         "unit": "GiB",
         "states": {
             "warning": 80,
@@ -122,7 +134,7 @@
     },
     "disk#tmp": {
         "path": "/tmp",
-        "format": "t:{specific_free:0.0f}",
+        "format": "<i>t</i>{specific_free:0.0f}",
         "unit": "GiB",
         "states": {
             "warning": 40,
@@ -131,7 +143,7 @@
     },
     "disk#home": {
         "path": "/home",
-        "format": "~:{specific_free:0.0f}",
+        "format": "<i>~</i>{specific_free:0.0f}",
         "unit": "GiB",
         "states": {
             "warning": 90,
@@ -144,7 +156,7 @@
     },
     "battery#bat0": {
         "bat": "BAT0",
-        "interval": 2,
+        "interval": 15,
         "states": {
             "good": 100,
             "warning": 70,
@@ -157,7 +169,7 @@
     },
     "battery#bat1": {
         "bat": "BAT1",
-        "interval": 2,
+        "interval": 15,
         "states": {
             "good": 100,
             "warning": 70,
@@ -170,7 +182,7 @@
     "network#eth0": {
         "interval": 2,
         "interface": "eth0",
-        "format-ethernet": "E u:{bandwidthUpBits:>} d:{bandwidthDownBits:>}",
+        "format-ethernet": "E <i>u</i>{bandwidthUpBits:>} <i>d</i>{bandwidthDownBits:>}",
         "format-linked": "E (No IP)",
         "format-disconnected": "E down",
         "tooltip-format": "{ifname} w/ {ipaddr}/{cidr} via {gwaddr}",
@@ -178,16 +190,21 @@
     "network#wlan0": {
         "interval": 2,
         "interface": "wlan0",
-        "format-wifi": "W u:{bandwidthUpBits:>} d:{bandwidthDownBits:>}",
+        "format-wifi": "W <i>u</i>{bandwidthUpBits:>} <i>d</i>{bandwidthDownBits:>}",
         "format-linked": "W (No IP)",
         "format-disconnected": "W down",
         "tooltip-format": "{ifname} w/ {ipaddr}/{cidr} via {gwaddr} @ {essid}({bssid}) @ {signaldBm} dBm",
     },
     "pulseaudio": {
-        "format": "o:<b>{volume}</b> {format_source}",
-        "format-muted": "<span bgcolor='yellow'>o:M</span> {format_source}",
-        "format-source": "<span bgcolor='red'>i:{volume}</span>",
-        "format-source-muted": "i:M",
+        "format": "<i>o</i><span color='white'><b>{volume}</b></span> {format_source}",
+        "format-muted": "<span bgcolor='yellow'><i>o</i>M</span> {format_source}",
+        "format-source": "<span bgcolor='red' color='white'><i>i</i>{volume}</span>",
+        "format-source-muted": "<i>i</i>M",
+        "states": {
+            "good": 60,
+            "warning": 100,
+            "critical": 999
+        },
         "scroll-step": 1,
         "on-click": "pavucontrol",
         "on-click-middle": "pactl set-sink-mute \"$(pactl get-default-sink)\" toggle",
@@ -198,7 +215,7 @@
     "custom/wlsunset": {
         "format": "T",
         "tooltip-format": "high -> low -> auto",
-        "on-click": "pkill -USR1 wlsunset"
+        "on-click": "pkill --exact -USR1 wlsunset"
     },
 
     "systemd-failed-units": {

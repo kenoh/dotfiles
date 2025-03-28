@@ -3,13 +3,18 @@ executable = 'fuzzel'
 args = [
      '--dmenu',
      '--width=80',
+     '--lines=24',
+     '--line-height=22',
      '--dpi-aware=no',
-     '--font=Terminus (TTF):style=Bold:size=15',
+     # '--font=Terminus (TTF):style=Bold:size=15',
+     '--font=Iosevka Fixed:size=15',
      '--background=c0c0c0ff',
      '--text-color=000000ff',
 ]
 
 [format]
-window_format = "{workspace_name:{:<3.3}} {app_name:{:<11.11}}   {title:{:<.90}...} \u0000icon\u001f{app_icon}"
+workspace_format = '{name}'
+window_format = "{indent}{app_name:{:>11.11}}  {title:{:<.80}...}\u0000icon\u001f{app_icon}"
+#window_format = "{workspace_name:{:<3.3}} {app_name:{:<11.11}}   {title:{:<.90}...} \u0000icon\u001f{app_icon}"
 indent = ' '
 html_escape = false

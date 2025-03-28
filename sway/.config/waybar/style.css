@@ -1,47 +1,32 @@
-/* light */
-@define-color barbg #ccc;
-@define-color selbg #eee;
-@define-color text #000;
-@define-color textDim #888;
-@define-color warn yellow;
-@define-color warn2 black;
+/* black */
+@define-color active #0f9fcf;
+@define-color visible #5f8faf;
+@define-color barbg #000;
+@define-color text #aaa;
+@define-color textDim #666;
+@define-color warn @barbg;
+@define-color warn2 #ff0;
 @define-color crit red;
 @define-color crit2 white;
 
-@define-color sunkD grey;
-@define-color sunkL white;
-
-@define-color butD black;
-@define-color butL white;
- 
-/* darker */
-@define-color barbg #666;
-@define-color selbg #ccc;
-@define-color text #000;
-@define-color textDim #aaa;
-@define-color warn yellow;
-@define-color warn2 black;
-@define-color crit red;
-@define-color crit2 white;
-
-@define-color sunkD #333;
-@define-color sunkL #aaa;
-
-@define-color butD black;
-@define-color butL white;
+@define-color ws1 rgba(223,   0,   0, 0.8);
+@define-color ws2 rgba(223, 223,   0, 0.8);
+@define-color ws3 rgba(  0, 223,   0, 0.8);
+@define-color ws4 rgba(  0, 223, 223, 0.8);
+@define-color ws5 rgba(  0,   0, 223, 0.8);
+@define-color ws6 rgba(223,   0, 223, 0.8);
 
 
 
 * {
-    font-family: Terminus, CommitMono Nerd Font, FontAwesome, sans-serif;
-    font-size: 14px;
+    font-family: Iosevka Fixed, Terminus, CommitMono Nerd Font, FontAwesome, sans-serif;
+    font-size: 13px;
     min-height: 0;
     color: @text;
 }
 
 window {
     background: @barbg;
-    border-top: 1px solid @sunkL;
 }
 
 box > box {
@@ -50,8 +35,8 @@ box > box {
 }
 
 box.modules-right widget {
-    border-color: @sunkD @sunkL @sunkL @sunkD ;
-    border-width: 1px;
+    border-left-color: #333 ;
+    border-left-width: 1px;
     border-style: ridge;
     border-radius: 0px;
 }
@@ -63,9 +48,11 @@ label {
 
 .warning {
     background: @warn;
+    color: @warn2;
 }
 .critical {
     background: @crit;
+    color: @crit2;
 }
 
 
@@ -77,7 +64,7 @@ label {
 }
 
 #window {
-    padding-left: 8px;
+    padding-left: 12px;
 }
 
 #workspaces button.urgent {
@@ -85,33 +72,44 @@ label {
     color: @crit2;
 }
 #workspaces button {
-    border-color: @butL @butD @butD @butL ;
-    border-width: 1px;
-    border-style: ridge;
-    border-radius: 0px;
+    border-radius: 12px;
     padding: 0px;  /* fixes possibly default taking too much space */
+    border: 1px solid gray;
     margin-right: 2px;
 }
-#workspaces button.visible {
-    border-color: @butD @butL @butL @butD;
+#workspaces button label {
+    margin: 0px;
 }
+#workspaces button.visible {
+    border-color: @visible;
+}
+/* #workspaces label { color: white; font-weight: bold;} */
 #workspaces button.focused, #workspaces button.active {
-    background: @selbg;
+    background: white;
+    /* text-shadow: -1px -1px #000, -1px 1px #000, 1px -1px #000, 1px 1px #000; */
+}
+#workspaces button.focused label, #workspace button.active label {
+    color: black;
 }
 
-#workspaces label { text-shadow: 1px 0px #333;}
-#sway-workspace-1 label { color: #f00; }
-#sway-workspace-2 label { color: #ff0; }
-#sway-workspace-3 label { color: #0f0; }
-#sway-workspace-4 label { color: #0ff; }
-#sway-workspace-5 label { color: #00f; }
-#sway-workspace-6 label { color: #f0f; }
+#sway-workspace-1:not(.visible) button { background-image: linear-gradient(to top, @ws1 0%, rgba(0,0,0,0) 40% ); }
+#sway-workspace-2:not(.visible) button { background-image: linear-gradient(to top, @ws2 0%, rgba(0,0,0,0) 40% ); }
+#sway-workspace-3:not(.visible) button { background-image: linear-gradient(to top, @ws3 0%, rgba(0,0,0,0) 40% ); }
+#sway-workspace-4:not(.visible) button { background-image: linear-gradient(to top, @ws4 0%, rgba(0,0,0,0) 40% ); }
+#sway-workspace-5:not(.visible) button { background-image: linear-gradient(to top, @ws5 0%, rgba(0,0,0,0) 40% ); }
+#sway-workspace-6:not(.visible) button { background-image: linear-gradient(to top, @ws6 0%, rgba(0,0,0,0) 40% ); }
+
+#scratchpad {
+    background: white;
+    color: black;
+    margin-left: 10px;
+    border-radius: 12px;
+}
 
 
 #mode, #submap {
     background: blue;
     color: #fff;
-    border-bottom: 0px solid white;
 }
 
 
@@ -139,7 +137,8 @@ label {
     color: white;
 }
 #battery.charging {
-    color: @warn;
+    color: @warn2;
+    background-color: @warn;
 }
 #battery.discharging {
     background: @warn;
@@ -154,7 +153,7 @@ label {
     color: @textDim;
 }
 #network.linked {
-    color: @crit;
+    color: #828;
 }
 
 

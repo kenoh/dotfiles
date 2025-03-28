@@ -1,6 +1,12 @@
 #!/bin/bash
 
-set -e
+set -euo pipefail
+
+# flock -n "$0"  # related to DEBOUNCE below.
+
+###
+# PRE-TEST
+###
 
 CMD="$0"
 
@@ -14,11 +20,38 @@ tst() {
 tst swaylock
 tst dunstctl
 
+
+###
+# DEBOUNCE
+###
+
+# dT=0.1
+# N0=10
+# Nmax=15
+
+# x=$N0;
+# for i in $(seq 1 "$Nmax"); do
+# 	sleep "$dT"
+# 	cat /proc/acpi/button/lid/LID/state | grep '^state: *open$' >/dev/null && x=$(( x - 1 )) || x=$N0;
+# 	if [ x$x = x0 ]; then
+# 		break;
+# 	fi
+# done
+# test x$x != x0 && echo bounced && exit 1
+
+
+###
+# PREP
+###
 export PREV="$(dunstctl is-paused)"
 dunstctl set-paused true
 
+
+###
+# EXEC
+###
 {
-	swaylock
+	swaylock -i ~/Pictures/bg$(( $RANDOM % 3 )).png
 
 	dunstctl set-paused "$PREV"
 	# killall -SIGUSR1 py3status
