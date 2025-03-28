@@ -11,7 +11,6 @@
         "sway/workspaces",
         "sway/scratchpad",
         "sway/mode"
-        // "sway/window"
     ],
     "modules-center": [
     ],
@@ -184,16 +183,16 @@
         "interface": "eth0",
         "format-ethernet": "E <i>u</i>{bandwidthUpBits:>} <i>d</i>{bandwidthDownBits:>}",
         "format-linked": "E (No IP)",
-        "format-disconnected": "E down",
-        "tooltip-format": "{ifname} w/ {ipaddr}/{cidr} via {gwaddr}",
+        "format-disconnected": "E -",
+        "tooltip-format": "{ifname}\n<b>{ipaddr}</b>/{cidr}\nvia {gwaddr}",
     },
     "network#wlan0": {
         "interval": 2,
         "interface": "wlan0",
         "format-wifi": "W <i>u</i>{bandwidthUpBits:>} <i>d</i>{bandwidthDownBits:>}",
         "format-linked": "W (No IP)",
-        "format-disconnected": "W down",
-        "tooltip-format": "{ifname} w/ {ipaddr}/{cidr} via {gwaddr} @ {essid}({bssid}) @ {signaldBm} dBm",
+        "format-disconnected": "W -",
+        "tooltip-format": "{ifname}\n<b>{ipaddr}</b>/{cidr}\nvia {gwaddr}\n{essid}({bssid})\n{signaldBm} dBm",
     },
     "pulseaudio": {
         "format": "<i>o</i><span color='white'><b>{volume}</b></span> {format_source}",

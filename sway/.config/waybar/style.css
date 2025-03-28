@@ -58,9 +58,12 @@ label {
 
 #language {
     min-width: 2em;
+    background: cyan;
+    color: purple;
 }
-#language:not(.us) {
-    background: aqua;
+#language.us {
+    background: inherit;
+    color: inherit;
 }
 
 #window {
@@ -74,30 +77,27 @@ label {
 #workspaces button {
     border-radius: 12px;
     padding: 0px;  /* fixes possibly default taking too much space */
-    border: 1px solid gray;
+    border-left: 1px solid gray;
     margin-right: 2px;
 }
 #workspaces button label {
     margin: 0px;
+    text-shadow: -1px -1px #000, -1px 1px #000, 1px -1px #000, 1px 1px #000;
+    color: white;
 }
 #workspaces button.visible {
-    border-color: @visible;
+    background-image: linear-gradient(to right, white 0%, rgba(0,0,0,0) 3em, white 100%);
 }
-/* #workspaces label { color: white; font-weight: bold;} */
 #workspaces button.focused, #workspaces button.active {
     background: white;
-    /* text-shadow: -1px -1px #000, -1px 1px #000, 1px -1px #000, 1px 1px #000; */
-}
-#workspaces button.focused label, #workspace button.active label {
-    color: black;
 }
 
-#sway-workspace-1:not(.visible) button { background-image: linear-gradient(to top, @ws1 0%, rgba(0,0,0,0) 40% ); }
-#sway-workspace-2:not(.visible) button { background-image: linear-gradient(to top, @ws2 0%, rgba(0,0,0,0) 40% ); }
-#sway-workspace-3:not(.visible) button { background-image: linear-gradient(to top, @ws3 0%, rgba(0,0,0,0) 40% ); }
-#sway-workspace-4:not(.visible) button { background-image: linear-gradient(to top, @ws4 0%, rgba(0,0,0,0) 40% ); }
-#sway-workspace-5:not(.visible) button { background-image: linear-gradient(to top, @ws5 0%, rgba(0,0,0,0) 40% ); }
-#sway-workspace-6:not(.visible) button { background-image: linear-gradient(to top, @ws6 0%, rgba(0,0,0,0) 40% ); }
+#sway-workspace-1:not(.visible) { background-image: linear-gradient(to right, @ws1 0%, rgba(0,0,0,0) 3em ); }
+#sway-workspace-2:not(.visible) { background-image: linear-gradient(to right, @ws2 0%, rgba(0,0,0,0) 3em ); }
+#sway-workspace-3:not(.visible) { background-image: linear-gradient(to right, @ws3 0%, rgba(0,0,0,0) 3em ); }
+#sway-workspace-4:not(.visible) { background-image: linear-gradient(to right, @ws4 0%, rgba(0,0,0,0) 3em ); }
+#sway-workspace-5:not(.visible) { background-image: linear-gradient(to right, @ws5 0%, rgba(0,0,0,0) 3em ); }
+#sway-workspace-6:not(.visible) { background-image: linear-gradient(to right, @ws6 0%, rgba(0,0,0,0) 3em ); }
 
 #scratchpad {
     background: white;
