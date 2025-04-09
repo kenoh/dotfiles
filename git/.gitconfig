@@ -1,0 +1,59 @@
+[include]
+	path = ~/.gitconfig_user
+[core]
+	editor = nvim
+	excludesfile = ~/.gitignore_global
+	#pager = delta
+	pager = sed 's/\t/⤚------⇥/g' | less -R
+[pager]
+	blame = true
+[pull]
+	ff = only
+[color]
+	ui = auto
+[color "diff"]
+	whitespace = red reverse
+[diff "org"]
+	xfuncname="^\\*+ +(.*)$"
+[diff "el"]
+	xfuncname="^(;;;;*\\s*[^;].*)$"
+[diff]
+	tool = meld
+	context = 5
+	colorMoved = default
+	colorMovedWS = allow-indentation-change
+[format]
+	pretty = fuller
+[apply]
+	whitespace = fix  # Remove trailing whitespace
+[commit]
+	verbose = 2
+[merge]
+	tool = meld
+	conflictstyle = zdiff3
+[filter "gignre"]
+	clean = sed \"/GIGNRE/d\"
+	smudge = sed \"/GIGNRE/d\"
+[interactive]
+	difffilter = delta
+[include]
+	path = ~/.config/delta/themes.gitconfig
+[delta]
+	features = interactive #, mellow-barbet
+	syntax-theme = 1337
+	navigate = true
+	true-color = always
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[lfs]
+	cachecredentials = true
+[diff "lfs"]
+	# Uncomment below to have some diff for LFS blobs, but not always working correctly.
+	#textconv = head -c 10K
+[init]
+	defaultBranch = master
+[tag]
+	sort = version:refname
