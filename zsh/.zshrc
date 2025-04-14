@@ -90,7 +90,7 @@ bindkey "^[^d" forward-kill-full-word
 
 ## Fix home/end keys
 bindkey '\e[H' beginning-of-line
-bindkey '\e[F' end-of-line 
+bindkey '\e[F' end-of-line
 bindkey  "^[[3~"  delete-char
 
 
@@ -144,8 +144,8 @@ has colordiff \
     && alias d='colordiff -u' \
     || alias d='diff -u'
 douts() {
-    [ "$#" -lt 3 ] && echo 'usage: douts BEFORE FST SND [DIFF-OPTS [AFTER]]' && return
-    eval "${DIFFTOOL:-d} $4 <($1 $2 $5) <($1 $3 $5)"; 
+    [ "$#" -lt 3 ] && echo 'usage: douts BEFORE FST SND [AFTER [DIFF-OPTS]]' && return
+    eval "${DIFFTOOL:-d} $5 <($1$2$4) <($1$3$4)";
 }
 
 ## git
@@ -196,6 +196,7 @@ alias dlastid='docker ps -l -q'
 alias dbuild.='docker build -t k-$(basename "$PWD") .'
 alias drunp='docker run -ti'
 alias drunr='docker run -ti --rm=true'
+alias drunr.='docker run -ti --rm=true k-$(basename "$PWD")'
 alias dexec='docker exec -ti'
 dshell() {
     LASTID="$(docker ps -l --format '{{.ID}}')"
@@ -289,10 +290,18 @@ F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # DEBUG: profile (also enable the modload at the top).
 # zprof
 
+function check_ssh_env() {
+    # TODO: add as precmd_function
+    # TODO: pull sctl show-env.. and if SSH_* vars differ, show a warning
+    # TODO: same for emacs?
+}
 
 ## starship
 function set_win_title(){
     echo -ne "\033]0; @$(basename "$PWD") \007"
 }
 precmd_functions+=(set_win_title)
-eval $(starship init zsh)
+has starship && eval "$(starship init zsh)"
+
+## atuin (shell command history addon)
+has atuin && eval "$(atuin init --disable-up-arrow zsh)"
