@@ -53,6 +53,10 @@
 (column-number-mode t)
 (size-indication-mode t)
 
+;; Minibuffer
+(setq enable-recursive-minibuffers t)
+(minibuffer-depth-indicate-mode 1)
+
 ;; Parens
 (require 'paren)
 (setq show-paren-delay 0.5)
@@ -113,35 +117,11 @@
 ;; suppres warnings
 (setq byte-compile-warnings '(not cl-functions obsolete docstrings))
 
+;; line numbers
+(global-display-line-numbers-mode)
 
 ;; treesitter
-(unless (version< emacs-version "29.1")
-  (setq treesit-language-source-alist
-        '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-          ;; (cmake "https://github.com/uyha/tree-sitter-cmake")
-          (css "https://github.com/tree-sitter/tree-sitter-css")
-          (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-          (go "https://github.com/tree-sitter/tree-sitter-go")
-          (html "https://github.com/tree-sitter/tree-sitter-html")
-          (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-          (json "https://github.com/tree-sitter/tree-sitter-json")
-          ;; (make "https://github.com/alemuller/tree-sitter-make")
-          ;; (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-          (python "https://github.com/tree-sitter/tree-sitter-python")
-          (toml "https://github.com/tree-sitter/tree-sitter-toml")
-          (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-          (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-          ;; (yaml "https://github.com/ikatyang/tree-sitter-yaml")
-          )
-        major-mode-remap-alist
-        '(;; (yaml-mode . yaml-ts-mode)
-          ;; (bash-mode . bash-ts-mode)
-          ;; (js2-mode . js-ts-mode)
-          ;; (typescript-mode . typescript-ts-mode)
-          (json-mode . json-ts-mode)
-          ;; (css-mode . css-ts-mode)
-          ;; (python-mode . python-ts-mode)
-          )))
+(unless (version< emacs-version "29.1") (load "init-treesitter.el"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; BOOTSTRAP (packaging and basic packages setup)
@@ -185,6 +165,10 @@
 ;; some stats to gather here:
 ;; (setq use-package-compute-statistics t)
 
+(use-package emacs
+  :delight
+  (dired-mode "D")
+  (evil-collection-unimpaired-mode " eUi"))
 
 ;; ;; quelpa allows use-package install from git
 ;; (unless (package-installed-p 'quelpa)
@@ -394,7 +378,9 @@
   (setq magit-display-buffer-function
         (lambda (buf) (display-buffer-same-window buf '()))
         magit-diff-refine-hunk t
-        magit-save-repository-buffers nil)
+        magit-save-repository-buffers nil
+        magit-diff-paint-whitespace-lines 'both
+        magit-diff-refine-ignore-whitespace nil)
   (with-eval-after-load 'magit  ;; Might be useful for when checking out another branch while having a dirty worktree.
     (transient-append-suffix 'magit-branch "-r"
       '("-m" "Merge local modifications" "--merge"))))
@@ -467,6 +453,7 @@
 
 (use-package projectile
   ;; :delight '(:eval (concat " <" (projectile-project-name) ">"))
+  :delight " P"
   :init
   ;; (setq projectile-require-project-root nil
   ;;       projectile-switch-project-action #'projectile-dired)
@@ -476,12 +463,10 @@
 
   (when t  ;; buffer name tweaks
     (defun k--proj-relative-name (name)
-      (rename-buffer
-       (ignore-errors
-         (concat (projectile-project-name)
-                 "|"
-                 (file-relative-name name
-                                     (projectile-project-root))))))
+      (let ((pn (projectile-project-name))
+            (pr (projectile-project-root)))
+        (when pr  ; "-" is returned for no project
+          (rename-buffer (ignore-errors (concat pn "|" (file-relative-name name pr)))))))
     (defun k--proj-relative-buf-name ()
       (k--proj-relative-name buffer-file-name))
     (defun k--proj-relative-dired-name ()
@@ -524,6 +509,7 @@
 
 
 (use-package editorconfig
+  :delight " EC"
   :ensure t
   :config
   (editorconfig-mode 1))
@@ -583,7 +569,8 @@
 ;;;; Look'n'feel
 
 (let ((face (car (seq-intersection
-                  '("JetBrains Mono NL"
+                  '("Iosevka Fixed"
+                    "JetBrains Mono NL"
                     "DejaVu Sans Mono"
                     "Monospace")
                   (cons "Monospace" (font-family-list))))))
@@ -717,7 +704,8 @@
 (use-package lsp-mode :defer t
   :hook ((rust-mode . lsp-deferred)
          (lsp-mode . lsp-enable-which-key-integration)
-         (python-mode . lsp))
+         (python-mode . lsp)
+         (terraform-mode . lsp))
   :commands (lsp lsp-deferred)
   ;; :init
   ;; (my-leader ";" nil :wk "LSP fu")
