@@ -1,0 +1,12 @@
+[Unit]
+Description=Debounced lid switch screenlock
+StartLimitIntervalSec=60
+StartLimitBurst=15
+
+[Service]
+RestartSec=3
+ExecStartPre=test -n "$SWAYSOCK"
+ExecStart=%h/bin/evdev-debounce.py ~/bin/lock
+
+[Install]
+WantedBy=sway-session.target

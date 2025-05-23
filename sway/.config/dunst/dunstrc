@@ -3,7 +3,7 @@ follow = mouse
 ignore_dbusclose = true
 corner_radius = 5
 font = "Terminus (TTF) 15"
-markup = full
+markup = strip
 format = "<span size='x-small' style='italic'>%a\n</span><b>%s</b>\n%b\n%p"
 width = (300, 800)
 icon_path = "/usr/share/icons/Adwaita"
