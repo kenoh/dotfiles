@@ -1,6 +1,7 @@
 .config
 .config/kitty
 .config/sway
+.config/sway/startup.d
 .config/systemd/user
 .local
 .local/share

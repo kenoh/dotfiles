@@ -1,0 +1,2 @@
+#!/bin/sh
+exec wlsunset -l 49 -L 16

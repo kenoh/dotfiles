@@ -58,16 +58,14 @@ label {
 
 #language {
     min-width: 2em;
-    background: cyan;
-    color: purple;
-}
-#language.us {
-    background: inherit;
-    color: inherit;
 }
 
 #window {
     padding-left: 12px;
+}
+
+#workspaces button.empty label {
+    color: #666;
 }
 
 #workspaces button.urgent {
@@ -75,29 +73,23 @@ label {
     color: @crit2;
 }
 #workspaces button {
-    border-radius: 12px;
+    border-radius: 0px;
     padding: 0px;  /* fixes possibly default taking too much space */
-    border-left: 1px solid gray;
-    margin-right: 2px;
+    border-right: 1px solid gray;
+    padding-right: 2px;
 }
 #workspaces button label {
     margin: 0px;
-    text-shadow: -1px -1px #000, -1px 1px #000, 1px -1px #000, 1px 1px #000;
+    /* text-shadow: -1px -1px #000, -1px 1px #000, 1px -1px #000, 1px 1px #000; */
     color: white;
 }
 #workspaces button.visible {
     background-image: linear-gradient(to right, white 0%, rgba(0,0,0,0) 3em, white 100%);
 }
 #workspaces button.focused, #workspaces button.active {
-    background: white;
+    background: #285577;
 }
 
-#sway-workspace-1:not(.visible) { background-image: linear-gradient(to right, @ws1 0%, rgba(0,0,0,0) 3em ); }
-#sway-workspace-2:not(.visible) { background-image: linear-gradient(to right, @ws2 0%, rgba(0,0,0,0) 3em ); }
-#sway-workspace-3:not(.visible) { background-image: linear-gradient(to right, @ws3 0%, rgba(0,0,0,0) 3em ); }
-#sway-workspace-4:not(.visible) { background-image: linear-gradient(to right, @ws4 0%, rgba(0,0,0,0) 3em ); }
-#sway-workspace-5:not(.visible) { background-image: linear-gradient(to right, @ws5 0%, rgba(0,0,0,0) 3em ); }
-#sway-workspace-6:not(.visible) { background-image: linear-gradient(to right, @ws6 0%, rgba(0,0,0,0) 3em ); }
 
 #scratchpad {
     background: white;
@@ -110,6 +102,7 @@ label {
 #mode, #submap {
     background: blue;
     color: #fff;
+    min-width: 50em;
 }
 
 

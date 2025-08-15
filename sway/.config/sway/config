@@ -1,12 +1,11 @@
 set $mod Mod4
 
-xwayland force
+#xwayland force
 
 # automagic for outputs (bindswitch is available since sway-1.1)
 set $laptop eDP-1
-# TODO: try to implement lid debounce below for my buggy lid switch
-bindswitch --locked lid:off output $laptop enable
-bindswitch --locked lid:on output $laptop disable
+bindswitch --reload --locked lid:off exec sh -c "sleep 3; swaymsg 'output $laptop enable'"
+bindswitch --reload --locked lid:on  exec sh -c "sleep 3; swaymsg 'output $laptop disable'"
 
 input * {
   xkb_options "ctrl:nocaps,grp:ctrls_toggle"
@@ -14,6 +13,11 @@ input * {
   xkb_variant ",qwerty,qwerty,phonetic_mac"
 }
 input * tap enabled
+input "2:7:SynPS/2_Synaptics_TouchPad" pointer_accel 0.3
+
+# touchscreen
+input "1267:11453:ELAN901C:00_04F3:2CBD" events disabled
+bindsym XF86Display exec swaymsg input "1267:11453:ELAN901C:00_04F3:2CBD" events toggle enabled disabled
 
 
 # look&feel
@@ -24,19 +28,19 @@ font pango: CommitMono Nerd Font 9
 
 
 # Colors                border   bg       text     indi     childborder
-set $c1 #0f9fcf
-set $c1f #ffffff
-set $c2 #5f8faf
-set $c2f #ffffff
-set $c3 #C6C3BC
-set $c3f #000000
+# set $c1 #0f9fcf
+# set $c1f #ffffff
+# set $c2 #5f8faf
+# set $c2f #ffffff
+# set $c3 #C6C3BC
+# set $c3f #000000
 
-set $cind #f5bd02
+# set $cind #f5bd02
 
-client.focused          $c1f     $c1      $c1f     $cind    $c1
-client.focused_inactive $c2f     $c2      $c2f     $c2      $c2
-client.unfocused        $c2      $c3      $c3f     $c3      $c3
-client.urgent           #ff0000  #ff0000  #ffffff  #ff0000  #ff0000
+# client.focused          $c1f     $c1      $c1f     $cind    $c1
+# client.focused_inactive $c2f     $c2      $c2f     $c2      $c2
+# client.unfocused        $c2      $c3      $c3f     $c3      $c3
+# client.urgent           #ff0000  #ff0000  #ffffff  #ff0000  #ff0000
 
 
 # border
@@ -47,7 +51,7 @@ default_floating_border normal
 # smart/hidden borders ghosts - although not visible, the content in
 # that area is unclickable (which is likely a bug => TODO: file a
 # bug).
-titlebar_border_thickness 1
+titlebar_border_thickness 3
 #titlebar_padding 3 1
 hide_edge_borders none
 smart_borders on
@@ -56,14 +60,14 @@ gaps inner 0
 smart_gaps off
 
 # swayfx
-default_dim_inactive 0.3
-shadows enable
-shadow_color $c1f
-shadow_inactive_color #0000007f
-shadow_blur_radius 20
-# titlebar_separator disable
-corner_radius 3
-# layer_effects "panel" "blur enable"
+#default_dim_inactive 0.3
+#shadows enable
+#shadow_color $c1f
+#shadow_inactive_color #0000007f
+#shadow_blur_radius 20
+## titlebar_separator disable
+#corner_radius 3
+## layer_effects "panel" "blur enable"
 
 
 
@@ -75,10 +79,27 @@ bindsym --release button1 nop
 
 # general
 set $term kitty -1
-set $termx kitty
+set $term0 kitty
+
+# title rewrite
+for_window [class="."] title_format "<b><i>%class</i></b> :: %title"
+for_window [app_id="."] title_format "<b>%class</b> :: %title"
+for_window [app_id="org.mozilla.firefox"] title_format \
+                    "<span bgcolor='darkorange' color='white'>FF</span> %title"
+for_window [app_id="net.thunderbird.Thunderbird"] title_format \
+                    "<span bgcolor='blue' color='white'>TB</span> %title"
+for_window [app_id="kitty"] title_format \
+                    "<span bgcolor='black' color='white'>KT</span> %title"
+for_window [app_id="libreoffice-writer"] title_format \
+                    "<span bgcolor='white' color='blue'>Write</span> %title"
+for_window [app_id="libreoffice-calc"] title_format \
+                    "<span bgcolor='white' color='darkgreen'>Calc</span> %title"
+for_window [app_id="qpdfview"] title_format \
+                    "<span bgcolor='white' color='darkred'>PDF</span> %title"
+for_window [class="Emacs"] title_format \
+                    "<span bgcolor='purple' color='white'>EM</span> %title"
 
 # windows
-for_window [class="."] title_format "<b>%class</b> :: %title"
 for_window [title="Firefox – Sharing Indicator"] floating enable; move scratchpad
 no_focus [title="Firefox – Sharing Indicator"]
 
@@ -221,6 +242,10 @@ bar {
 ###############################################################################
 
 set $MDEF mode "default"
+set $modeexit \
+	bindsym q $$MDEF\
+        bindsym Return $$MDEF\
+        bindsym Escape $$MDEF
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -229,8 +254,7 @@ mode "resize" {
         bindsym k resize shrink height 10 px or 10 ppt
         bindsym l resize grow width 10 px or 10 ppt
 
-        bindsym Return $MDEF
-        bindsym Escape $MDEF
+        $modeexit
 }
 bindsym $mod+r mode "resize"
 
@@ -271,8 +295,8 @@ mode --pango_markup "$mymenu" {
     bindsym Shift+f exec sed -n 's/Name=\(.*\)$/\1/ p'  ~/.mozilla/firefox/profiles.ini | $dmenu | xargs -r firefox -P ; $MDEF
     bindsym h exec thunar ; $MDEF
     bindsym k exec bash ~/bin/kanshi-menu.sh $dmenu ; $MDEF
-    bindsym n exec $termx sh -c 'sleep 0.1 && nmtui' ; $MDEF
-    bindsym p exec $termx sh -c 'pavucontrol' ; $MDEF
+    bindsym n exec $term0 sh -c 'sleep 0.1 && nmtui' ; $MDEF
+    bindsym p exec $term0 sh -c 'pavucontrol' ; $MDEF
     bindsym r exec swayr execute-swayr-command ; $MDEF
     bindsym s $MDEF ; mode $grimshot
     bindsym t exec thunderbird ; $MDEF
@@ -291,8 +315,8 @@ bindsym $mod+x mode "$mymenu"
 ###############################################################################
 
 swaybg_command swaybg
-output * bg ~/Pictures/wallpapers/430099-japanese-zen-painting-wallpaper-top-free-japanese-zen-painting.jpg fill
-output * bg ~/Pictures/tux.png center
+#output * bg ~/Pictures/wallpapers/430099-japanese-zen-painting-wallpaper-top-free-japanese-zen-painting.jpg fill
+#output * bg ~/Pictures/tux.png center
 
 set $lock ~/bin/lock
 
@@ -307,7 +331,7 @@ bindsym $mod+Return exec $term
 bindsym $mod+Shift+Return exec gnome-terminal || alacrity || kitty || urxvt || xterm
 
 # lock/suspend
-bindsym $mod+Escape exec $lock
+bindsym $mod+Escape exec swaylock
 bindsym $mod+Control+Escape exec systemctl suspend
 
 # audio
@@ -319,8 +343,8 @@ bindsym --locked $mod+XF86AudioMute   exec pactl set-source-mute @DEFAULT_SOURCE
 bindsym --locked XF86AudioMicMute     exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
 # brightness
-bindsym --locked XF86MonBrightnessUp exec brightnessctl set +10%
-bindsym --locked XF86MonBrightnessDown exec brightnessctl --min-value=1 set 10%-
+bindsym --locked XF86MonBrightnessUp exec brightnessctl -e set +10%
+bindsym --locked XF86MonBrightnessDown exec brightnessctl -e --min-value=1 set 10%-
 
 # Notifications
 bindsym $mod+Backspace exec dunstctl close
@@ -351,6 +375,9 @@ exec pkill ssh-agent
 
 # We use facility of sway-session.target (of sway-systemd package in Fedora) to run additional binaries.
 exec_always systemctl --user start sway-session.target
+set $sup ~/.config/sway/startup.sh
+exec $sup
+bindsym $mod+shift+s exec $term0 $sup attach
 exec ~/bin/startup.sh
 
 # GTK

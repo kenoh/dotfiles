@@ -2,7 +2,7 @@
 // vi: ft=jsonc
 {
     "layer": "bottom",
-    "position": "bottom",
+    "position": "top",
     "margin": 0,
     "height": 16,
     "spacing": 0,
@@ -10,9 +10,10 @@
     "modules-left": [
         "sway/workspaces",
         "sway/scratchpad",
-        "sway/mode"
+        "sway/mode",
     ],
     "modules-center": [
+        "sway/window",
     ],
     "modules-right": [
         "systemd-failed-units",
@@ -20,6 +21,7 @@
         "idle_inhibitor",
         "pulseaudio",
         "wireplumber",
+        "network#tun0",
         "network#eth0",
         "network#wlan0",
         "cpu",
@@ -28,10 +30,12 @@
         "disk#tmp",
         "disk#home",
         "backlight",
-        "sway/language",
         "custom/wlsunset",
         "battery#bat0",
         "battery#bat1",
+        "upower",
+        "power-profiles-daemon",
+        "sway/language",
         "clock#date",
         "clock",
         "tray"
@@ -54,21 +58,32 @@
         }
     },
     "sway/workspaces": {
-        "format": "{icon}<span size='smaller' rise='3pt'> {windows}</span>",
-        "format-window-separator": "",
-        "window-format": "{name}",
-        "window-rewrite-default": ".",
-        "window-rewrite": {
-            "class<org.mozilla.firefox>": "<span color='#ff8800'>F</span>",
-            "class<net.thunderbird.Thunderbird>": "<span color='#00aaff'>T</span>",
-            "class<kitty>": "<span color='#ffffff'>#</span>",
-            "class<Emacs>": "<span color='#ff00ff'>e</span>",
-            "class<qpdfview>": "<span color='red'>p</span>"
+        "format": "{icon}",
+        "all-outputs": true,
+        "persistent-workspaces": {
+            "0": [],
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": [],
+            "5": [],
+            "6": [],
+            "7": [],
+            "8": [],
+            "9": [],
         }
+
     },
 
     "sway/mode": {
         "format": "{}"
+    },
+
+    "hyprland/language": {
+	"format-en": " en ",
+	"format-sk": "<span bgcolor='magenta' color='white'> sk </span>",
+	"format-cs-qwerty": "<span bgcolor='magenta' color='white'> cs </span>",
+	"format-ru": "<span bgcolor='red' color='white'> ru </span>"
     },
 
     "idle_inhibitor": {
@@ -82,6 +97,15 @@
     "tray": {
         "icon-size": 16,
         "spacing": 3
+    },
+
+    "power-profiles-daemon": {
+        "format-icons": {
+            "default": "D",
+            "performance": "P",
+            "balanced": "B",
+            "power-saver": "S"
+          }
     },
 
     "clock": {
@@ -102,8 +126,9 @@
         "format": "{:%b<b>%d</b>}"
     },
     "cpu": {
-        "format": "{icon0}{icon1}{icon2}{icon3}{load:0.1f}",
-        "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+        "format": "{icon0}{icon1}{icon2}{icon3}{icon4}{icon5}{icon6}{icon7}{icon8}{icon9}{icon10}{icon11}{icon12}{icon13}{icon14}{icon15}{load:0.1f}",
+        // "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+        "format-icons": [" ", ".", ":", "!", "|"],
         "states": {
             "warning": 50,
             "critical": 85
@@ -113,7 +138,7 @@
         "interval": 2
     },
     "memory": {
-        "format": "<i>m</i>{}",
+        "format": "<i>m</i>{avail:.0f}",
         "states": {
             "warning": 70,
             "critical": 85
@@ -151,7 +176,7 @@
     },
     "backlight": {
         // "device": "acpi_video1",
-        "format": "bri:{percent}"
+        "format": "*{percent}"
     },
     "battery#bat0": {
         "bat": "BAT0",
@@ -177,6 +202,10 @@
         "format-time": "{H}:{m}",
         "format": "{time} {capacity}%",
         "format-plugged-good": "",
+    },
+    "network#tun0": {
+        "interface": "tun0",
+        "format-disconnected": "T -"
     },
     "network#eth0": {
         "interval": 2,
