@@ -29,14 +29,15 @@
         ;; (python-mode . python-ts-mode)
         ))
 
-(use-package straight)
+'(  ;; FIXME: Meta-broken, i.e. you canot install straight with use-package, thus cannot currently install kdl-ts-mode.
+  (use-package straight)
 
-(when nil  ;; used by Niri wayland compositor
-  (use-package kdl-ts-mode
+  (use-package kdl-ts-mode    ;; used by Niri wayland compositor
     :after (straight)
     :straight '(kdl-ts-mode
                 :type git
                 :host github
-                :repo "dataphract/kdl-ts-mode")))
+                :repo "dataphract/kdl-ts-mode"))
+  )
 
 (use-package bitbake-ts-mode)
