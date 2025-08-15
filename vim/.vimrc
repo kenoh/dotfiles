@@ -16,7 +16,7 @@ set runtimepath+=~/.vim/repos/github.com/Shougo/dein.vim/
 
 call dein#begin(expand('~/.vim'))
 call dein#add('Shougo/dein.vim')
-call dein#add('tpope/vim-fugitive')
+"call dein#add('tpope/vim-fugitive')
 " ^^^ vim-fugitive:
 " :G<something>
 call dein#add('tpope/vim-commentary')
@@ -46,7 +46,7 @@ let mapleader = ";"
 filetype plugin indent on
 syntax on
 set t_Co=256
-set background=light
+set background=dark
 set scrolloff=5
 set sidescrolloff=5
 set title
