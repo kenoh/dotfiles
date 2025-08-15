@@ -147,6 +147,17 @@ douts() {
     [ "$#" -lt 3 ] && echo 'usage: douts BEFORE FST SND [AFTER [DIFF-OPTS]]' && return
     eval "${DIFFTOOL:-d} $5 <($1$2$4) <($1$3$4)";
 }
+longdiff() {
+    # TODO: finish with actuall 'diff' and its parametrisation
+    local X
+    local Y
+    read Y
+    while read Z; do
+        local X="$Y"
+        local Y="$Z"
+        echo $X $Y
+    done
+}
 
 ## git
 alias ga='git add'
@@ -161,6 +172,8 @@ alias gdca='git diff --cached'
 alias gdt='git difftool'
 alias gf='git fetch'
 alias gfa='git fetch --all'
+alias gfapd='git fetch --all --prune --dry-run'
+alias gfapF='git fetch --all --prune'
 alias gl='git pull'
 alias glg='git log'
 alias glgp='git log -p'
@@ -237,7 +250,8 @@ alias e='emacsclient --no-wait -c'
 alias et='emacsclient -t'
 etdiff() { emacsclient -t --eval "(ediff-files \"$1\" \"$2\")"; }
 
-
+## openssl
+alias osslcert='openssl x509 -noout -text -in'
 
 
 ###############################################################################
@@ -286,6 +300,9 @@ FZF_ALT_C_COMMAND="fd --type d --strip-cwd-prefix --hidden --exclude .git --excl
 F=/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [ -f "$F" ] && source "$F"
 
+## autoloaded functions (e.g. completions)
+FPATH="$HOME/.zsh.d/functions:$FPATH"
+time compinit
 
 # DEBUG: profile (also enable the modload at the top).
 # zprof

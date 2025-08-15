@@ -56,123 +56,153 @@ renamed = "r"
 deleted = "x"
 
 [bun]
+disabled = true
 symbol = "bun "
 
 [c]
+disabled = true
 symbol = "C "
 
 [cobol]
+disabled = true
 symbol = "cobol "
 
 [crystal]
+disabled = true
 symbol = "cr "
 
 [cmake]
+disabled = true
 symbol = "cmake "
 
 [daml]
+disabled = true
 symbol = "daml "
 
 [dart]
+disabled = true
 symbol = "dart "
 
 [deno]
+disabled = true
 symbol = "deno "
 
 [dotnet]
+disabled = true
 symbol = ".NET "
 
 [docker_context]
 symbol = "docker "
 
 [elixir]
+disabled = true
 symbol = "exs "
 
 [elm]
+disabled = true
 symbol = "elm "
 
 [git_branch]
 symbol = "git "
 
 [golang]
+disabled = true
 symbol = "go "
 
 [hg_branch]
 symbol = "hg "
 
 [java]
+disabled = true
 symbol = "java "
 
 [julia]
+disabled = true
 symbol = "jl "
 
 [kotlin]
+disabled = true
 symbol = "kt "
 
 [lua]
+disabled = true
 symbol = "lua "
 
 [nodejs]
+disabled = true
 symbol = "nodejs "
 
 [memory_usage]
 symbol = "memory "
-disabled = false
+disabled = true
 
 [meson]
 symbol = "meson "
 
 [nim]
+disabled = true
 symbol = "nim "
 
 [nix_shell]
+disabled = true
 symbol = "nix "
 
 [ocaml]
+disabled = true
 symbol = "ml "
 
 [package]
 symbol = "pkg "
 
 [perl]
+disabled = true
 symbol = "pl "
 
 [php]
+disabled = true
 symbol = "php "
 
 [pulumi]
+disabled = true
 symbol = "pulumi "
 
 [purescript]
+disabled = true
 symbol = "purs "
 
 [python]
 symbol = "py "
 
 [raku]
+disabled = true
 symbol = "raku "
 
 [ruby]
+disabled = true
 symbol = "rb "
 
 [rust]
 symbol = "rs "
 
 [scala]
+disabled = true
 symbol = "scala "
 
 [spack]
+disabled = true
 symbol = "spack "
 
 [sudo]
 symbol = "sudo "
 
 [swift]
+disabled = true
 symbol = "swift "
 
 [terraform]
 symbol = "terraform "
 
 [zig]
+disabled = true
 symbol = "zig "
 
