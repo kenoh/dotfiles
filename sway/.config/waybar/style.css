@@ -1,6 +1,6 @@
 /* black */
-@define-color active #0f9fcf;
-@define-color visible #5f8faf;
+@define-color active #285577;
+@define-color visible #5F676A;
 @define-color barbg #000;
 @define-color text #aaa;
 @define-color textDim #666;
@@ -9,12 +9,6 @@
 @define-color crit red;
 @define-color crit2 white;
 
-@define-color ws1 rgba(223,   0,   0, 0.8);
-@define-color ws2 rgba(223, 223,   0, 0.8);
-@define-color ws3 rgba(  0, 223,   0, 0.8);
-@define-color ws4 rgba(  0, 223, 223, 0.8);
-@define-color ws5 rgba(  0,   0, 223, 0.8);
-@define-color ws6 rgba(223,   0, 223, 0.8);
 
 
 
@@ -22,10 +16,14 @@
     font-family: Iosevka Fixed, Terminus, CommitMono Nerd Font, FontAwesome, sans-serif;
     font-size: 13px;
     min-height: 0;
+}
+
+/* Setting `color` complicatedly, since we cannot persist #tray explicitly (nothing to match on negatively). */
+window > box > box > widget > box > label, window > box > box > widget > label {
     color: @text;
 }
 
-window {
+window#waybar {
     background: @barbg;
 }
 
@@ -64,8 +62,12 @@ label {
     padding-left: 12px;
 }
 
-#workspaces button.empty label {
-    color: #666;
+#sway-workspace-1 { margin-left: 9px;}
+#sway-workspace-4 { margin-left: 9px;}
+#sway-workspace-7 { margin-left: 9px;}
+
+#workspaces button:hover {
+    background: inherit;
 }
 
 #workspaces button.urgent {
@@ -84,12 +86,16 @@ label {
     color: white;
 }
 #workspaces button.visible {
-    background-image: linear-gradient(to right, white 0%, rgba(0,0,0,0) 3em, white 100%);
+    /* background-image: linear-gradient(to right, white 0%, rgba(0,0,0,0) 3em, white 100%); */
+    background: @inactive;
 }
 #workspaces button.focused, #workspaces button.active {
     background: #285577;
 }
 
+#workspaces button.empty label {
+    color: #666;
+}
 
 #scratchpad {
     background: white;
@@ -100,7 +106,7 @@ label {
 
 
 #mode, #submap {
-    background: blue;
+    background: #f0f;
     color: #fff;
     min-width: 50em;
 }
@@ -152,11 +158,4 @@ label {
 
 #tray image {
     -gtk-icon-shadow: 1px 1px grey;
-}
-
-#tray menu {
-    color: @text;
-}
-#tray menuitem label {
-    background: inherit;
 }

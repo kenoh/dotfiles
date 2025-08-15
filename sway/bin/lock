@@ -44,6 +44,7 @@ tst dunstctl
 # PREP
 ###
 export PREV="$(dunstctl is-paused)"
+dunstctl set-pause-level 60
 dunstctl set-paused true
 
 
@@ -51,6 +52,7 @@ dunstctl set-paused true
 # EXEC
 ###
 {
+	swaymsg input '*' xkb_switch_layout 0
 	swaylock -i ~/Pictures/bg$(( $RANDOM % 3 )).png
 
 	dunstctl set-paused "$PREV"

@@ -44,7 +44,7 @@ font pango: CommitMono Nerd Font 9
 
 
 # border
-default_border pixel 5
+# default_border pixel 5
 default_floating_border normal
 # A trade-off below (or why we gave up titlebar borders): I want the
 # `bindsym button1 nop` to work but using `--border` makes the
@@ -105,7 +105,7 @@ no_focus [title="Firefox – Sharing Indicator"]
 
 # containers
 for_window [floating] border normal
-#for_window [title="Picture-in-Picture"] floating enable, dim_inactive 0.0, border none; #FIXME
+for_window [title="Picture-in-Picture"] floating enable, dim_inactive 0.0, border none;
 
 # don't lock when in fullscreen mode
 for_window [shell=".*"] inhibit_idle fullscreen
@@ -120,6 +120,7 @@ focus_on_window_activation focus
 
 # fullscreen in a window
 # bindsym $mod+y fullscreen disable; floating enable; resize set 600 400; sticky enable
+bindsym $mod+shift+s sticky toggle
 
 
 bindsym $mod+o output eDP-1 power toggle
@@ -186,17 +187,18 @@ set $ws7 number 7
 set $ws8 number 8
 set $ws9 number 9
 
+set $w workspace
 
-bindsym --to-code $mod+0 workspace $ws0
-bindsym --to-code $mod+1 workspace $ws1
-bindsym --to-code $mod+2 workspace $ws2
-bindsym --to-code $mod+3 workspace $ws3
-bindsym --to-code $mod+4 workspace $ws4
-bindsym --to-code $mod+5 workspace $ws5
-bindsym --to-code $mod+6 workspace $ws6
-bindsym --to-code $mod+7 workspace $ws7
-bindsym --to-code $mod+8 workspace $ws8
-bindsym --to-code $mod+9 workspace $ws9
+bindsym --to-code $mod+0 $w $ws0
+bindsym --to-code $mod+1 $w $ws2, $w $ws1
+bindsym --to-code $mod+2 $w $ws1, $w $ws2
+bindsym --to-code $mod+3 $w $ws4, $w $ws3
+bindsym --to-code $mod+4 $w $ws3, $w $ws4
+bindsym --to-code $mod+5 $w $ws6, $w $ws5
+bindsym --to-code $mod+6 $w $ws5, $w $ws6
+bindsym --to-code $mod+7 $w $ws7
+bindsym --to-code $mod+8 $w $ws8
+bindsym --to-code $mod+9 $w $ws9
 
 # we switch to these so on Sway's startup we get reasonable workspaces
 workspace $ws4
@@ -234,6 +236,11 @@ bindsym $mod+F12 focus output right
 
 bar {
   swaybar_command waybar
+  # status_command RUST_LOG=block:privacy i3status-rs | tee /tmp/debug-i3status-rs
+  # status_command i3status-rs
+  # colors {
+  #   binding_mode #0000ff #ff00ff #ffffff
+  # }
 }
 
 
